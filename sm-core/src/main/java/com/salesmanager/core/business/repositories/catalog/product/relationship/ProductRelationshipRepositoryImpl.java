@@ -164,7 +164,8 @@ public class ProductRelationshipRepositoryImpl implements ProductRelationshipRep
   @Override
   public List<ProductRelationship> getGroups(MerchantStore store) {
     @SuppressWarnings("unchecked")
-    List<ProductRelationship> relations = entityManager.createQuery(HQL_GET_PRODUCT_RELATIONSHIP_BY_STORE_ID)
+    List<ProductRelationship> relations = entityManager
+        .createQuery(HQL_GET_PRODUCT_RELATIONSHIP_BY_STORE_ID)
         .setParameter("store", store.getId())
         .getResultList();
     Map<String, ProductRelationship> relationMap = relations.stream()

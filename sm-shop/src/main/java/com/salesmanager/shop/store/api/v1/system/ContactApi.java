@@ -36,9 +36,11 @@ import springfox.documentation.annotations.ApiIgnore;
 public class ContactApi {
 
 
-  @Inject private LanguageService languageService;
+  @Inject
+  private LanguageService languageService;
 
-  @Inject private EmailTemplatesUtils emailTemplatesUtils;
+  @Inject
+  private EmailTemplatesUtils emailTemplatesUtils;
 
   @PostMapping("/contact")
   @ApiOperation(

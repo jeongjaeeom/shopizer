@@ -14,67 +14,68 @@ import com.salesmanager.shop.store.api.exception.ServiceRuntimeException;
 
 public class SanitizeUtils {
 
-	/**
-	 * should not contain /
-	 */
-    private static List<Character> blackList = Arrays.asList(';','%', '&', '=', '|', '*', '+', '_',
-            '^', '%','$','(', ')', '{', '}', '<', '>', '[',
-            ']', '`', '\'', '~','\\', '?','\'');
-    
-    private final static String POLICY_FILE = "antisamy-slashdot.xml";
-    
-    private static Policy policy = null;
-    
-    static { 
-		try {
-			ClassLoader loader = Policy.class.getClassLoader();
-	        InputStream configStream = loader.getResourceAsStream(POLICY_FILE);
-			policy = Policy.getInstance(configStream);
-	        
-		} catch (Exception e) {
-			throw new ServiceRuntimeException(e);
-		}
-    } 
+  /**
+   * should not contain /
+   */
+  private static List<Character> blackList = Arrays.asList(';', '%', '&', '=', '|', '*', '+', '_',
+      '^', '%', '$', '(', ')', '{', '}', '<', '>', '[',
+      ']', '`', '\'', '~', '\\', '?', '\'');
 
-    private SanitizeUtils() {
-        //Utility class
+  private final static String POLICY_FILE = "antisamy-slashdot.xml";
+
+  private static Policy policy = null;
+
+  static {
+    try {
+      ClassLoader loader = Policy.class.getClassLoader();
+      InputStream configStream = loader.getResourceAsStream(POLICY_FILE);
+      policy = Policy.getInstance(configStream);
+
+    } catch (Exception e) {
+      throw new ServiceRuntimeException(e);
     }
-    
-    public static String getSafeString(String value) {
+  }
 
-		try {
+  private SanitizeUtils() {
+    //Utility class
+  }
 
-			if(policy == null) {
-				throw new ServiceRuntimeException("Error in " + SanitizeUtils.class.getName() + " html sanitize utils is null");		}
+  public static String getSafeString(String value) {
 
-	        AntiSamy as = new AntiSamy();
-	        CleanResults cr = as.scan(value, policy);
-	        
-	        return cr.getCleanHTML();
-	        
-		} catch (Exception e) {
-			throw new ServiceRuntimeException(e);
-		}
+    try {
 
+      if (policy == null) {
+        throw new ServiceRuntimeException(
+            "Error in " + SanitizeUtils.class.getName() + " html sanitize utils is null");
+      }
 
-    	
+      AntiSamy as = new AntiSamy();
+      CleanResults cr = as.scan(value, policy);
+
+      return cr.getCleanHTML();
+
+    } catch (Exception e) {
+      throw new ServiceRuntimeException(e);
     }
-    
-    
-    public static String getSafeRequestParamString(String value) {
+
+
+  }
+
+
+  public static String getSafeRequestParamString(String value) {
 
     StringBuilder safe = new StringBuilder();
-    if(StringUtils.isNotEmpty(value)) {
-        // Fastest way for short strings - https://stackoverflow.com/a/11876086/195904
-        for(int i=0; i<value.length(); i++) {
-            char current = value.charAt(i);
-            if(!blackList.contains(current)) {
-                safe.append(current);
-            }
+    if (StringUtils.isNotEmpty(value)) {
+      // Fastest way for short strings - https://stackoverflow.com/a/11876086/195904
+      for (int i = 0; i < value.length(); i++) {
+        char current = value.charAt(i);
+        if (!blackList.contains(current)) {
+          safe.append(current);
         }
+      }
     }
     return StringEscapeUtils.escapeXml11(safe.toString());
-}
+  }
     
 
 

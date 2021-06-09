@@ -10,13 +10,15 @@ import com.salesmanager.core.model.reference.language.Language;
 
 public interface ProductOptionSetService extends SalesManagerEntityService<Long, ProductOptionSet> {
 
-	List<ProductOptionSet> listByStore(MerchantStore store, Language language)
-			throws ServiceException;
+  List<ProductOptionSet> listByStore(MerchantStore store, Language language)
+      throws ServiceException;
 
 
-	ProductOptionSet getById(MerchantStore store, Long optionId, Language lang);
-	ProductOptionSet getCode(MerchantStore store, String code);
-	List<ProductOptionSet> getByProductType (Long productTypeId, MerchantStore store, Language lang);
+  ProductOptionSet getById(MerchantStore store, Long optionId, Language lang);
+
+  ProductOptionSet getCode(MerchantStore store, String code);
+
+  List<ProductOptionSet> getByProductType(Long productTypeId, MerchantStore store, Language lang);
 
 
 }

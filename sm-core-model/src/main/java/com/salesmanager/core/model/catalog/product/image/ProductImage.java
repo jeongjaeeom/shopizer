@@ -24,125 +24,126 @@ import com.salesmanager.core.model.generic.SalesManagerEntity;
 @Entity
 @Table(name = "PRODUCT_IMAGE")
 public class ProductImage extends SalesManagerEntity<Long, ProductImage> {
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@Column(name = "PRODUCT_IMAGE_ID")
-	@TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "PRODUCT_IMG_SEQ_NEXT_VAL")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
-	private Long id;
-	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productImage", cascade = CascadeType.ALL)
-	private List<ProductImageDescription> descriptions = new ArrayList<ProductImageDescription>();
 
-	
-	@Column(name = "PRODUCT_IMAGE")
-	private String productImage;
-	
-	@Column(name = "DEFAULT_IMAGE")
-	private boolean defaultImage = true;
-	
-	/**
-	 * default to 0 for images managed by the system
-	 */
-	@Column(name = "IMAGE_TYPE")
-	private int imageType;
-	
-	/**
-	 * Refers to images not accessible through the system. It may also be a video.
-	 */
-	@Column(name = "PRODUCT_IMAGE_URL")
-	private String productImageUrl;
-	
+  private static final long serialVersionUID = 1L;
 
-	@Column(name = "IMAGE_CROP")
-	private boolean imageCrop;
-	
-	@ManyToOne(targetEntity = Product.class)
-	@JoinColumn(name = "PRODUCT_ID", nullable = false)
-	private Product product;
-	
-	@Transient
-	private InputStream image = null;
-	
-	//private MultiPartFile image
+  @Id
+  @Column(name = "PRODUCT_IMAGE_ID")
+  @TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "PRODUCT_IMG_SEQ_NEXT_VAL")
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
+  private Long id;
 
-	public ProductImage(){
-	}
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "productImage", cascade = CascadeType.ALL)
+  private List<ProductImageDescription> descriptions = new ArrayList<ProductImageDescription>();
 
-	public String getProductImage() {
-		return productImage;
-	}
 
-	public void setProductImage(String productImage) {
-		this.productImage = productImage;
-	}
+  @Column(name = "PRODUCT_IMAGE")
+  private String productImage;
 
-	public boolean isDefaultImage() {
-		return defaultImage;
-	}
+  @Column(name = "DEFAULT_IMAGE")
+  private boolean defaultImage = true;
 
-	public void setDefaultImage(boolean defaultImage) {
-		this.defaultImage = defaultImage;
-	}
+  /**
+   * default to 0 for images managed by the system
+   */
+  @Column(name = "IMAGE_TYPE")
+  private int imageType;
 
-	public int getImageType() {
-		return imageType;
-	}
+  /**
+   * Refers to images not accessible through the system. It may also be a video.
+   */
+  @Column(name = "PRODUCT_IMAGE_URL")
+  private String productImageUrl;
 
-	public void setImageType(int imageType) {
-		this.imageType = imageType;
-	}
 
-	public boolean isImageCrop() {
-		return imageCrop;
-	}
+  @Column(name = "IMAGE_CROP")
+  private boolean imageCrop;
 
-	public void setImageCrop(boolean imageCrop) {
-		this.imageCrop = imageCrop;
-	}
+  @ManyToOne(targetEntity = Product.class)
+  @JoinColumn(name = "PRODUCT_ID", nullable = false)
+  private Product product;
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+  @Transient
+  private InputStream image = null;
 
-	@Override
-	public void setId(Long id) {
-		this.id = id;
-	}
+  //private MultiPartFile image
 
-	public Product getProduct() {
-		return product;
-	}
+  public ProductImage() {
+  }
 
-	public void setProduct(Product product) {
-		this.product = product;
-	}
+  public String getProductImage() {
+    return productImage;
+  }
 
-	public void setDescriptions(List<ProductImageDescription> descriptions) {
-		this.descriptions = descriptions;
-	}
+  public void setProductImage(String productImage) {
+    this.productImage = productImage;
+  }
 
-	public List<ProductImageDescription> getDescriptions() {
-		return descriptions;
-	}
+  public boolean isDefaultImage() {
+    return defaultImage;
+  }
 
-	public InputStream getImage() {
-		return image;
-	}
+  public void setDefaultImage(boolean defaultImage) {
+    this.defaultImage = defaultImage;
+  }
 
-	public void setImage(InputStream image) {
-		this.image = image;
-	}
+  public int getImageType() {
+    return imageType;
+  }
 
-	public String getProductImageUrl() {
-		return productImageUrl;
-	}
+  public void setImageType(int imageType) {
+    this.imageType = imageType;
+  }
 
-	public void setProductImageUrl(String productImageUrl) {
-		this.productImageUrl = productImageUrl;
-	}
+  public boolean isImageCrop() {
+    return imageCrop;
+  }
+
+  public void setImageCrop(boolean imageCrop) {
+    this.imageCrop = imageCrop;
+  }
+
+  @Override
+  public Long getId() {
+    return id;
+  }
+
+  @Override
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Product getProduct() {
+    return product;
+  }
+
+  public void setProduct(Product product) {
+    this.product = product;
+  }
+
+  public void setDescriptions(List<ProductImageDescription> descriptions) {
+    this.descriptions = descriptions;
+  }
+
+  public List<ProductImageDescription> getDescriptions() {
+    return descriptions;
+  }
+
+  public InputStream getImage() {
+    return image;
+  }
+
+  public void setImage(InputStream image) {
+    this.image = image;
+  }
+
+  public String getProductImageUrl() {
+    return productImageUrl;
+  }
+
+  public void setProductImageUrl(String productImageUrl) {
+    this.productImageUrl = productImageUrl;
+  }
 
 
 }

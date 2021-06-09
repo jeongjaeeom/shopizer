@@ -6,8 +6,8 @@ import java.util.Optional;
 import com.salesmanager.core.business.exception.ServiceException;
 
 public interface FolderList {
-	
-	  List<String> listFolders(final String merchantStoreCode, Optional<String> path)
-		      throws ServiceException;
+
+  List<String> listFolders(final String merchantStoreCode, Optional<String> path)
+      throws ServiceException;
 
 }

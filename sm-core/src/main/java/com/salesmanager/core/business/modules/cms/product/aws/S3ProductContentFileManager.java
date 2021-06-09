@@ -32,22 +32,19 @@ import com.salesmanager.core.model.content.OutputContentFile;
 
 /**
  * Product content file manager with AWS S3
- * 
- * @author carlsamson
  *
+ * @author carlsamson
  */
 public class S3ProductContentFileManager
     implements ProductAssetsManager {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 
 
-
   private static final Logger LOGGER = LoggerFactory.getLogger(S3ProductContentFileManager.class);
-
 
 
   private static S3ProductContentFileManager fileManager = null;
@@ -81,8 +78,6 @@ public class S3ProductContentFileManager
     try {
       // get buckets
       String bucketName = bucketName();
-
-
 
       ListObjectsV2Request listObjectsRequest = new ListObjectsV2Request()
           .withBucketName(bucketName).withPrefix(nodePath(merchantStoreCode));
@@ -199,7 +194,6 @@ public class S3ProductContentFileManager
   public void addProductImage(ProductImage productImage, ImageContentFile contentImage)
       throws ServiceException {
 
-
     try {
       // get buckets
       String bucketName = bucketName();
@@ -208,7 +202,6 @@ public class S3ProductContentFileManager
       String nodePath = this.nodePath(productImage.getProduct().getMerchantStore().getCode(),
           productImage.getProduct().getSku(), contentImage);
 
-
       ObjectMetadata metadata = new ObjectMetadata();
       metadata.setContentType(contentImage.getMimeType());
 
@@ -216,9 +209,7 @@ public class S3ProductContentFileManager
           nodePath + productImage.getProductImage(), contentImage.getFile(), metadata);
       request.setCannedAcl(CannedAccessControlList.PublicRead);
 
-
       s3.putObject(request);
-
 
       LOGGER.info("Product add file");
 
@@ -267,14 +258,14 @@ public class S3ProductContentFileManager
 
   /**
    * Builds an amazon S3 client
-   * 
+   *
    * @return
    */
   private AmazonS3 s3Client() {
 
     return AmazonS3ClientBuilder.standard().withRegion(regionName()) // The first region to
-                                                                            // try your request
-                                                                            // against
+        // try your request
+        // against
         .build();
   }
 
@@ -347,7 +338,6 @@ public class S3ProductContentFileManager
     int lastWindowsPos = filename.lastIndexOf(WINDOWS_SEPARATOR);
     return Math.max(lastUnixPos, lastWindowsPos);
   }
-
 
 
   public CMSManager getCmsManager() {

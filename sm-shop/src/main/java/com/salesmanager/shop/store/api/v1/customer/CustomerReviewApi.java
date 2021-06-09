@@ -36,22 +36,22 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/v1")
 public class CustomerReviewApi {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CustomerReviewApi.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CustomerReviewApi.class);
 
-	@Inject
-	private CustomerFacade customerFacade;
-	
-	@Inject
-	private StoreFacade storeFacade;
-	
-	@Inject
-	private LanguageUtils languageUtils;
+  @Inject
+  private CustomerFacade customerFacade;
 
-	@Inject
-	private CustomerService customerService;
-	
-	@Inject
-	private CustomerReviewService customerReviewService;
+  @Inject
+  private StoreFacade storeFacade;
+
+  @Inject
+  private LanguageUtils languageUtils;
+
+  @Inject
+  private CustomerService customerService;
+
+  @Inject
+  private CustomerReviewService customerReviewService;
 
   /**
    * Reviews made for a given customer
@@ -81,19 +81,20 @@ public class CustomerReviewApi {
       @ApiImplicitParam(name = "lang", dataType = "string", defaultValue = "en")
   })
   public List<ReadableCustomerReview> getAll(
-      @PathVariable final Long id, @ApiIgnore MerchantStore merchantStore, @ApiIgnore Language language) {
+      @PathVariable final Long id, @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
     return customerFacade.getAllCustomerReviewsByReviewed(id, merchantStore, language);
   }
 
-	@PutMapping("/private/customers/{id}/reviews/{reviewid}")
+  @PutMapping("/private/customers/{id}/reviews/{reviewid}")
   public PersistableCustomerReview update(
       @PathVariable final Long id,
       @PathVariable final Long reviewId,
       @Valid @RequestBody PersistableCustomerReview review,
       @ApiIgnore MerchantStore merchantStore,
       @ApiIgnore Language language) {
-      return customerFacade.updateCustomerReview(id, reviewId, review, merchantStore, language);
-	}
+    return customerFacade.updateCustomerReview(id, reviewId, review, merchantStore, language);
+  }
 
   @DeleteMapping("/private/customers/{id}/reviews/{reviewId}")
   public void delete(

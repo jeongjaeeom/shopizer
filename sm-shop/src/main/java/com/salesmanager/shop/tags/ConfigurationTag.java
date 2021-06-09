@@ -14,65 +14,54 @@ import com.salesmanager.core.business.utils.CoreConfiguration;
 
 
 public class ConfigurationTag extends RequestContextAwareTag {
-	
-	
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationTag.class);
-
-	
-	@Inject
-	private CoreConfiguration coreConfiguration;
-	
-	private String configurationCode;
 
 
-	public int doStartTagInternal() throws JspException {
-		try {
-			
-			if (coreConfiguration==null) {
-	            WebApplicationContext wac = getRequestContext().getWebApplicationContext();
-	            AutowireCapableBeanFactory factory = wac.getAutowireCapableBeanFactory();
-	            factory.autowireBean(this);
-	        }
-
-			HttpServletRequest request = (HttpServletRequest) pageContext
-					.getRequest();
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationTag.class);
 
 
-			pageContext.getOut().print(coreConfiguration.getProperty(this.getConfigurationCode(), "property " + getConfigurationCode() + " not found"));
+  @Inject
+  private CoreConfiguration coreConfiguration;
+
+  private String configurationCode;
 
 
-			
-		} catch (Exception ex) {
-			LOGGER.error("Error while getting content url", ex);
-		}
-		return SKIP_BODY;
-	}
+  public int doStartTagInternal() throws JspException {
+    try {
 
-	public int doEndTag() {
-		return EVAL_PAGE;
-	}
+      if (coreConfiguration == null) {
+        WebApplicationContext wac = getRequestContext().getWebApplicationContext();
+        AutowireCapableBeanFactory factory = wac.getAutowireCapableBeanFactory();
+        factory.autowireBean(this);
+      }
 
-	public String getConfigurationCode() {
-		return configurationCode;
-	}
+      HttpServletRequest request = (HttpServletRequest) pageContext
+          .getRequest();
 
-	public void setConfigurationCode(String configurationCode) {
-		this.configurationCode = configurationCode;
-	}
+      pageContext.getOut().print(coreConfiguration.getProperty(this.getConfigurationCode(),
+          "property " + getConfigurationCode() + " not found"));
 
 
+    } catch (Exception ex) {
+      LOGGER.error("Error while getting content url", ex);
+    }
+    return SKIP_BODY;
+  }
 
+  public int doEndTag() {
+    return EVAL_PAGE;
+  }
 
+  public String getConfigurationCode() {
+    return configurationCode;
+  }
 
+  public void setConfigurationCode(String configurationCode) {
+    this.configurationCode = configurationCode;
+  }
 
-
-
-
-	
 
 }

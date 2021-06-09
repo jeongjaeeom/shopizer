@@ -17,71 +17,66 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 import com.salesmanager.core.model.reference.language.Language;
 
 
-
 @Service("customerOptionSetService")
 public class CustomerOptionSetServiceImpl extends
-		SalesManagerEntityServiceImpl<Long, CustomerOptionSet> implements CustomerOptionSetService {
+    SalesManagerEntityServiceImpl<Long, CustomerOptionSet> implements CustomerOptionSetService {
 
 
-	@Inject
-	private CustomerOptionSetRepository customerOptionSetRepository;
-	
-
-	@Inject
-	public CustomerOptionSetServiceImpl(
-			CustomerOptionSetRepository customerOptionSetRepository) {
-			super(customerOptionSetRepository);
-			this.customerOptionSetRepository = customerOptionSetRepository;
-	}
-	
-
-	@Override
-	public List<CustomerOptionSet> listByOption(CustomerOption option, MerchantStore store) throws ServiceException {
-		Validate.notNull(store,"merchant store cannot be null");
-		Validate.notNull(option,"option cannot be null");
-		
-		return customerOptionSetRepository.findByOptionId(store.getId(), option.getId());
-	}
-	
-	@Override
-	public void delete(CustomerOptionSet customerOptionSet) throws ServiceException {
-		customerOptionSet = customerOptionSetRepository.findOne(customerOptionSet.getId());
-		super.delete(customerOptionSet);
-	}
-	
-	@Override
-	public List<CustomerOptionSet> listByStore(MerchantStore store, Language language) throws ServiceException {
-		Validate.notNull(store,"merchant store cannot be null");
-
-		
-		return customerOptionSetRepository.findByStore(store.getId(),language.getId());
-	}
+  @Inject
+  private CustomerOptionSetRepository customerOptionSetRepository;
 
 
-	@Override
-	public void saveOrUpdate(CustomerOptionSet entity) throws ServiceException {
-		Validate.notNull(entity,"customer option set cannot be null");
-
-		if(entity.getId()>0) {
-			super.update(entity);
-		} else {
-			super.create(entity);
-		}
-		
-	}
+  @Inject
+  public CustomerOptionSetServiceImpl(
+      CustomerOptionSetRepository customerOptionSetRepository) {
+    super(customerOptionSetRepository);
+    this.customerOptionSetRepository = customerOptionSetRepository;
+  }
 
 
-	@Override
-	public List<CustomerOptionSet> listByOptionValue(
-			CustomerOptionValue optionValue, MerchantStore store)
-			throws ServiceException {
-		return customerOptionSetRepository.findByOptionValueId(store.getId(), optionValue.getId());
-	}
+  @Override
+  public List<CustomerOptionSet> listByOption(CustomerOption option, MerchantStore store)
+      throws ServiceException {
+    Validate.notNull(store, "merchant store cannot be null");
+    Validate.notNull(option, "option cannot be null");
+
+    return customerOptionSetRepository.findByOptionId(store.getId(), option.getId());
+  }
+
+  @Override
+  public void delete(CustomerOptionSet customerOptionSet) throws ServiceException {
+    customerOptionSet = customerOptionSetRepository.findOne(customerOptionSet.getId());
+    super.delete(customerOptionSet);
+  }
+
+  @Override
+  public List<CustomerOptionSet> listByStore(MerchantStore store, Language language)
+      throws ServiceException {
+    Validate.notNull(store, "merchant store cannot be null");
+
+    return customerOptionSetRepository.findByStore(store.getId(), language.getId());
+  }
 
 
-	
+  @Override
+  public void saveOrUpdate(CustomerOptionSet entity) throws ServiceException {
+    Validate.notNull(entity, "customer option set cannot be null");
+
+    if (entity.getId() > 0) {
+      super.update(entity);
+    } else {
+      super.create(entity);
+    }
+
+  }
 
 
+  @Override
+  public List<CustomerOptionSet> listByOptionValue(
+      CustomerOptionValue optionValue, MerchantStore store)
+      throws ServiceException {
+    return customerOptionSetRepository.findByOptionValueId(store.getId(), optionValue.getId());
+  }
 
 
 }

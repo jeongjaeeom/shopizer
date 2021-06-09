@@ -22,6 +22,7 @@ public interface ProductFacade {
 
   /**
    * Create / Update product
+   *
    * @param store
    * @param product
    * @param language
@@ -32,11 +33,13 @@ public interface ProductFacade {
 
   /**
    * Update minimal product details
+   *
    * @param product
    * @param merchant
    * @param language
    */
-  void update(Long productId, LightPersistableProduct product, MerchantStore merchant, Language language);
+  void update(Long productId, LightPersistableProduct product, MerchantStore merchant,
+      Language language);
 
   /**
    * Get a Product by id and store
@@ -50,7 +53,6 @@ public interface ProductFacade {
   ReadableProduct getProduct(MerchantStore store, Long id, Language language) throws Exception;
 
   /**
-   *
    * @param sku
    * @param store
    * @return
@@ -89,7 +91,8 @@ public interface ProductFacade {
    * @return
    * @throws Exception
    */
-  ReadableProduct getProductBySeUrl(MerchantStore store, String friendlyUrl, Language language) throws Exception;
+  ReadableProduct getProductBySeUrl(MerchantStore store, String friendlyUrl, Language language)
+      throws Exception;
 
   /**
    * Sets a new price to an existing product
@@ -125,6 +128,7 @@ public interface ProductFacade {
 
   /**
    * Delete product
+   *
    * @param id
    * @param store
    * @throws Exception
@@ -203,12 +207,12 @@ public interface ProductFacade {
 
   /**
    * validates if product exists
+   *
    * @param sku
    * @param store
    * @return
    */
   public boolean exists(String sku, MerchantStore store);
-
 
 
   /**
@@ -222,16 +226,18 @@ public interface ProductFacade {
    */
   List<ReadableProduct> relatedItems(MerchantStore store, Product product, Language language)
       throws Exception;
-  
-  
+
+
   /**
    * Calculate product price based on specific product options
+   *
    * @param id
    * @param priceRequest
    * @param store
    * @param language
    * @return
    */
-  ReadableProductPrice getProductPrice(Long id, ProductPriceRequest priceRequest, MerchantStore store, Language language);
+  ReadableProductPrice getProductPrice(Long id, ProductPriceRequest priceRequest,
+      MerchantStore store, Language language);
 
 }

@@ -17,34 +17,34 @@
  * limitations under the License.
  * ============================================================ */
 
-
 !function ($) {
 
   "use strict"; // jshint ;_;
 
-
- /* DROPDOWN CLASS DEFINITION
-  * ========================= */
+  /* DROPDOWN CLASS DEFINITION
+   * ========================= */
 
   var toggle = '[data-toggle="dropdown"]'
-    , Dropdown = function (element) {
-        var $el = $(element).on('click.dropdown.data-api', this.toggle)
-        $('html').on('click.dropdown.data-api', function () {
-          $el.parent().removeClass('open')
-        })
-      }
+      , Dropdown = function (element) {
+    var $el = $(element).on('click.dropdown.data-api', this.toggle)
+    $('html').on('click.dropdown.data-api', function () {
+      $el.parent().removeClass('open')
+    })
+  }
 
   Dropdown.prototype = {
 
     constructor: Dropdown
 
-  , toggle: function (e) {
+    , toggle: function (e) {
       var $this = $(this)
-        , $parent
-        , selector
-        , isActive
+          , $parent
+          , selector
+          , isActive
 
-      if ($this.is('.disabled, :disabled')) return
+      if ($this.is('.disabled, :disabled')) {
+        return
+      }
 
       selector = $this.attr('data-target')
 
@@ -60,7 +60,9 @@
 
       clearMenus()
 
-      if (!isActive) $parent.toggleClass('open')
+      if (!isActive) {
+        $parent.toggleClass('open')
+      }
 
       return false
     }
@@ -71,21 +73,23 @@
     $(toggle).parent().removeClass('open')
   }
 
-
   /* DROPDOWN PLUGIN DEFINITION
    * ========================== */
 
   $.fn.dropdown = function (option) {
     return this.each(function () {
       var $this = $(this)
-        , data = $this.data('dropdown')
-      if (!data) $this.data('dropdown', (data = new Dropdown(this)))
-      if (typeof option == 'string') data[option].call($this)
+          , data = $this.data('dropdown')
+      if (!data) {
+        $this.data('dropdown', (data = new Dropdown(this)))
+      }
+      if (typeof option == 'string') {
+        data[option].call($this)
+      }
     })
   }
 
   $.fn.dropdown.Constructor = Dropdown
-
 
   /* APPLY TO STANDARD DROPDOWN ELEMENTS
    * =================================== */
@@ -93,8 +97,10 @@
   $(function () {
     $('html').on('click.dropdown.data-api', clearMenus)
     $('body')
-      .on('click.dropdown', '.dropdown form', function (e) { e.stopPropagation() })
-      .on('click.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('click.dropdown', '.dropdown form', function (e) {
+      e.stopPropagation()
+    })
+    .on('click.dropdown.data-api', toggle, Dropdown.prototype.toggle)
   })
 
 }(window.jQuery);

@@ -14,7 +14,7 @@ import com.salesmanager.core.model.common.GenericEntityList;
 import com.salesmanager.core.model.user.User;
 
 public class UserRepositoryImpl implements UserRepositoryCustom {
-  
+
 
   @PersistenceContext
   private EntityManager em;
@@ -24,13 +24,12 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
   @SuppressWarnings("unchecked")
   @Override
   public GenericEntityList<User> listByCriteria(Criteria criteria) throws ServiceException {
-	  
-	/**
-	 * Name like
-	 * email like  
-	 */
-	  
-	 
+
+    /**
+     * Name like
+     * email like
+     */
+
     try {
       StringBuilder req = new StringBuilder();
       req.append(
@@ -41,8 +40,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         req.append("  where um.code=:storeCode");
         countBuilder.append(" where um.code=:storeCode");
       }
-      
-      if(!StringUtils.isBlank(criteria.getCriteriaOrderByField())) {
+
+      if (!StringUtils.isBlank(criteria.getCriteriaOrderByField())) {
         req.append(" order by u." + criteria.getCriteriaOrderByField() + " "
             + criteria.getOrderBy().name().toLowerCase());
       }
@@ -52,7 +51,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
       String hql = req.toString();
       Query q = this.em.createQuery(hql);
 
-      if(!StringUtils.isBlank(criteria.getSearch())) {
+      if (!StringUtils.isBlank(criteria.getSearch())) {
         //TODO
       } else {
         if (criteria.getStoreCode() != null) {
@@ -66,11 +65,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
       @SuppressWarnings("rawtypes")
       GenericEntityList entityList = new GenericEntityList();
       entityList.setTotalCount(count.intValue());
-      
+
       /**
        * Configure pagination using setMaxResults and setFirstResult method
        */
-      
+
       q = RepositoryHelper.paginateQuery(q, count, entityList, criteria);
       
 /*      if(criteria.isLegacyPagination()) {
@@ -90,7 +89,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
       entityList.setList(users);
 
       return entityList;
-
 
 
     } catch (javax.persistence.NoResultException ers) {

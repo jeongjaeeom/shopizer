@@ -28,6 +28,7 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 @EntityListeners(value = AuditListener.class)
 @Table(name = "PRODUCT_TYPE")
 public class ProductType extends SalesManagerEntity<Long, ProductType> implements Auditable {
+
   private static final long serialVersionUID = 1L;
 
   public final static String GENERAL_TYPE = "GENERAL";
@@ -41,7 +42,7 @@ public class ProductType extends SalesManagerEntity<Long, ProductType> implement
 
   @Embedded
   private AuditSection auditSection = new AuditSection();
-  
+
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "productType")
   private Set<ProductTypeDescription> descriptions = new HashSet<ProductTypeDescription>();
 
@@ -50,7 +51,7 @@ public class ProductType extends SalesManagerEntity<Long, ProductType> implement
 
   @Column(name = "PRD_TYPE_ADD_TO_CART")
   private Boolean allowAddToCart;
-  
+
   @Column(name = "PRD_TYPE_VISIBLE")
   private Boolean visible;
 
@@ -58,7 +59,8 @@ public class ProductType extends SalesManagerEntity<Long, ProductType> implement
   @JoinColumn(name = "MERCHANT_ID", nullable = true)
   private MerchantStore merchantStore;
 
-  public ProductType() {}
+  public ProductType() {
+  }
 
   @Override
   public Long getId() {
@@ -112,21 +114,21 @@ public class ProductType extends SalesManagerEntity<Long, ProductType> implement
     this.merchantStore = merchantStore;
   }
 
-public Set<ProductTypeDescription> getDescriptions() {
-	return descriptions;
-}
+  public Set<ProductTypeDescription> getDescriptions() {
+    return descriptions;
+  }
 
-public void setDescriptions(Set<ProductTypeDescription> descriptions) {
-	this.descriptions = descriptions;
-}
+  public void setDescriptions(Set<ProductTypeDescription> descriptions) {
+    this.descriptions = descriptions;
+  }
 
-public Boolean getVisible() {
-	return visible;
-}
+  public Boolean getVisible() {
+    return visible;
+  }
 
-public void setVisible(Boolean visible) {
-	this.visible = visible;
-}
+  public void setVisible(Boolean visible) {
+    this.visible = visible;
+  }
 
 
 }

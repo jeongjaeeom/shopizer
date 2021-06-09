@@ -6,5 +6,6 @@ import com.salesmanager.core.model.order.orderstatus.OrderStatusHistory;
 import java.util.List;
 
 public interface OrderStatusHistoryService {
-    List<OrderStatusHistory> findByOrder(Order order);
+
+  List<OrderStatusHistory> findByOrder(Order order);
 }

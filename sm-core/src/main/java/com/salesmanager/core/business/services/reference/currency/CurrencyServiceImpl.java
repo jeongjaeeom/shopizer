@@ -10,19 +10,19 @@ import com.salesmanager.core.model.reference.currency.Currency;
 
 @Service("currencyService")
 public class CurrencyServiceImpl extends SalesManagerEntityServiceImpl<Long, Currency>
-	implements CurrencyService {
-	
-	private CurrencyRepository currencyRepository;
-	
-	@Inject
-	public CurrencyServiceImpl(CurrencyRepository currencyRepository) {
-		super(currencyRepository);
-		this.currencyRepository = currencyRepository;
-	}
+    implements CurrencyService {
 
-	@Override
-	public Currency getByCode(String code) {
-		return currencyRepository.getByCode(code);
-	}
+  private CurrencyRepository currencyRepository;
+
+  @Inject
+  public CurrencyServiceImpl(CurrencyRepository currencyRepository) {
+    super(currencyRepository);
+    this.currencyRepository = currencyRepository;
+  }
+
+  @Override
+  public Currency getByCode(String code) {
+    return currencyRepository.getByCode(code);
+  }
 
 }

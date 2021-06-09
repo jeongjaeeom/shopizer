@@ -6,7 +6,7 @@ import java.util.List;
 public class PersistableProductPrice extends ProductPriceEntity {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
   private List<ProductPriceDescription> descriptions = new ArrayList<ProductPriceDescription>();

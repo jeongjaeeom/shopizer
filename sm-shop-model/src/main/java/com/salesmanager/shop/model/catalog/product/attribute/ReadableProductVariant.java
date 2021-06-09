@@ -10,7 +10,7 @@ import com.salesmanager.shop.model.entity.Entity;
 public class ReadableProductVariant extends Entity implements Serializable {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
   //option name
@@ -34,14 +34,13 @@ public class ReadableProductVariant extends Entity implements Serializable {
     this.name = name;
   }
 
-public String getCode() {
-	return code;
-}
+  public String getCode() {
+    return code;
+  }
 
-public void setCode(String code) {
-	this.code = code;
-}
-
+  public void setCode(String code) {
+    this.code = code;
+  }
 
 
 }

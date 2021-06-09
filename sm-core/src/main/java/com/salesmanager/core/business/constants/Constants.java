@@ -7,9 +7,8 @@ import java.util.Locale;
 
 /**
  * Constants used for sm-core
- * 
- * @author carlsamson
  *
+ * @author carlsamson
  */
 public class Constants {
 
@@ -47,7 +46,7 @@ public class Constants {
 
   public final static Locale DEFAULT_LOCALE = Locale.US;
   public final static Currency DEFAULT_CURRENCY = Currency.getInstance(Locale.US);
-  
+
   public final static String PAYMENT_MODULES = "PAYMENT";
 
 }

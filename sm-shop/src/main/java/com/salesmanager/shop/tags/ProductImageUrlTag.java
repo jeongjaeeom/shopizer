@@ -18,95 +18,90 @@ import com.salesmanager.shop.utils.FilePathUtils;
 import com.salesmanager.shop.utils.ImageFilePath;
 
 public class ProductImageUrlTag extends RequestContextAwareTag {
-	
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6319855234657139862L;
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductImageUrlTag.class);
 
 
-	private String imageName;
-	private String imageType;
-	private Product product;
-	
-	@Inject
-	private FilePathUtils filePathUtils;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 6319855234657139862L;
 
-	@Inject
-	@Qualifier("img")
-	private ImageFilePath imageUtils;
-
-	public int doStartTagInternal() throws JspException {
-		try {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProductImageUrlTag.class);
 
 
-			if (filePathUtils==null || imageUtils==null) {
-	            WebApplicationContext wac = getRequestContext().getWebApplicationContext();
-	            AutowireCapableBeanFactory factory = wac.getAutowireCapableBeanFactory();
-	            factory.autowireBean(this);
-	        }
+  private String imageName;
+  private String imageType;
+  private Product product;
 
-			HttpServletRequest request = (HttpServletRequest) pageContext
-					.getRequest();
-			
-			MerchantStore merchantStore = (MerchantStore)request.getAttribute(Constants.ADMIN_STORE);
+  @Inject
+  private FilePathUtils filePathUtils;
 
-			StringBuilder imagePath = new StringBuilder();
-			
-			String baseUrl = filePathUtils.buildRelativeStoreUri(request, merchantStore);
-			imagePath.append(baseUrl);
-			
-			imagePath
+  @Inject
+  @Qualifier("img")
+  private ImageFilePath imageUtils;
 
-				.append(imageUtils.buildProductImageUtils(merchantStore, product, this.getImageName())).toString();
+  public int doStartTagInternal() throws JspException {
+    try {
 
-			System.out.println("Printing image " + imagePath.toString());
+      if (filePathUtils == null || imageUtils == null) {
+        WebApplicationContext wac = getRequestContext().getWebApplicationContext();
+        AutowireCapableBeanFactory factory = wac.getAutowireCapableBeanFactory();
+        factory.autowireBean(this);
+      }
 
-			pageContext.getOut().print(imagePath.toString());
+      HttpServletRequest request = (HttpServletRequest) pageContext
+          .getRequest();
 
+      MerchantStore merchantStore = (MerchantStore) request.getAttribute(Constants.ADMIN_STORE);
 
-			
-		} catch (Exception ex) {
-			LOGGER.error("Error while getting content url", ex);
-		}
-		return SKIP_BODY;
-	}
+      StringBuilder imagePath = new StringBuilder();
 
-	public int doEndTag() {
-		return EVAL_PAGE;
-	}
+      String baseUrl = filePathUtils.buildRelativeStoreUri(request, merchantStore);
+      imagePath.append(baseUrl);
 
+      imagePath
 
-	public void setImageName(String imageName) {
-		this.imageName = imageName;
-	}
+          .append(imageUtils.buildProductImageUtils(merchantStore, product, this.getImageName()))
+          .toString();
 
-	public String getImageName() {
-		return imageName;
-	}
+      System.out.println("Printing image " + imagePath.toString());
 
-	public void setImageType(String imageType) {
-		this.imageType = imageType;
-	}
-
-	public String getImageType() {
-		return imageType;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
+      pageContext.getOut().print(imagePath.toString());
 
 
+    } catch (Exception ex) {
+      LOGGER.error("Error while getting content url", ex);
+    }
+    return SKIP_BODY;
+  }
+
+  public int doEndTag() {
+    return EVAL_PAGE;
+  }
 
 
-	
+  public void setImageName(String imageName) {
+    this.imageName = imageName;
+  }
+
+  public String getImageName() {
+    return imageName;
+  }
+
+  public void setImageType(String imageType) {
+    this.imageType = imageType;
+  }
+
+  public String getImageType() {
+    return imageType;
+  }
+
+  public void setProduct(Product product) {
+    this.product = product;
+  }
+
+  public Product getProduct() {
+    return product;
+  }
+
 
 }

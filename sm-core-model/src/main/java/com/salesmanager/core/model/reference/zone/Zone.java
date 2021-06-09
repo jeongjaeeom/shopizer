@@ -24,6 +24,7 @@ import com.salesmanager.core.model.reference.country.Country;
 @Entity
 @Table(name = "ZONE")
 public class Zone extends SalesManagerEntity<Long, Zone> {
+
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -46,11 +47,11 @@ public class Zone extends SalesManagerEntity<Long, Zone> {
   private String name;
 
 
-
   @Column(name = "ZONE_CODE", unique = true, nullable = false)
   private String code;
 
-  public Zone() {}
+  public Zone() {
+  }
 
   public Zone(Country country, String name, String code) {
     this.setCode(code);
@@ -65,7 +66,6 @@ public class Zone extends SalesManagerEntity<Long, Zone> {
   public void setCountry(Country country) {
     this.country = country;
   }
-
 
 
   public String getCode() {

@@ -4,27 +4,27 @@
  *  Author: Victor C. / Octave & Octave web agency
  *  Licence: MIT
  */
-!function(root, factory) {
+!function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['jquery'], factory);
   } else {
     factory(root.jQuery);
   }
-}(this, function($) {
+}(this, function ($) {
   'use strict';
 
   // Create the defaults once
   var pluginName = 'scrolly',
-  defaults = {
-    bgParallax: false
-  },
-  didScroll = false;
+      defaults = {
+        bgParallax: false
+      },
+      didScroll = false;
 
-  function Plugin( element, options ) {
+  function Plugin(element, options) {
     this.element = element;
     this.$element = $(this.element);
 
-    this.options = $.extend( {}, defaults, options) ;
+    this.options = $.extend({}, defaults, options);
 
     this._defaults = defaults;
     this._name = pluginName;
@@ -40,11 +40,11 @@
     this.velocity = this.$element.attr('data-velocity');
     this.bgStart = parseInt(this.$element.attr('data-fit'), 10);
 
-    $(document).scroll(function(){
+    $(document).scroll(function () {
       self.didScroll = true;
     });
 
-    setInterval(function() {
+    setInterval(function () {
       if (self.didScroll) {
         self.didScroll = false;
         self.scrolly();
@@ -52,34 +52,37 @@
     }, 10);
   };
 
-  Plugin.prototype.scrolly = function() {
-    var dT =  $(window).scrollTop(),
-    wH = $(window).height(),
-    position = this.startPosition;
+  Plugin.prototype.scrolly = function () {
+    var dT = $(window).scrollTop(),
+        wH = $(window).height(),
+        position = this.startPosition;
 
-    if(this.offsetTop >= (dT+wH)) {
+    if (this.offsetTop >= (dT + wH)) {
       this.$element.addClass('scrolly-invisible');
     } else {
-      if(this.$element.hasClass('scrolly-invisible')){
-        position = this.startPosition + (dT + ( wH - this.offsetTop ) ) * this.velocity;
+      if (this.$element.hasClass('scrolly-invisible')) {
+        position = this.startPosition + (dT + (wH - this.offsetTop))
+            * this.velocity;
       } else {
-        position = this.startPosition + dT  * this.velocity;
+        position = this.startPosition + dT * this.velocity;
       }
     }
     // Fix background position
-    if(this.bgStart){ position = position + this.bgStart; }
+    if (this.bgStart) {
+      position = position + this.bgStart;
+    }
 
-    if(this.options.bgParallax === true) {
-      this.$element.css({backgroundPosition: '50% '+position+'px'});
+    if (this.options.bgParallax === true) {
+      this.$element.css({backgroundPosition: '50% ' + position + 'px'});
     } else {
       this.$element.css({top: position});
     }
   };
 
-  $.fn[pluginName] = function ( options ) {
+  $.fn[pluginName] = function (options) {
     return this.each(function () {
       if (!$.data(this, 'plugin_' + pluginName)) {
-        $.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
+        $.data(this, 'plugin_' + pluginName, new Plugin(this, options));
       }
     });
   };

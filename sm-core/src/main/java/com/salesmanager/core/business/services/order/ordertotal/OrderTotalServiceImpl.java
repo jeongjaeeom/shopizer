@@ -23,53 +23,56 @@ import com.salesmanager.core.modules.order.total.OrderTotalPostProcessorModule;
 
 @Service("OrderTotalService")
 public class OrderTotalServiceImpl implements OrderTotalService {
-	
-	@Autowired
-	@Resource(name="orderTotalsPostProcessors")
-	List<OrderTotalPostProcessorModule> orderTotalPostProcessors;
-	
-	@Inject
-	private ProductService productService;
-	
-	@Inject
-	private LanguageService languageService;
 
-	@Override
-	public OrderTotalVariation findOrderTotalVariation(OrderSummary summary, Customer customer, MerchantStore store, Language language)
-			throws Exception {
-	
-		RebatesOrderTotalVariation variation = new RebatesOrderTotalVariation();
-		
-		List<OrderTotal> totals = null;
-		
-		if(orderTotalPostProcessors != null) {
-			for(OrderTotalPostProcessorModule module : orderTotalPostProcessors) {
-				//TODO check if the module is enabled from the Admin
-				
-				List<ShoppingCartItem> items = summary.getProducts();
-				for(ShoppingCartItem item : items) {
-					
-					Long productId = item.getProductId();
-					Product product = productService.getProductForLocale(productId, language, languageService.toLocale(language, store));
-					
-					OrderTotal orderTotal = module.caculateProductPiceVariation(summary, item, product, customer, store);
-					if(orderTotal==null) {
-						continue;
-					}
-					if(totals==null) {
-						totals = new ArrayList<OrderTotal>();
-						variation.setVariations(totals);
-					}
-					
-					//if product is null it will be catched when invoking the module
-					orderTotal.setText(StringUtils.isNoneBlank(orderTotal.getText())?orderTotal.getText():product.getProductDescription().getName());
-					variation.getVariations().add(orderTotal);	
-				}
-			}
-		}
-		
-		
-		return variation;
-	}
+  @Autowired
+  @Resource(name = "orderTotalsPostProcessors")
+  List<OrderTotalPostProcessorModule> orderTotalPostProcessors;
+
+  @Inject
+  private ProductService productService;
+
+  @Inject
+  private LanguageService languageService;
+
+  @Override
+  public OrderTotalVariation findOrderTotalVariation(OrderSummary summary, Customer customer,
+      MerchantStore store, Language language)
+      throws Exception {
+
+    RebatesOrderTotalVariation variation = new RebatesOrderTotalVariation();
+
+    List<OrderTotal> totals = null;
+
+    if (orderTotalPostProcessors != null) {
+      for (OrderTotalPostProcessorModule module : orderTotalPostProcessors) {
+        //TODO check if the module is enabled from the Admin
+
+        List<ShoppingCartItem> items = summary.getProducts();
+        for (ShoppingCartItem item : items) {
+
+          Long productId = item.getProductId();
+          Product product = productService
+              .getProductForLocale(productId, language, languageService.toLocale(language, store));
+
+          OrderTotal orderTotal = module
+              .caculateProductPiceVariation(summary, item, product, customer, store);
+          if (orderTotal == null) {
+            continue;
+          }
+          if (totals == null) {
+            totals = new ArrayList<OrderTotal>();
+            variation.setVariations(totals);
+          }
+
+          //if product is null it will be catched when invoking the module
+          orderTotal.setText(StringUtils.isNoneBlank(orderTotal.getText()) ? orderTotal.getText()
+              : product.getProductDescription().getName());
+          variation.getVariations().add(orderTotal);
+        }
+      }
+    }
+
+    return variation;
+  }
 
 }

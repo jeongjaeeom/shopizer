@@ -55,17 +55,23 @@ public class OrderShippingApi {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(OrderShippingApi.class);
 
-  @Inject private CustomerService customerService;
+  @Inject
+  private CustomerService customerService;
 
-  @Inject private OrderFacade orderFacade;
+  @Inject
+  private OrderFacade orderFacade;
 
-  @Inject private ShoppingCartFacade shoppingCartFacade;
+  @Inject
+  private ShoppingCartFacade shoppingCartFacade;
 
-  @Inject private LabelUtils messages;
+  @Inject
+  private LabelUtils messages;
 
-  @Inject private PricingService pricingService;
-  
-  @Inject private CountryService countryService;
+  @Inject
+  private PricingService pricingService;
+
+  @Inject
+  private CountryService countryService;
 
   /**
    * Get shipping quote for a given shopping cart
@@ -110,11 +116,13 @@ public class OrderShippingApi {
       }
 
       if (cart.getCustomerId() == null) {
-        response.sendError(404, "Cart code " + code + " does not exist for exist for user " + userName);
+        response
+            .sendError(404, "Cart code " + code + " does not exist for exist for user " + userName);
       }
 
       if (cart.getCustomerId().longValue() != customer.getId().longValue()) {
-        response.sendError(404, "Cart code " + code + " does not exist for exist for user " + userName);
+        response
+            .sendError(404, "Cart code " + code + " does not exist for exist for user " + userName);
       }
 
       ShippingQuote quote = orderFacade.getShippingQuote(customer, cart, merchantStore, language);
@@ -137,7 +145,7 @@ public class OrderShippingApi {
 
           String carrier =
               messages.getMessage(
-                  moduleName.toString(), new String[] {merchantStore.getStorename()}, locale);
+                  moduleName.toString(), new String[]{merchantStore.getStorename()}, locale);
 
           String note = messages.getMessage(moduleName.append(".note").toString(), locale, "");
 
@@ -178,6 +186,7 @@ public class OrderShippingApi {
 
   /**
    * Get shipping quote based on postal code
+   *
    * @param code
    * @param address
    * @param merchantStore
@@ -213,22 +222,20 @@ public class OrderShippingApi {
         response.sendError(404, "Cart id " + code + " does not exist");
       }
 
-      
       Delivery addr = new Delivery();
       addr.setPostalCode(address.getPostalCode());
 
       Country c = countryService.getByCode(address.getCountryCode());
-      
-      if(c==null) {
-    	c = merchantStore.getCountry();
+
+      if (c == null) {
+        c = merchantStore.getCountry();
       }
       addr.setCountry(c);
 
-      
       Customer temp = new Customer();
       temp.setAnonymous(true);
       temp.setDelivery(addr);
-      
+
       ShippingQuote quote = orderFacade.getShippingQuote(temp, cart, merchantStore, language);
 
       ShippingSummary summary = orderFacade.getShippingSummary(quote, merchantStore, language);
@@ -249,7 +256,7 @@ public class OrderShippingApi {
 
           String carrier =
               messages.getMessage(
-                  moduleName.toString(), new String[] {merchantStore.getStorename()}, locale);
+                  moduleName.toString(), new String[]{merchantStore.getStorename()}, locale);
 
           String note = messages.getMessage(moduleName.append(".note").toString(), locale, "");
 
@@ -265,7 +272,8 @@ public class OrderShippingApi {
               optionCodeBuilder
                   .append("module.shipping.")
                   .append(shipOption.getShippingModuleCode());
-              String optionName = messages.getMessage(optionCodeBuilder.toString(), new String[]{merchantStore.getStorename()},locale);
+              String optionName = messages.getMessage(optionCodeBuilder.toString(),
+                  new String[]{merchantStore.getStorename()}, locale);
               shipOption.setOptionName(optionName);
             } catch (Exception e) { // label not found
               LOGGER.warn("No shipping code found for " + optionCodeBuilder.toString());

@@ -6,13 +6,15 @@ import com.salesmanager.core.business.services.common.generic.SalesManagerEntity
 import com.salesmanager.core.model.order.orderproduct.OrderProductDownload;
 
 
-public interface OrderProductDownloadService extends SalesManagerEntityService<Long, OrderProductDownload> {
+public interface OrderProductDownloadService extends
+    SalesManagerEntityService<Long, OrderProductDownload> {
 
-	/**
-	 * List {@link OrderProductDownload} by order id
-	 * @param orderId
-	 * @return
-	 */
-	List<OrderProductDownload> getByOrderId(Long orderId);
+  /**
+   * List {@link OrderProductDownload} by order id
+   *
+   * @param orderId
+   * @return
+   */
+  List<OrderProductDownload> getByOrderId(Long orderId);
 
 }

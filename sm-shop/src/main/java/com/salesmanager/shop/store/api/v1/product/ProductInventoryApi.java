@@ -38,10 +38,10 @@ import springfox.documentation.annotations.ApiIgnore;
     @Tag(name = "Product inventory resource", description = "Manage inventory for a given product")
 })
 public class ProductInventoryApi {
-  
+
   @Autowired
   private ProductInventoryFacade productInventoryFacade;
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ProductInventoryApi.class);
 
   @ResponseStatus(HttpStatus.CREATED)
@@ -52,13 +52,14 @@ public class ProductInventoryApi {
       @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
       @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
   })
-  public @ResponseBody ReadableInventory create(
+  public @ResponseBody
+  ReadableInventory create(
       @Valid @RequestBody PersistableInventory inventory,
-            @ApiIgnore MerchantStore merchantStore,
-            @ApiIgnore Language language) {
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
     return productInventoryFacade.add(inventory.getProductId(), inventory, merchantStore, language);
   }
-  
+
   @ResponseStatus(HttpStatus.OK)
   @RequestMapping(
       value = {"/private/product/{productId}/inventory/{id}"},
@@ -71,16 +72,16 @@ public class ProductInventoryApi {
       @PathVariable Long productId,
       @PathVariable Long id,
       @Valid @RequestBody PersistableInventory inventory,
-            @ApiIgnore MerchantStore merchantStore,
-            @ApiIgnore Language language,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language,
       HttpServletRequest request,
       HttpServletResponse response) {
-      inventory.setId(id);
-      inventory.setProductId(productId);
-      productInventoryFacade.update(productId, inventory, merchantStore, language);
+    inventory.setId(id);
+    inventory.setProductId(productId);
+    productInventoryFacade.update(productId, inventory, merchantStore, language);
 
   }
-  
+
   @ResponseStatus(HttpStatus.OK)
   @RequestMapping(
       value = {"/private/product/inventory/{id}"},
@@ -90,9 +91,9 @@ public class ProductInventoryApi {
       @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
   })
   public void delete(
-            @PathVariable Long id,
-            @ApiIgnore MerchantStore merchantStore,
-            @ApiIgnore Language language,
+      @PathVariable Long id,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language,
       HttpServletRequest request,
       HttpServletResponse response) {
 
@@ -100,7 +101,7 @@ public class ProductInventoryApi {
 
 
   }
-  
+
   @ResponseStatus(HttpStatus.OK)
   @RequestMapping(
       value = {"/private/product/{id}/inventory"},
@@ -111,18 +112,17 @@ public class ProductInventoryApi {
   })
   public @ResponseBody
   ReadableEntityList<ReadableInventory> get(
-            @PathVariable Long id,
-            @ApiIgnore MerchantStore merchantStore,
-            @ApiIgnore Language language,
-            @RequestParam(value = "child", required = false) String child,
-            @RequestParam(value = "page", required = false, defaultValue="0") Integer page,
-            @RequestParam(value = "count", required = false, defaultValue="10") Integer count) {
-    
-    
-      return productInventoryFacade.getInventory(id, merchantStore, child, language, page, count);
+      @PathVariable Long id,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language,
+      @RequestParam(value = "child", required = false) String child,
+      @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+      @RequestParam(value = "count", required = false, defaultValue = "10") Integer count) {
+
+    return productInventoryFacade.getInventory(id, merchantStore, child, language, page, count);
 
   }
-  
+
   @ResponseStatus(HttpStatus.OK)
   @RequestMapping(
       value = {"/private/product/{id}/inventory/{inventoryId}"},
@@ -131,19 +131,19 @@ public class ProductInventoryApi {
       @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
       @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
   })
-  public @ResponseBody ReadableInventory get(
-            @PathVariable Long id,
-            @PathVariable Long inventoryId,
-            @ApiIgnore MerchantStore merchantStore,
-            @ApiIgnore Language language,
+  public @ResponseBody
+  ReadableInventory get(
+      @PathVariable Long id,
+      @PathVariable Long inventoryId,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language,
       HttpServletRequest request,
       HttpServletResponse response) {
-    
-    
-      return productInventoryFacade.get(id, inventoryId, merchantStore, language);
+
+    return productInventoryFacade.get(id, inventoryId, merchantStore, language);
 
   }
-  
+
   @ResponseStatus(HttpStatus.OK)
   @RequestMapping(
       value = {"/private/product/{id}/inventory/store/{code}"},
@@ -152,16 +152,16 @@ public class ProductInventoryApi {
       @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
       @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
   })
-  public @ResponseBody ReadableInventory get(
-            @PathVariable Long id,
-            @PathVariable String code,
-            @ApiIgnore MerchantStore merchantStore,
-            @ApiIgnore Language language,
+  public @ResponseBody
+  ReadableInventory get(
+      @PathVariable Long id,
+      @PathVariable String code,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language,
       HttpServletRequest request,
       HttpServletResponse response) {
-    
-    
-      return productInventoryFacade.get(id, code, language);
+
+    return productInventoryFacade.get(id, code, language);
 
   }
 

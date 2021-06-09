@@ -4,8 +4,8 @@ package com.salesmanager.shop.store.api.exception;
 public class GenericRuntimeException extends RuntimeException {
 
   /**
-  * 
-  */
+   *
+   */
   private static final long serialVersionUID = 1L;
   private String errorCode;
   private String errorMessage;

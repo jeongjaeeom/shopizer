@@ -18,50 +18,49 @@ import com.salesmanager.core.model.reference.language.Language;
 
 @Service("productVariationeService")
 public class ProductVariationServiceImpl extends
-		SalesManagerEntityServiceImpl<Long, ProductVariation> implements
-		ProductVariationService {
+    SalesManagerEntityServiceImpl<Long, ProductVariation> implements
+    ProductVariationService {
 
-	@Inject
-	private ProductVariationRepository productVariationRepository;
-	
-	@Inject
-	public ProductVariationServiceImpl(
-			ProductVariationRepository productVariationSetRepository) {
-		super(productVariationSetRepository);
-		this.productVariationRepository = productVariationSetRepository;
-	}
+  @Inject
+  private ProductVariationRepository productVariationRepository;
 
-
-	@Autowired
-	private PageableProductVariationRepository pageableProductVariationSetRepository;
+  @Inject
+  public ProductVariationServiceImpl(
+      ProductVariationRepository productVariationSetRepository) {
+    super(productVariationSetRepository);
+    this.productVariationRepository = productVariationSetRepository;
+  }
 
 
-	@Override
-	public ProductVariation getById(MerchantStore store, Long id, Language lang) {
-		return productVariationRepository.findOne(store.getId(), id, lang.getId());
-	}
-	
-	@Override
-	public ProductVariation getByCode(MerchantStore store, String code) {
-		return productVariationRepository.findByCode(code, store.getId());
-	}
+  @Autowired
+  private PageableProductVariationRepository pageableProductVariationSetRepository;
 
 
-	@Override
-	public void saveOrUpdate(ProductVariation entity) throws ServiceException {
-		productVariationRepository.save(entity);
-		
-	}
+  @Override
+  public ProductVariation getById(MerchantStore store, Long id, Language lang) {
+    return productVariationRepository.findOne(store.getId(), id, lang.getId());
+  }
+
+  @Override
+  public ProductVariation getByCode(MerchantStore store, String code) {
+    return productVariationRepository.findByCode(code, store.getId());
+  }
 
 
+  @Override
+  public void saveOrUpdate(ProductVariation entity) throws ServiceException {
+    productVariationRepository.save(entity);
 
-	@Override
-	public Page<ProductVariation> getByMerchant(MerchantStore store, Language language, String code, int page,
-			int count) {
-		Pageable p = PageRequest.of(page, count);
-		return pageableProductVariationSetRepository.list(store.getId(), code, p);
-	}
+  }
 
+
+  @Override
+  public Page<ProductVariation> getByMerchant(MerchantStore store, Language language, String code,
+      int page,
+      int count) {
+    Pageable p = PageRequest.of(page, count);
+    return pageableProductVariationSetRepository.list(store.getId(), code, p);
+  }
 
 
 }

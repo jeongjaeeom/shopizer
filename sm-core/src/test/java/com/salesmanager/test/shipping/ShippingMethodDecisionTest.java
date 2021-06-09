@@ -18,71 +18,75 @@ import com.salesmanager.core.model.shipping.ShippingQuote;
 import com.salesmanager.core.model.system.IntegrationModule;
 
 
-
 @Ignore
-public class ShippingMethodDecisionTest extends com.salesmanager.test.common.AbstractSalesManagerCoreTestCase {
-	
-	@Inject
-	ShippingDecisionPreProcessorImpl shippingMethodDecisionProcess;
+public class ShippingMethodDecisionTest extends
+    com.salesmanager.test.common.AbstractSalesManagerCoreTestCase {
 
-	@Test
-	@Ignore
-	public void validateShippingMethod() throws Exception {
-		
-		ShippingQuote quote = new ShippingQuote();
-		PackageDetails pDetail = new PackageDetails();
-		pDetail.setShippingHeight(20);
-		pDetail.setShippingLength(10);
-		pDetail.setShippingWeight(70);
-		pDetail.setShippingWidth(78);
-		List<PackageDetails> details = new ArrayList<PackageDetails>();
-		details.add(pDetail);
+  @Inject
+  ShippingDecisionPreProcessorImpl shippingMethodDecisionProcess;
 
-		Delivery delivery = new Delivery();
-		delivery.setAddress("358 Du Languedoc");
-		delivery.setCity("Boucherville");
-		delivery.setPostalCode("J4B 8J9");
-		
-		Country country = new Country();
-		country.setIsoCode("CA");
-		country.setName("Canada");
-		
-		//country.setIsoCode("US");
-		//country.setName("United States");
-		
-		delivery.setCountry(country);
-		
-		Zone zone = new Zone();
-		zone.setCode("QC");
-		zone.setName("Quebec");
-		
-		//zone.setCode("NY");
-		//zone.setName("New York");
-		
-		delivery.setZone(zone);
-		
-		IntegrationModule currentModule = new IntegrationModule();
-		currentModule.setCode("canadapost");
-		quote.setCurrentShippingModule(currentModule);
-		quote.setShippingModuleCode(currentModule.getCode());
-		
-		IntegrationModule canadapost = new IntegrationModule();
-		canadapost.setCode("canadapost");
-		
-		IntegrationModule ups = new IntegrationModule();
-		ups.setCode("ups");
-		
-		IntegrationModule inhouse = new IntegrationModule();
-		inhouse.setCode("customQuotesRules");
-		
-		List<IntegrationModule> allModules = new ArrayList<IntegrationModule>();
-		allModules.add(canadapost);
-		allModules.add(ups);
-		allModules.add(inhouse);
+  @Test
+  @Ignore
+  public void validateShippingMethod() throws Exception {
 
-		shippingMethodDecisionProcess.prePostProcessShippingQuotes(quote, details, null, delivery, null, null, null, currentModule, null, allModules, Locale.CANADA);
-		
-		System.out.println("Done : " + quote.getCurrentShippingModule()!=null ? quote.getCurrentShippingModule().getCode() : currentModule.getCode());
+    ShippingQuote quote = new ShippingQuote();
+    PackageDetails pDetail = new PackageDetails();
+    pDetail.setShippingHeight(20);
+    pDetail.setShippingLength(10);
+    pDetail.setShippingWeight(70);
+    pDetail.setShippingWidth(78);
+    List<PackageDetails> details = new ArrayList<PackageDetails>();
+    details.add(pDetail);
 
-	}
+    Delivery delivery = new Delivery();
+    delivery.setAddress("358 Du Languedoc");
+    delivery.setCity("Boucherville");
+    delivery.setPostalCode("J4B 8J9");
+
+    Country country = new Country();
+    country.setIsoCode("CA");
+    country.setName("Canada");
+
+    //country.setIsoCode("US");
+    //country.setName("United States");
+
+    delivery.setCountry(country);
+
+    Zone zone = new Zone();
+    zone.setCode("QC");
+    zone.setName("Quebec");
+
+    //zone.setCode("NY");
+    //zone.setName("New York");
+
+    delivery.setZone(zone);
+
+    IntegrationModule currentModule = new IntegrationModule();
+    currentModule.setCode("canadapost");
+    quote.setCurrentShippingModule(currentModule);
+    quote.setShippingModuleCode(currentModule.getCode());
+
+    IntegrationModule canadapost = new IntegrationModule();
+    canadapost.setCode("canadapost");
+
+    IntegrationModule ups = new IntegrationModule();
+    ups.setCode("ups");
+
+    IntegrationModule inhouse = new IntegrationModule();
+    inhouse.setCode("customQuotesRules");
+
+    List<IntegrationModule> allModules = new ArrayList<IntegrationModule>();
+    allModules.add(canadapost);
+    allModules.add(ups);
+    allModules.add(inhouse);
+
+    shippingMethodDecisionProcess
+        .prePostProcessShippingQuotes(quote, details, null, delivery, null, null, null,
+            currentModule, null, allModules, Locale.CANADA);
+
+    System.out.println(
+        "Done : " + quote.getCurrentShippingModule() != null ? quote.getCurrentShippingModule()
+            .getCode() : currentModule.getCode());
+
+  }
 }

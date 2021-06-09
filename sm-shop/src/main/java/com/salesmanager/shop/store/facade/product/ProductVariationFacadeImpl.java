@@ -25,123 +25,132 @@ import com.salesmanager.shop.store.controller.product.facade.ProductVariationFac
 
 @Service
 public class ProductVariationFacadeImpl implements ProductVariationFacade {
-	
-	@Autowired
-	private PersistableProductVariationMapper persistableProductVariationMapper;
-	
-	@Autowired
-	private ReadableProductVariationMapper readableProductVariationMapper;
-	
-	@Autowired
-	private ProductVariationService productVariationService;
+
+  @Autowired
+  private PersistableProductVariationMapper persistableProductVariationMapper;
+
+  @Autowired
+  private ReadableProductVariationMapper readableProductVariationMapper;
+
+  @Autowired
+  private ProductVariationService productVariationService;
 
 
-	@Override
-	public ReadableProductVariation get(Long id, MerchantStore store, Language language) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(language, "Language cannot be null");
-		ProductVariation variation =  productVariationService.getById(store, id, language);
-		if(variation == null) {
-			throw new ResourceNotFoundException("ProductVariation not found for id [" + id +"] and store [" + store.getCode() + "]");
-		}
-		
-		return readableProductVariationMapper.convert(variation, store, language);
-	}
+  @Override
+  public ReadableProductVariation get(Long id, MerchantStore store, Language language) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(language, "Language cannot be null");
+    ProductVariation variation = productVariationService.getById(store, id, language);
+    if (variation == null) {
+      throw new ResourceNotFoundException(
+          "ProductVariation not found for id [" + id + "] and store [" + store.getCode() + "]");
+    }
 
-	@Override
-	public ReadableEntityList<ReadableProductVariation> list(MerchantStore store, Language language, int page, int count) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(language, "Language cannot be null");
-		
+    return readableProductVariationMapper.convert(variation, store, language);
+  }
 
-			Page<ProductVariation> vars = productVariationService.getByMerchant(store, language, null, page, count);
-			List<ReadableProductVariation> variations = vars.stream().map(opt -> this.convert(opt, store, language)).collect(Collectors.toList());
-			ReadableEntityList<ReadableProductVariation> returnList = new ReadableEntityList<ReadableProductVariation>();
-			returnList.setItems(variations);
-			returnList.setNumber(variations.size());
-			returnList.setRecordsTotal(vars.getTotalElements());
-			returnList.setTotalPages(vars.getTotalPages());
-			return returnList;
-		
+  @Override
+  public ReadableEntityList<ReadableProductVariation> list(MerchantStore store, Language language,
+      int page, int count) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(language, "Language cannot be null");
 
-	}
-	
-	private ReadableProductVariation convert(ProductVariation var, MerchantStore store, Language language) {
-		return readableProductVariationMapper.convert(var, store, language);
-	}
+    Page<ProductVariation> vars = productVariationService
+        .getByMerchant(store, language, null, page, count);
+    List<ReadableProductVariation> variations = vars.stream()
+        .map(opt -> this.convert(opt, store, language)).collect(Collectors.toList());
+    ReadableEntityList<ReadableProductVariation> returnList = new ReadableEntityList<ReadableProductVariation>();
+    returnList.setItems(variations);
+    returnList.setNumber(variations.size());
+    returnList.setRecordsTotal(vars.getTotalElements());
+    returnList.setTotalPages(vars.getTotalPages());
+    return returnList;
 
-	@Override
-	public void create(PersistableProductVariation var, MerchantStore store, Language language) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(language, "Language cannot be null");
-		Validate.notNull(var, "PersistableProductVariation cannot be null");
-		
-		if(this.exists(var.getCode(), store)) {
-			throw new OperationNotAllowedException("Option set with code [" + var.getCode() + "] already exist");
-		}
-		
-		ProductVariation p = persistableProductVariationMapper.convert(var, store, language);
-		try {
-			p.setMerchantStore(store);
-			productVariationService.create(p);
-		} catch (ServiceException e) {
-			throw new ServiceRuntimeException("Exception while creating ProductOptionSet", e);
-		}
 
-	}
+  }
 
-	@Override
-	public void update(Long id, PersistableProductVariation var, MerchantStore store, Language language) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(language, "Language cannot be null");
-		Validate.notNull(var, "PersistableProductVariation cannot be null");
-		
-		ProductVariation p =  productVariationService.getById(store, id, language);
-		if(p == null) {
-			throw new ResourceNotFoundException("ProductVariation not found for id [" + id +"] and store [" + store.getCode() + "]");
-		}
-		
-		p.setId(id);
-		p.setCode(var.getCode());
-		ProductVariation model = persistableProductVariationMapper.merge(var, p, store, language);
-		try {
-			model.setMerchantStore(store);
-			productVariationService.save(model);
-		} catch (ServiceException e) {
-			throw new ServiceRuntimeException("Exception while creating ProductVariation", e);
-		}
+  private ReadableProductVariation convert(ProductVariation var, MerchantStore store,
+      Language language) {
+    return readableProductVariationMapper.convert(var, store, language);
+  }
 
-	}
+  @Override
+  public void create(PersistableProductVariation var, MerchantStore store, Language language) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(language, "Language cannot be null");
+    Validate.notNull(var, "PersistableProductVariation cannot be null");
 
-	@Override
-	public void delete(Long id, MerchantStore store) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(id, "id cannot be null");
-		ProductVariation opt =  productVariationService.getById(id);
-		if(opt == null) {
-			throw new ResourceNotFoundException("ProductVariation not found for id [" + id +"] and store [" + store.getCode() + "]");
-		}
-		if(!opt.getMerchantStore().getCode().equals(store.getCode())) {
-			throw new ResourceNotFoundException("ProductVariation not found for id [" + id +"] and store [" + store.getCode() + "]");
-		}
-		try {
-			productVariationService.delete(opt);
-		} catch (ServiceException e) {
-			throw new ServiceRuntimeException("Exception while deleting ProductVariation", e);
-		}
+    if (this.exists(var.getCode(), store)) {
+      throw new OperationNotAllowedException(
+          "Option set with code [" + var.getCode() + "] already exist");
+    }
 
-	}
+    ProductVariation p = persistableProductVariationMapper.convert(var, store, language);
+    try {
+      p.setMerchantStore(store);
+      productVariationService.create(p);
+    } catch (ServiceException e) {
+      throw new ServiceRuntimeException("Exception while creating ProductOptionSet", e);
+    }
 
-	@Override
-	public boolean exists(String code, MerchantStore store) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(code, "code cannot be null");
-		ProductVariation var =  productVariationService.getByCode(store, code);
-		if(var != null) {
-			return true;
-		}
-		
-		return false;
-	}
+  }
+
+  @Override
+  public void update(Long id, PersistableProductVariation var, MerchantStore store,
+      Language language) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(language, "Language cannot be null");
+    Validate.notNull(var, "PersistableProductVariation cannot be null");
+
+    ProductVariation p = productVariationService.getById(store, id, language);
+    if (p == null) {
+      throw new ResourceNotFoundException(
+          "ProductVariation not found for id [" + id + "] and store [" + store.getCode() + "]");
+    }
+
+    p.setId(id);
+    p.setCode(var.getCode());
+    ProductVariation model = persistableProductVariationMapper.merge(var, p, store, language);
+    try {
+      model.setMerchantStore(store);
+      productVariationService.save(model);
+    } catch (ServiceException e) {
+      throw new ServiceRuntimeException("Exception while creating ProductVariation", e);
+    }
+
+  }
+
+  @Override
+  public void delete(Long id, MerchantStore store) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(id, "id cannot be null");
+    ProductVariation opt = productVariationService.getById(id);
+    if (opt == null) {
+      throw new ResourceNotFoundException(
+          "ProductVariation not found for id [" + id + "] and store [" + store.getCode() + "]");
+    }
+    if (!opt.getMerchantStore().getCode().equals(store.getCode())) {
+      throw new ResourceNotFoundException(
+          "ProductVariation not found for id [" + id + "] and store [" + store.getCode() + "]");
+    }
+    try {
+      productVariationService.delete(opt);
+    } catch (ServiceException e) {
+      throw new ServiceRuntimeException("Exception while deleting ProductVariation", e);
+    }
+
+  }
+
+  @Override
+  public boolean exists(String code, MerchantStore store) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(code, "code cannot be null");
+    ProductVariation var = productVariationService.getByCode(store, code);
+    if (var != null) {
+      return true;
+    }
+
+    return false;
+  }
 
 }

@@ -18,5 +18,4 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class CoreApplicationConfiguration {
 
 
-
 }

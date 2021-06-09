@@ -8,9 +8,9 @@ import com.salesmanager.core.model.system.IntegrationModule;
 
 public interface ModuleConfigurationRepository extends JpaRepository<IntegrationModule, Long> {
 
-	List<IntegrationModule> findByModule(String moduleName);
-	
-	IntegrationModule findByCode(String code);
-	
+  List<IntegrationModule> findByModule(String moduleName);
+
+  IntegrationModule findByCode(String code);
+
 
 }

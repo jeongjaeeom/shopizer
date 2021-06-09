@@ -17,13 +17,13 @@ public class LanguageFacadeImpl implements LanguageFacade {
 
   @Override
   public List<Language> getLanguages() {
-    try{
+    try {
       List<Language> languages = languageService.getLanguages();
       if (languages.isEmpty()) {
         throw new ResourceNotFoundException("No languages found");
       }
       return languages;
-    } catch (ServiceException e){
+    } catch (ServiceException e) {
       throw new ServiceRuntimeException(e);
     }
 

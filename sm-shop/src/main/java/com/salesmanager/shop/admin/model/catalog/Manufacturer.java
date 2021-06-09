@@ -12,80 +12,78 @@ import java.util.List;
 
 
 public class Manufacturer implements Serializable {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4531526676134574984L;
 
-	/**
-	 * 
-	 */
+  /**
+   *
+   */
+  private static final long serialVersionUID = -4531526676134574984L;
 
-	//provides wrapping to the main Manufacturer entity
-	private com.salesmanager.core.model.catalog.product.manufacturer.Manufacturer manufacturer;
-	
-	@Valid
-	private List<ManufacturerDescription> descriptions = new ArrayList<ManufacturerDescription>();
-	
-	private Integer order = new Integer(0);
-	private MultipartFile image = null;
-	@NotNull
-	private String code;
-	public String getCode() {
-		return code;
-	}
+  /**
+   *
+   */
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+  //provides wrapping to the main Manufacturer entity
+  private com.salesmanager.core.model.catalog.product.manufacturer.Manufacturer manufacturer;
 
-	private ProductImage productImage = null;
-	
-	
-	
-	public MultipartFile getImage() {
-		return image;
-	}
+  @Valid
+  private List<ManufacturerDescription> descriptions = new ArrayList<ManufacturerDescription>();
 
-	public void setImage(MultipartFile image) {
-		this.image = image;
-	}
+  private Integer order = new Integer(0);
+  private MultipartFile image = null;
+  @NotNull
+  private String code;
 
-	public ProductImage getProductImage() {
-		return productImage;
-	}
+  public String getCode() {
+    return code;
+  }
 
-	public void setProductImage(ProductImage productImage) {
-		this.productImage = productImage;
-	}
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-	public com.salesmanager.core.model.catalog.product.manufacturer.Manufacturer getManufacturer() {
-		return manufacturer;
-	}
+  private ProductImage productImage = null;
 
-	public void setManufacturer(
-			com.salesmanager.core.model.catalog.product.manufacturer.Manufacturer manufacturer) {
-		this.manufacturer = manufacturer;
-	}
 
-	public List<ManufacturerDescription> getDescriptions() {
-		return descriptions;
-	}
+  public MultipartFile getImage() {
+    return image;
+  }
 
-	public void setDescriptions(List<ManufacturerDescription> descriptions) {
-		this.descriptions = descriptions;
-	}
+  public void setImage(MultipartFile image) {
+    this.image = image;
+  }
 
-	public Integer getOrder() {
-		return order;
-	}
+  public ProductImage getProductImage() {
+    return productImage;
+  }
 
-	public void setOrder(Integer order) {
-		this.order = order;
-	}
-	
-	
-	
+  public void setProductImage(ProductImage productImage) {
+    this.productImage = productImage;
+  }
+
+  public com.salesmanager.core.model.catalog.product.manufacturer.Manufacturer getManufacturer() {
+    return manufacturer;
+  }
+
+  public void setManufacturer(
+      com.salesmanager.core.model.catalog.product.manufacturer.Manufacturer manufacturer) {
+    this.manufacturer = manufacturer;
+  }
+
+  public List<ManufacturerDescription> getDescriptions() {
+    return descriptions;
+  }
+
+  public void setDescriptions(List<ManufacturerDescription> descriptions) {
+    this.descriptions = descriptions;
+  }
+
+  public Integer getOrder() {
+    return order;
+  }
+
+  public void setOrder(Integer order) {
+    this.order = order;
+  }
+
 
 }

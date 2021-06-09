@@ -2,9 +2,8 @@ package com.salesmanager.core.business.modules.cms.impl;
 
 /**
  * Infinispan asset manager
- * 
- * @author casams1
  *
+ * @author casams1
  */
 public class StoreCacheManagerImpl extends CacheManagerImpl {
 
@@ -29,7 +28,6 @@ public class StoreCacheManagerImpl extends CacheManagerImpl {
   public String getLocation() {
     return location;
   }
-
 
 
 }

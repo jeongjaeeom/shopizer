@@ -7,14 +7,15 @@ import javax.validation.constraints.NotEmpty;
 public abstract class Content implements Serializable {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
   @NotEmpty
   private String name;
   private String contentType;
 
-  public Content() {}
+  public Content() {
+  }
 
   public Content(String name) {
     this.name = name;

@@ -7,17 +7,18 @@ import com.salesmanager.shop.model.catalog.product.type.ReadableProductType;
 import com.salesmanager.shop.model.catalog.product.type.ReadableProductTypeList;
 
 public interface ProductTypeFacade {
-  
-  ReadableProductTypeList getByMerchant(MerchantStore store, Language language, int count, int page);
-  
+
+  ReadableProductTypeList getByMerchant(MerchantStore store, Language language, int count,
+      int page);
+
   ReadableProductType get(MerchantStore store, Long id, Language language);
-  
+
   Long save(PersistableProductType type, MerchantStore store, Language language);
-  
+
   void update(PersistableProductType type, Long id, MerchantStore store, Language language);
-  
+
   void delete(Long id, MerchantStore store, Language language);
-  
+
   boolean exists(String code, MerchantStore store, Language language);
 
 }

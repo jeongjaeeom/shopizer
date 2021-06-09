@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.salesmanager.core.business.modules.cms.content;
 
@@ -14,6 +14,7 @@ import com.salesmanager.core.model.content.FileContentType;
  *
  */
 public interface FileRemove {
+
   void removeFile(String merchantStoreCode, FileContentType staticContentType,
       String fileName, Optional<String> path) throws ServiceException;
 

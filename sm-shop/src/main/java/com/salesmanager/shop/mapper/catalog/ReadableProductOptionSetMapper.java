@@ -26,91 +26,101 @@ import com.salesmanager.shop.model.catalog.product.attribute.optionset.ReadableP
 import com.salesmanager.shop.model.catalog.product.type.ReadableProductType;
 
 @Component
-public class ReadableProductOptionSetMapper implements Mapper<ProductOptionSet, ReadableProductOptionSet> {
- 
-	
-	@Autowired
-	private ReadableProductTypeMapper readableProductTypeMapper;
-	
-	@Override
-	public ReadableProductOptionSet convert(ProductOptionSet source, MerchantStore store, Language language) {
-		ReadableProductOptionSet optionSource = new ReadableProductOptionSet();
-		return merge(source, optionSource, store, language);
-	}
+public class ReadableProductOptionSetMapper implements
+    Mapper<ProductOptionSet, ReadableProductOptionSet> {
 
-	@Override
-	public ReadableProductOptionSet merge(ProductOptionSet source, ReadableProductOptionSet destination,
-										  MerchantStore store, Language language) {
-		Validate.notNull(source,"ProductOptionSet must not be null");
-		Validate.notNull(destination,"ReadableProductOptionSet must not be null");
-		
-		
-		destination.setId(source.getId());
-		destination.setCode(source.getCode());
-		destination.setReadOnly(source.isOptionDisplayOnly());
-		
-		destination.setOption(this.option(source.getOption(), store, language));
-		
-		List<Long> ids = new ArrayList<Long>();
 
-		if(!CollectionUtils.isEmpty(source.getValues())) {
-			List<ReadableProductOptionValue> values = source.getValues().stream().map(val -> optionValue(ids, val, store, language)).collect(Collectors.toList());
-			destination.setValues(values);
-			destination.getValues().removeAll(Collections.singleton(null));
-		}
-		
-		if(!CollectionUtils.isEmpty(source.getProductTypes())) {
-			List<ReadableProductType> types = source.getProductTypes().stream().map( t -> this.productType(t, store, language)).collect(Collectors.toList());
-			destination.setProductTypes(types);
-		}
+  @Autowired
+  private ReadableProductTypeMapper readableProductTypeMapper;
 
-		
-		return destination;
-	}
-	
-	private ReadableProductOption option (ProductOption option, MerchantStore store, Language lang) {
+  @Override
+  public ReadableProductOptionSet convert(ProductOptionSet source, MerchantStore store,
+      Language language) {
+    ReadableProductOptionSet optionSource = new ReadableProductOptionSet();
+    return merge(source, optionSource, store, language);
+  }
 
-		ReadableProductOption opt = new ReadableProductOption();
-		opt.setCode(option.getCode());
-		opt.setId(option.getId());
-		opt.setLang(lang.getCode());
-		opt.setReadOnly(option.isReadOnly());
-		opt.setType(option.getProductOptionType());
-		ProductOptionDescription desc = this.optionDescription(option.getDescriptions(), lang);
-		if(desc != null) {
-			opt.setName(desc.getName());
-		}
+  @Override
+  public ReadableProductOptionSet merge(ProductOptionSet source,
+      ReadableProductOptionSet destination,
+      MerchantStore store, Language language) {
+    Validate.notNull(source, "ProductOptionSet must not be null");
+    Validate.notNull(destination, "ReadableProductOptionSet must not be null");
 
-		return opt;
-	}
-	
-	private ReadableProductOptionValue optionValue (List<Long> ids, ProductOptionValue optionValue, MerchantStore store, Language language) {
-		
-		if(!ids.contains(optionValue.getId())) {
-			ReadableProductOptionValue value = new ReadableProductOptionValue();
-			value.setCode(optionValue.getCode());
-			value.setId(optionValue.getId());
-			ProductOptionValueDescription desc = optionValueDescription(optionValue.getDescriptions(), language);
-			if(desc!=null) {
-				value.setName(desc.getName());
-			}
-			ids.add(optionValue.getId());
-			return value;
-		} else {
-			return null;
-		}
-	}
-	
-	private ProductOptionDescription optionDescription(Set<ProductOptionDescription> descriptions, Language lang) {
-		return descriptions.stream().filter(desc-> desc.getLanguage().getCode().equals(lang.getCode())).findAny().orElse(null);
-	}
-	
-	private ProductOptionValueDescription optionValueDescription(Set<ProductOptionValueDescription> descriptions, Language lang) {
-		return descriptions.stream().filter(desc-> desc.getLanguage().getCode().equals(lang.getCode())).findAny().orElse(null);
-	}
-	
-	private ReadableProductType productType(ProductType type, MerchantStore store, Language language) {
-		return readableProductTypeMapper.convert(type, store, language);
-	}
+    destination.setId(source.getId());
+    destination.setCode(source.getCode());
+    destination.setReadOnly(source.isOptionDisplayOnly());
+
+    destination.setOption(this.option(source.getOption(), store, language));
+
+    List<Long> ids = new ArrayList<Long>();
+
+    if (!CollectionUtils.isEmpty(source.getValues())) {
+      List<ReadableProductOptionValue> values = source.getValues().stream()
+          .map(val -> optionValue(ids, val, store, language)).collect(Collectors.toList());
+      destination.setValues(values);
+      destination.getValues().removeAll(Collections.singleton(null));
+    }
+
+    if (!CollectionUtils.isEmpty(source.getProductTypes())) {
+      List<ReadableProductType> types = source.getProductTypes().stream()
+          .map(t -> this.productType(t, store, language)).collect(Collectors.toList());
+      destination.setProductTypes(types);
+    }
+
+    return destination;
+  }
+
+  private ReadableProductOption option(ProductOption option, MerchantStore store, Language lang) {
+
+    ReadableProductOption opt = new ReadableProductOption();
+    opt.setCode(option.getCode());
+    opt.setId(option.getId());
+    opt.setLang(lang.getCode());
+    opt.setReadOnly(option.isReadOnly());
+    opt.setType(option.getProductOptionType());
+    ProductOptionDescription desc = this.optionDescription(option.getDescriptions(), lang);
+    if (desc != null) {
+      opt.setName(desc.getName());
+    }
+
+    return opt;
+  }
+
+  private ReadableProductOptionValue optionValue(List<Long> ids, ProductOptionValue optionValue,
+      MerchantStore store, Language language) {
+
+    if (!ids.contains(optionValue.getId())) {
+      ReadableProductOptionValue value = new ReadableProductOptionValue();
+      value.setCode(optionValue.getCode());
+      value.setId(optionValue.getId());
+      ProductOptionValueDescription desc = optionValueDescription(optionValue.getDescriptions(),
+          language);
+      if (desc != null) {
+        value.setName(desc.getName());
+      }
+      ids.add(optionValue.getId());
+      return value;
+    } else {
+      return null;
+    }
+  }
+
+  private ProductOptionDescription optionDescription(Set<ProductOptionDescription> descriptions,
+      Language lang) {
+    return descriptions.stream().filter(desc -> desc.getLanguage().getCode().equals(lang.getCode()))
+        .findAny().orElse(null);
+  }
+
+  private ProductOptionValueDescription optionValueDescription(
+      Set<ProductOptionValueDescription> descriptions, Language lang) {
+    return descriptions.stream().filter(desc -> desc.getLanguage().getCode().equals(lang.getCode()))
+        .findAny().orElse(null);
+  }
+
+  private ReadableProductType productType(ProductType type, MerchantStore store,
+      Language language) {
+    return readableProductTypeMapper.convert(type, store, language);
+  }
 
 }

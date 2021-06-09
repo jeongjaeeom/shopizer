@@ -7,7 +7,6 @@ Shopizer (for java 1.8 +)
 [![stackoverflow](https://img.shields.io/badge/shopizer-stackoverflow-orange.svg?style=flat)](http://stackoverflow.com/questions/tagged/shopizer)
 [![CircleCI](https://circleci.com/gh/shopizer-ecommerce/shopizer.svg?style=svg)](https://circleci.com/gh/shopizer-ecommerce/shopizer)
 
-
 Java open source e-commerce software
 
 - Headless commerce
@@ -30,12 +29,13 @@ Available soon
 Get the code:
 -------------------
 Clone the repository:
-     
+
 	 $ git clone git://github.com/shopizer-ecommerce/shopizer.git
 
 If this is your first time using Github, review http://help.github.com to learn the basics.
 
-You can also download the zip file containing the code from https://github.com/shopizer-ecommerce/shopizer 
+You can also download the zip file containing the code
+from https://github.com/shopizer-ecommerce/shopizer
 
 To build the application:
 -------------------	
@@ -43,16 +43,14 @@ From the command line:
 
 	$ cd shopizer
 	$ mvnw clean install
-	
 
-Run the application from Tomcat 
+Run the application from Tomcat
 -------------------
 copy sm-shop/target/ROOT.war to tomcat or any other application server deployment dir
 
 Increase heap space to 1024 m
 
 ### Heap space configuration in Tomcat:
-
 
 If you are using Tomcat, edit catalina.bat for windows users or catalina.sh for linux / Mac users
 
@@ -62,7 +60,7 @@ If you are using Tomcat, edit catalina.bat for windows users or catalina.sh for 
 	in Linux / Mac
 	export JAVA_OPTS="-Xms1024m -Xmx1024m -XX:MaxPermSize=256m" 
 
-Run the application from Spring boot 
+Run the application from Spring boot
 -------------------
 
        $ cd sm-shop
@@ -87,7 +85,6 @@ Run Docker image with working demo
 
 	docker run -p 80:8080 shopizerecomm/shopizer:latest
 
-
 ### Access the application:
 -------------------
 
@@ -100,7 +97,8 @@ username : admin@shopizer.com
 password : password
 
 The instructions above will let you run the application with default settings and configurations.
-Please read the instructions on how to connect to MySQL, configure an email server and configure other subsystems
+Please read the instructions on how to connect to MySQL, configure an email server and configure
+other subsystems
 
 
 ### Documentation:
@@ -108,15 +106,16 @@ Please read the instructions on how to connect to MySQL, configure an email serv
 
 Documentation available <http://documentation.shopizer.com>
 
-ChatOps <https://shopizer.slack.com>  - Join our Slack channel https://shopizer-slackin.herokuapp.com/
+ChatOps <https://shopizer.slack.com>  - Join our Slack
+channel https://shopizer-slackin.herokuapp.com/
 
 More information is available on shopizer web site here <http://www.shopizer.com>
 
 ### Participation:
 -------------------
 
-If you have interest in giving feedback or for participating to Shopizer project in any way
-Feel to use the contact form <http://www.shopizer.com/contact.html> and share your email address
-so we can send an invite to our Slack channel
+If you have interest in giving feedback or for participating to Shopizer project in any way Feel to
+use the contact form <http://www.shopizer.com/contact.html> and share your email address so we can
+send an invite to our Slack channel
 
 

@@ -54,11 +54,14 @@ import springfox.documentation.annotations.ApiIgnore;
 public class ProductVariantApi {
 
 
-  @Inject private PricingService pricingService;
+  @Inject
+  private PricingService pricingService;
 
-  @Inject private ProductService productService;
-  
-  @Inject private CategoryFacade categoryFacade;
+  @Inject
+  private ProductService productService;
+
+  @Inject
+  private CategoryFacade categoryFacade;
 
   @Inject
   @Qualifier("img")
@@ -102,21 +105,20 @@ public class ProductVariantApi {
       return null;
     }
     List<ReadableProductVariantValue> variants = options.getOptions();
-    
-    
+
     List<ProductAttribute> attributes = new ArrayList<ProductAttribute>();
-    
+
     Set<ProductAttribute> productAttributes = product.getAttributes();
-    for(ProductAttribute attribute : productAttributes) {
+    for (ProductAttribute attribute : productAttributes) {
       Long option = attribute.getProductOption().getId();
       Long optionValue = attribute.getProductOptionValue().getId();
-      for(ReadableProductVariantValue v : variants) {
-        if(v.getOption().longValue() == option.longValue()
+      for (ReadableProductVariantValue v : variants) {
+        if (v.getOption().longValue() == option.longValue()
             && v.getValue().longValue() == optionValue.longValue()) {
           attributes.add(attribute);
         }
       }
-      
+
     }
 
     FinalPrice price = pricingService.calculateProductPrice(product, attributes);
@@ -127,7 +129,7 @@ public class ProductVariantApi {
     return readablePrice;
   }
 
-  
+
   @RequestMapping(value = "/category/{id}/variants", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ApiOperation(
@@ -147,9 +149,9 @@ public class ProductVariantApi {
       @ApiIgnore Language language,
       HttpServletResponse response)
       throws Exception {
-    
+
     return categoryFacade.categoryProductVariants(id, merchantStore, language);
-    
+
   }
-  
+
 }

@@ -12,28 +12,27 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 import com.salesmanager.core.model.shipping.ShippingOrigin;
 
 
-
 @Service("shippingOriginService")
-public class ShippingOriginServiceImpl extends SalesManagerEntityServiceImpl<Long, ShippingOrigin> implements ShippingOriginService {
+public class ShippingOriginServiceImpl extends
+    SalesManagerEntityServiceImpl<Long, ShippingOrigin> implements ShippingOriginService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ShippingOriginServiceImpl.class);
-	
-	private ShippingOriginRepository shippingOriginRepository;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShippingOriginServiceImpl.class);
 
-	
-
-	@Inject
-	public ShippingOriginServiceImpl(ShippingOriginRepository shippingOriginRepository) {
-		super(shippingOriginRepository);
-		this.shippingOriginRepository = shippingOriginRepository;
-	}
+  private ShippingOriginRepository shippingOriginRepository;
 
 
-	@Override
-	public ShippingOrigin getByStore(MerchantStore store) {
-		// TODO Auto-generated method stub
-		return shippingOriginRepository.findByStore(store.getId());
-	}
-	
+  @Inject
+  public ShippingOriginServiceImpl(ShippingOriginRepository shippingOriginRepository) {
+    super(shippingOriginRepository);
+    this.shippingOriginRepository = shippingOriginRepository;
+  }
+
+
+  @Override
+  public ShippingOrigin getByStore(MerchantStore store) {
+    // TODO Auto-generated method stub
+    return shippingOriginRepository.findByStore(store.getId());
+  }
+
 
 }

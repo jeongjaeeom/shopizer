@@ -4,9 +4,9 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
 public class UniqueEntity implements Serializable {
-  
+
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
   @NotNull

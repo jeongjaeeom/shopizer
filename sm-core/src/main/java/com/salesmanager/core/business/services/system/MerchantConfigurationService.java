@@ -10,22 +10,23 @@ import com.salesmanager.core.model.system.MerchantConfiguration;
 import com.salesmanager.core.model.system.MerchantConfigurationType;
 
 public interface MerchantConfigurationService extends
-		SalesManagerEntityService<Long, MerchantConfiguration> {
-	
-	MerchantConfiguration getMerchantConfiguration(String key, MerchantStore store) throws ServiceException;
-	
-	void saveOrUpdate(MerchantConfiguration entity) throws ServiceException;
+    SalesManagerEntityService<Long, MerchantConfiguration> {
 
-	List<MerchantConfiguration> listByStore(MerchantStore store)
-			throws ServiceException;
+  MerchantConfiguration getMerchantConfiguration(String key, MerchantStore store)
+      throws ServiceException;
 
-	List<MerchantConfiguration> listByType(MerchantConfigurationType type,
-			MerchantStore store) throws ServiceException;
+  void saveOrUpdate(MerchantConfiguration entity) throws ServiceException;
 
-	MerchantConfig getMerchantConfig(MerchantStore store)
-			throws ServiceException;
+  List<MerchantConfiguration> listByStore(MerchantStore store)
+      throws ServiceException;
 
-	void saveMerchantConfig(MerchantConfig config, MerchantStore store)
-			throws ServiceException;
+  List<MerchantConfiguration> listByType(MerchantConfigurationType type,
+      MerchantStore store) throws ServiceException;
+
+  MerchantConfig getMerchantConfig(MerchantStore store)
+      throws ServiceException;
+
+  void saveMerchantConfig(MerchantConfig config, MerchantStore store)
+      throws ServiceException;
 
 }

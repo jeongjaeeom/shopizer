@@ -16,72 +16,76 @@ import com.salesmanager.core.business.utils.AbstractDataPopulator;
 import com.salesmanager.shop.model.order.PersistableOrderProduct;
 
 public class ShoppingCartItemPopulator extends
-		AbstractDataPopulator<PersistableOrderProduct, ShoppingCartItem> {
+    AbstractDataPopulator<PersistableOrderProduct, ShoppingCartItem> {
 
 
-	private ProductService productService;
-	private ProductAttributeService productAttributeService;
-	private ShoppingCartService shoppingCartService;
+  private ProductService productService;
+  private ProductAttributeService productAttributeService;
+  private ShoppingCartService shoppingCartService;
 
-	@Override
-	public ShoppingCartItem populate(PersistableOrderProduct source, /** TODO: Fix, target not used possible future bug ! **/ShoppingCartItem target,
-									 MerchantStore store, Language language)
-			throws ConversionException {
-		Validate.notNull(productService, "Requires to set productService");
-		Validate.notNull(productAttributeService, "Requires to set productAttributeService");
-		Validate.notNull(shoppingCartService, "Requires to set shoppingCartService");
+  @Override
+  public ShoppingCartItem populate(PersistableOrderProduct source,
+      /** TODO: Fix, target not used possible future bug ! **/ShoppingCartItem target,
+      MerchantStore store, Language language)
+      throws ConversionException {
+    Validate.notNull(productService, "Requires to set productService");
+    Validate.notNull(productAttributeService, "Requires to set productAttributeService");
+    Validate.notNull(shoppingCartService, "Requires to set shoppingCartService");
 
-		Product product = productService.getById(source.getProduct().getId());
-		if(source.getAttributes()!=null) {
+    Product product = productService.getById(source.getProduct().getId());
+    if (source.getAttributes() != null) {
 
-			for(com.salesmanager.shop.model.catalog.product.attribute.ProductAttribute attr : source.getAttributes()) {
-				ProductAttribute attribute = productAttributeService.getById(attr.getId());
-				if(attribute==null) {
-					throw new ConversionException("ProductAttribute with id " + attr.getId() + " is null");
-				}
-				if(attribute.getProduct().getId().longValue()!=source.getProduct().getId().longValue()) {
-					throw new ConversionException("ProductAttribute with id " + attr.getId() + " is not assigned to Product id " + source.getProduct().getId());
-				}
-				product.getAttributes().add(attribute);
-			}
-		}
+      for (com.salesmanager.shop.model.catalog.product.attribute.ProductAttribute attr : source
+          .getAttributes()) {
+        ProductAttribute attribute = productAttributeService.getById(attr.getId());
+        if (attribute == null) {
+          throw new ConversionException("ProductAttribute with id " + attr.getId() + " is null");
+        }
+        if (attribute.getProduct().getId().longValue() != source.getProduct().getId().longValue()) {
+          throw new ConversionException(
+              "ProductAttribute with id " + attr.getId() + " is not assigned to Product id "
+                  + source.getProduct().getId());
+        }
+        product.getAttributes().add(attribute);
+      }
+    }
 
-		try {
-			return shoppingCartService.populateShoppingCartItem(product);
-		} catch (ServiceException e) {
-			throw new ConversionException(e);
-		}
+    try {
+      return shoppingCartService.populateShoppingCartItem(product);
+    } catch (ServiceException e) {
+      throw new ConversionException(e);
+    }
 
-	}
+  }
 
-	@Override
-	protected ShoppingCartItem createTarget() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  protected ShoppingCartItem createTarget() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	public void setProductAttributeService(ProductAttributeService productAttributeService) {
-		this.productAttributeService = productAttributeService;
-	}
+  public void setProductAttributeService(ProductAttributeService productAttributeService) {
+    this.productAttributeService = productAttributeService;
+  }
 
-	public ProductAttributeService getProductAttributeService() {
-		return productAttributeService;
-	}
+  public ProductAttributeService getProductAttributeService() {
+    return productAttributeService;
+  }
 
-	public void setProductService(ProductService productService) {
-		this.productService = productService;
-	}
+  public void setProductService(ProductService productService) {
+    this.productService = productService;
+  }
 
-	public ProductService getProductService() {
-		return productService;
-	}
+  public ProductService getProductService() {
+    return productService;
+  }
 
-	public void setShoppingCartService(ShoppingCartService shoppingCartService) {
-		this.shoppingCartService = shoppingCartService;
-	}
+  public void setShoppingCartService(ShoppingCartService shoppingCartService) {
+    this.shoppingCartService = shoppingCartService;
+  }
 
-	public ShoppingCartService getShoppingCartService() {
-		return shoppingCartService;
-	}
+  public ShoppingCartService getShoppingCartService() {
+    return shoppingCartService;
+  }
 
 }

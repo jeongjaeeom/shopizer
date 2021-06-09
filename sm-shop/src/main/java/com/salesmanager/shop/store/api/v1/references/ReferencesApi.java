@@ -40,17 +40,23 @@ public class ReferencesApi {
   private static final Logger LOGGER = LoggerFactory.getLogger(ReferencesApi.class);
 
 
-  @Inject private StoreFacade storeFacade;
+  @Inject
+  private StoreFacade storeFacade;
 
-  @Inject private LanguageUtils languageUtils;
+  @Inject
+  private LanguageUtils languageUtils;
 
-  @Inject private LanguageFacade languageFacade;
+  @Inject
+  private LanguageFacade languageFacade;
 
-  @Inject private CountryFacade countryFacade;
+  @Inject
+  private CountryFacade countryFacade;
 
-  @Inject private ZoneFacade zoneFacade;
+  @Inject
+  private ZoneFacade zoneFacade;
 
-  @Inject private CurrencyFacade currencyFacade;
+  @Inject
+  private CurrencyFacade currencyFacade;
 
   /**
    * Search languages by language code private/languages returns everything

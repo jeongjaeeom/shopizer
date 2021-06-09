@@ -16,15 +16,23 @@ Creative Commons, 444 Castro Street, Suite 900,
 Mountain View, California, 94041, USA.
 */
 
-
-(function() {
+(function () {
   var $,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+      __indexOf = [].indexOf || function (item) {
+        for (var i = 0, l = this.length; i < l; i++) {
+          if (i in this && this[i] === item) {
+            return i;
+          }
+        }
+        return -1;
+      };
 
   $ = jQuery;
 
-  $.fn.validateCreditCard = function(callback, options) {
-    var card, card_type, card_types, get_card_type, is_valid_length, is_valid_luhn, normalize, validate, validate_number, _i, _len, _ref, _ref1;
+  $.fn.validateCreditCard = function (callback, options) {
+    var card, card_type, card_types, get_card_type, is_valid_length,
+        is_valid_luhn, normalize, validate, validate_number, _i, _len, _ref,
+        _ref1;
     card_types = [
       {
         name: 'amex',
@@ -72,7 +80,7 @@ Mountain View, California, 94041, USA.
       options = {};
     }
     if ((_ref = options.accept) == null) {
-      options.accept = (function() {
+      options.accept = (function () {
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = card_types.length; _i < _len; _i++) {
@@ -85,7 +93,7 @@ Mountain View, California, 94041, USA.
     _ref1 = options.accept;
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
       card_type = _ref1[_i];
-      if (__indexOf.call((function() {
+      if (__indexOf.call((function () {
         var _j, _len1, _results;
         _results = [];
         for (_j = 0, _len1 = card_types.length; _j < _len1; _j++) {
@@ -97,9 +105,9 @@ Mountain View, California, 94041, USA.
         throw "Credit card type '" + card_type + "' is not supported";
       }
     }
-    get_card_type = function(number) {
+    get_card_type = function (number) {
       var _j, _len1, _ref2;
-      _ref2 = (function() {
+      _ref2 = (function () {
         var _k, _len1, _ref2, _results;
         _results = [];
         for (_k = 0, _len1 = card_types.length; _k < _len1; _k++) {
@@ -118,7 +126,7 @@ Mountain View, California, 94041, USA.
       }
       return null;
     };
-    is_valid_luhn = function(number) {
+    is_valid_luhn = function (number) {
       var digit, n, sum, _j, _len1, _ref2;
       sum = 0;
       _ref2 = number.split('').reverse();
@@ -138,11 +146,12 @@ Mountain View, California, 94041, USA.
       }
       return sum % 10 === 0;
     };
-    is_valid_length = function(number, card_type) {
+    is_valid_length = function (number, card_type) {
       var _ref2;
-      return _ref2 = number.length, __indexOf.call(card_type.valid_length, _ref2) >= 0;
+      return _ref2 = number.length, __indexOf.call(card_type.valid_length,
+          _ref2) >= 0;
     };
-    validate_number = function(number) {
+    validate_number = function (number) {
       var length_valid, luhn_valid;
       card_type = get_card_type(number);
       luhn_valid = false;
@@ -157,19 +166,19 @@ Mountain View, California, 94041, USA.
         length_valid: length_valid
       });
     };
-    validate = function() {
+    validate = function () {
       var number;
       number = normalize($(this).val());
       return validate_number(number);
     };
-    normalize = function(number) {
+    normalize = function (number) {
       return number.replace(/[ -]/g, '');
     };
-    this.bind('input', function() {
+    this.bind('input', function () {
       $(this).unbind('keyup');
       return validate.call(this);
     });
-    this.bind('keyup', function() {
+    this.bind('keyup', function () {
       return validate.call(this);
     });
     if (this.length !== 0) {

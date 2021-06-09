@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.salesmanager.core.business.modules.cms.content;
 
@@ -16,7 +16,7 @@ import com.salesmanager.core.model.content.InputContentFile;
  */
 
 public interface FilePut {
-	
+
   /**
    * Add file to folder
    * @param merchantStoreCode
@@ -24,7 +24,8 @@ public interface FilePut {
    * @param inputStaticContentData
    * @throws ServiceException
    */
-  void addFile(final String merchantStoreCode, Optional<String> path, InputContentFile inputStaticContentData)
+  void addFile(final String merchantStoreCode, Optional<String> path,
+      InputContentFile inputStaticContentData)
       throws ServiceException;
 
   /**
@@ -35,5 +36,6 @@ public interface FilePut {
    * @throws ServiceException
    */
   void addFiles(final String merchantStoreCode,
-      Optional<String> path, List<InputContentFile> inputStaticContentDataList) throws ServiceException;
+      Optional<String> path, List<InputContentFile> inputStaticContentDataList)
+      throws ServiceException;
 }

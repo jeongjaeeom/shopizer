@@ -2,9 +2,8 @@ package com.salesmanager.core.business.modules.cms.impl;
 
 /**
  * Http server bootstrap
- * 
- * @author carlsamson
  *
+ * @author carlsamson
  */
 public class LocalCacheManagerImpl implements CMSManager {
 

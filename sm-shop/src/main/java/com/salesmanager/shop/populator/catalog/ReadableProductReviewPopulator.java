@@ -14,47 +14,45 @@ import com.salesmanager.shop.populator.customer.ReadableCustomerPopulator;
 import com.salesmanager.shop.utils.DateUtil;
 
 public class ReadableProductReviewPopulator extends
-		AbstractDataPopulator<ProductReview, ReadableProductReview> {
+    AbstractDataPopulator<ProductReview, ReadableProductReview> {
 
-	@Override
-	public ReadableProductReview populate(ProductReview source,
-			ReadableProductReview target, MerchantStore store, Language language)
-			throws ConversionException {
+  @Override
+  public ReadableProductReview populate(ProductReview source,
+      ReadableProductReview target, MerchantStore store, Language language)
+      throws ConversionException {
 
-		
-		try {
-			ReadableCustomerPopulator populator = new ReadableCustomerPopulator();
-			ReadableCustomer customer = new ReadableCustomer();
-			populator.populate(source.getCustomer(), customer, store, language);
+    try {
+      ReadableCustomerPopulator populator = new ReadableCustomerPopulator();
+      ReadableCustomer customer = new ReadableCustomer();
+      populator.populate(source.getCustomer(), customer, store, language);
 
-			target.setId(source.getId());
-			target.setDate(DateUtil.formatDate(source.getReviewDate()));
-			target.setCustomer(customer);
-			target.setRating(source.getReviewRating());
-			target.setProductId(source.getProduct().getId());
-			
-			Set<ProductReviewDescription> descriptions = source.getDescriptions();
-			if(descriptions!=null) {
-				for(ProductReviewDescription description : descriptions) {
-					target.setDescription(description.getDescription());
-					target.setLanguage(description.getLanguage().getCode());
-					break;
-				}
-			}
+      target.setId(source.getId());
+      target.setDate(DateUtil.formatDate(source.getReviewDate()));
+      target.setCustomer(customer);
+      target.setRating(source.getReviewRating());
+      target.setProductId(source.getProduct().getId());
 
-			return target;
-			
-		} catch (Exception e) {
-			throw new ConversionException("Cannot populate ProductReview", e);
-		}
-		
-		
-		
-	}
+      Set<ProductReviewDescription> descriptions = source.getDescriptions();
+      if (descriptions != null) {
+        for (ProductReviewDescription description : descriptions) {
+          target.setDescription(description.getDescription());
+          target.setLanguage(description.getLanguage().getCode());
+          break;
+        }
+      }
 
-	@Override
-	protected ReadableProductReview createTarget() {
-		return null;
-	}
+      return target;
+
+    } catch (Exception e) {
+      throw new ConversionException("Cannot populate ProductReview", e);
+    }
+
+
+  }
+
+  @Override
+  protected ReadableProductReview createTarget() {
+    return null;
+  }
 
 }

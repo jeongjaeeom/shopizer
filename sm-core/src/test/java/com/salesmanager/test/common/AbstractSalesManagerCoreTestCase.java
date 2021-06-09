@@ -1,7 +1,6 @@
 /**
- * This application is maintained by CSTI consulting (www.csticonsulting.com).
- * Licensed under LGPL - Feel free to use it and modify it to your needs !
- *
+ * This application is maintained by CSTI consulting (www.csticonsulting.com). Licensed under LGPL -
+ * Feel free to use it and modify it to your needs !
  */
 package com.salesmanager.test.common;
 
@@ -52,117 +51,116 @@ import com.salesmanager.test.configuration.ConfigurationTest;
  */
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes=ConfigurationTest.class)
+@SpringBootTest(classes = ConfigurationTest.class)
 @Ignore
 public class AbstractSalesManagerCoreTestCase {
 
-	
-	
-	protected static String CAD_CURRENCY_CODE = "CAD";
-	protected static String USD_CURRENCY_CODE = "USD";
-	
-	protected static String ENGLISH_LANGUAGE_CODE = "en";
-	protected static String FRENCH_LANGUAGE_CODE = "fr";
-	
-	@Inject
-	protected InitializationDatabase   initializationDatabase;
-	
-	@Inject
-	protected ProductService productService;
-	
-	@Inject
-	protected PricingService pricingService;
-	
-	@Inject
-	protected ProductPriceService productPriceService;
-	
-	@Inject
-	protected ProductAttributeService productAttributeService;
-	
-	@Inject
-	protected ProductOptionService productOptionService;
-	
-	@Inject
-	protected ProductOptionSetService productOptionSetService;
-	
-	@Inject
-	protected ProductOptionValueService productOptionValueService;
-	
-	@Inject
-	protected ProductAvailabilityService productAvailabilityService;
-	
-	@Inject
-	protected ProductReviewService productReviewService;
-	
-	@Inject
-	protected ProductImageService productImageService;
-	
-	@Inject
-	protected ProductRelationshipService productRelationshipService;
-	
-	@Inject
-	protected CategoryService categoryService;
-	
-	@Inject
-	protected MerchantStoreService merchantService;
-	
-	@Inject
-	protected ProductTypeService productTypeService;
-	
-	@Inject
-	protected LanguageService languageService;
-	
-	@Inject
-	protected CountryService countryService;
-	
-	@Inject
-	protected CurrencyService currencyService;
-	
-	@Inject
-	protected ManufacturerService manufacturerService;
-	
-	@Inject
-	protected ZoneService zoneService;
-	
-	@Inject
-	protected CustomerService customerService;
-	
-	@Inject
-	protected CustomerOptionService customerOptionService;
-	
-	@Inject
-	protected CustomerOptionValueService customerOptionValueService;
-	
-	@Inject
-	protected CustomerOptionSetService customerOptionSetService;
-	
-	@Inject
-	protected OrderService orderService;
-	
-	@Inject
-	protected PaymentService paymentService;
-	
-	@Inject
-	protected ShoppingCartService shoppingCartService;
-	
-	@Inject
-	protected EmailService emailService;
-	
-	@Before
-	public void init() throws ServiceException {
-		if(initializationDatabase.isEmpty()) {
-		  populate();
-		}
 
-	}
-	
-	@After
-	public void close() throws ServiceException {
+  protected static String CAD_CURRENCY_CODE = "CAD";
+  protected static String USD_CURRENCY_CODE = "USD";
 
-	}
-	
-	private void populate() throws ServiceException {
-		initializationDatabase.populate("TEST");
-	}
+  protected static String ENGLISH_LANGUAGE_CODE = "en";
+  protected static String FRENCH_LANGUAGE_CODE = "fr";
+
+  @Inject
+  protected InitializationDatabase initializationDatabase;
+
+  @Inject
+  protected ProductService productService;
+
+  @Inject
+  protected PricingService pricingService;
+
+  @Inject
+  protected ProductPriceService productPriceService;
+
+  @Inject
+  protected ProductAttributeService productAttributeService;
+
+  @Inject
+  protected ProductOptionService productOptionService;
+
+  @Inject
+  protected ProductOptionSetService productOptionSetService;
+
+  @Inject
+  protected ProductOptionValueService productOptionValueService;
+
+  @Inject
+  protected ProductAvailabilityService productAvailabilityService;
+
+  @Inject
+  protected ProductReviewService productReviewService;
+
+  @Inject
+  protected ProductImageService productImageService;
+
+  @Inject
+  protected ProductRelationshipService productRelationshipService;
+
+  @Inject
+  protected CategoryService categoryService;
+
+  @Inject
+  protected MerchantStoreService merchantService;
+
+  @Inject
+  protected ProductTypeService productTypeService;
+
+  @Inject
+  protected LanguageService languageService;
+
+  @Inject
+  protected CountryService countryService;
+
+  @Inject
+  protected CurrencyService currencyService;
+
+  @Inject
+  protected ManufacturerService manufacturerService;
+
+  @Inject
+  protected ZoneService zoneService;
+
+  @Inject
+  protected CustomerService customerService;
+
+  @Inject
+  protected CustomerOptionService customerOptionService;
+
+  @Inject
+  protected CustomerOptionValueService customerOptionValueService;
+
+  @Inject
+  protected CustomerOptionSetService customerOptionSetService;
+
+  @Inject
+  protected OrderService orderService;
+
+  @Inject
+  protected PaymentService paymentService;
+
+  @Inject
+  protected ShoppingCartService shoppingCartService;
+
+  @Inject
+  protected EmailService emailService;
+
+  @Before
+  public void init() throws ServiceException {
+    if (initializationDatabase.isEmpty()) {
+      populate();
+    }
+
+  }
+
+  @After
+  public void close() throws ServiceException {
+
+  }
+
+  private void populate() throws ServiceException {
+    initializationDatabase.populate("TEST");
+  }
 
 }

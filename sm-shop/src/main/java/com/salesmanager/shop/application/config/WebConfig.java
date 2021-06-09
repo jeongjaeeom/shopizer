@@ -10,20 +10,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-	
-	
-    @Autowired
-    private MerchantStoreArgumentResolver merchantStoreArgumentResolver;
-    
-    @Autowired
-    private LanguageArgumentResolver languageArgumentResolver;
 
-	
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(merchantStoreArgumentResolver);
-        argumentResolvers.add(languageArgumentResolver);
-    }
-    
+
+  @Autowired
+  private MerchantStoreArgumentResolver merchantStoreArgumentResolver;
+
+  @Autowired
+  private LanguageArgumentResolver languageArgumentResolver;
+
+
+  @Override
+  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+    argumentResolvers.add(merchantStoreArgumentResolver);
+    argumentResolvers.add(languageArgumentResolver);
+  }
+
 
 }

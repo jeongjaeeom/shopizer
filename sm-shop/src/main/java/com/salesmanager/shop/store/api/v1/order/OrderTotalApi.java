@@ -46,17 +46,23 @@ import springfox.documentation.annotations.ApiIgnore;
 })
 public class OrderTotalApi {
 
-  @Inject private ShoppingCartFacade shoppingCartFacade;
+  @Inject
+  private ShoppingCartFacade shoppingCartFacade;
 
-  @Inject private LabelUtils messages;
+  @Inject
+  private LabelUtils messages;
 
-  @Inject private PricingService pricingService;
+  @Inject
+  private PricingService pricingService;
 
-  @Inject private CustomerService customerService;
+  @Inject
+  private CustomerService customerService;
 
-  @Inject private ShippingQuoteService shippingQuoteService;
+  @Inject
+  private ShippingQuoteService shippingQuoteService;
 
-  @Inject private OrderService orderService;
+  @Inject
+  private OrderService orderService;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(OrderTotalApi.class);
 
@@ -154,6 +160,7 @@ public class OrderTotalApi {
 
   /**
    * Public api
+   *
    * @param id
    * @param quote
    * @param merchantStore

@@ -15,20 +15,22 @@ import com.salesmanager.shop.model.catalog.product.attribute.api.PersistableProd
 import com.salesmanager.shop.store.api.exception.ServiceRuntimeException;
 
 @Component
-public class PersistableProductOptionMapper implements Mapper<PersistableProductOptionEntity, ProductOption> {
+public class PersistableProductOptionMapper implements
+    Mapper<PersistableProductOptionEntity, ProductOption> {
 
   @Autowired
   private LanguageService languageService;
 
 
-
-  ProductOptionDescription description(com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription description) throws Exception {
-    Validate.notNull(description.getLanguage(),"description.language should not be null");
+  ProductOptionDescription description(
+      com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription description)
+      throws Exception {
+    Validate.notNull(description.getLanguage(), "description.language should not be null");
     ProductOptionDescription desc = new ProductOptionDescription();
     desc.setId(null);
     desc.setDescription(description.getDescription());
     desc.setName(description.getName());
-    if(description.getId() != null && description.getId().longValue()>0) {
+    if (description.getId() != null && description.getId().longValue() > 0) {
       desc.setId(description.getId());
     }
     Language lang = languageService.getByCode(description.getLanguage());
@@ -47,46 +49,47 @@ public class PersistableProductOptionMapper implements Mapper<PersistableProduct
 
   @Override
   public ProductOption merge(PersistableProductOptionEntity source, ProductOption destination,
-                             MerchantStore store, Language language) {
-    if(destination == null) {
+      MerchantStore store, Language language) {
+    if (destination == null) {
       destination = new ProductOption();
     }
-    
+
     try {
 
-      if(!CollectionUtils.isEmpty(source.getDescriptions())) {
-        for(com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription desc : source.getDescriptions()) {
+      if (!CollectionUtils.isEmpty(source.getDescriptions())) {
+        for (com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription desc : source
+            .getDescriptions()) {
           ProductOptionDescription description = null;
-          if(!CollectionUtils.isEmpty(destination.getDescriptions())) {
-            for(ProductOptionDescription d : destination.getDescriptions()) {
-              if(!StringUtils.isBlank(desc.getLanguage()) && desc.getLanguage().equals(d.getLanguage().getCode())) {
-            	  d.setDescription(desc.getDescription());
-            	  d.setName(desc.getName());
-            	  d.setTitle(desc.getTitle());
-            	  description = d;
-            	  break;
-              } 
+          if (!CollectionUtils.isEmpty(destination.getDescriptions())) {
+            for (ProductOptionDescription d : destination.getDescriptions()) {
+              if (!StringUtils.isBlank(desc.getLanguage()) && desc.getLanguage()
+                  .equals(d.getLanguage().getCode())) {
+                d.setDescription(desc.getDescription());
+                d.setName(desc.getName());
+                d.setTitle(desc.getTitle());
+                description = d;
+                break;
+              }
             }
-          } 
-          if(description == null) {
-	          description = description(desc);
-	          description.setProductOption(destination);
-	          destination.getDescriptions().add(description);
+          }
+          if (description == null) {
+            description = description(desc);
+            description.setProductOption(destination);
+            destination.getDescriptions().add(description);
           }
         }
       }
-      
+
       destination.setCode(source.getCode());
       destination.setMerchantStore(store);
       destination.setProductOptionSortOrder(source.getOrder());
       destination.setProductOptionType(source.getType());
       destination.setReadOnly(source.isReadOnly());
 
-
       return destination;
-      } catch (Exception e) {
-        throw new ServiceRuntimeException("Error while converting product option", e);
-      }
+    } catch (Exception e) {
+      throw new ServiceRuntimeException("Error while converting product option", e);
+    }
   }
 
 }

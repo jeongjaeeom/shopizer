@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.Query;
 import com.salesmanager.core.model.catalog.product.availability.ProductAvailability;
 
 public interface ProductAvailabilityRepository extends JpaRepository<ProductAvailability, Long> {
-  
+
   @Query("select count(distinct p) from ProductAvailability as p where p.product.id=?1")
   int count(Long productId);
-  
+
   @Query(value = "select distinct p from ProductAvailability p "
       + "left join fetch p.merchantStore pm "
       + "left join fetch p.prices pp "
@@ -18,7 +18,7 @@ public interface ProductAvailabilityRepository extends JpaRepository<ProductAvai
       + "join fetch ppr.merchantStore pprm "
       + "where p.id=?1 ")
   ProductAvailability getById(Long availabilityId);
-  
+
   @Query(value = "select distinct p from ProductAvailability p "
       + "left join fetch p.merchantStore pm "
       + "left join fetch p.prices pp "
@@ -29,7 +29,7 @@ public interface ProductAvailabilityRepository extends JpaRepository<ProductAvai
       + "where p.id=?1 "
       + "and pprm.id=?2")
   ProductAvailability getById(Long availabilityId, int merchantId);
-  
+
   @Query(value = "select distinct p from ProductAvailability p "
       + "left join fetch p.merchantStore pm "
       + "left join fetch p.prices pp "
@@ -40,7 +40,7 @@ public interface ProductAvailabilityRepository extends JpaRepository<ProductAvai
       + "where ppr.id=?1 "
       + "and pm.code=?2")
   ProductAvailability getByStore(Long productId, String store);
-  
+
   @Query(value = "select distinct p from ProductAvailability p "
       + "left join fetch p.merchantStore pm "
       + "left join fetch p.prices pp "

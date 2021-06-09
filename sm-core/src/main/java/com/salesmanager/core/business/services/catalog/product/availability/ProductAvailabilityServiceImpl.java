@@ -56,7 +56,8 @@ public class ProductAvailabilityServiceImpl extends
   public Optional<ProductAvailability> getByStore(Product product, MerchantStore store) {
     Validate.notNull(product, "Product cannot be null");
     Validate.notNull(store, "MerchantStore cannot be null");
-    return Optional.ofNullable(productAvailabilityRepository.getByStore(product.getId(), store.getCode()));
+    return Optional
+        .ofNullable(productAvailabilityRepository.getByStore(product.getId(), store.getCode()));
   }
 
 
@@ -97,7 +98,6 @@ public class ProductAvailabilityServiceImpl extends
     Validate.notNull(store, "Merchant must not be null");
     return Optional.ofNullable(productAvailabilityRepository.getByStore(productId, availabilityId));
   }
-
 
 
 }

@@ -22,7 +22,7 @@ public class ReadableOptinMapper implements Mapper<Optin, ReadableOptin> {
 
   @Override
   public ReadableOptin merge(Optin source, ReadableOptin destination, MerchantStore store,
-                             Language language) {
+      Language language) {
     return destination;
   }
 }

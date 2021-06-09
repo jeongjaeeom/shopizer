@@ -25,14 +25,13 @@ import io.swagger.annotations.Tag;
 import springfox.documentation.annotations.ApiIgnore;
 
 
-
 /**
  * Api to manage ProductInstance
- * 
- * Product instance also known as product variant
- * allows to specify product size, sku and options related to this product instance
- * @author carlsamson
+ * <p>
+ * Product instance also known as product variant allows to specify product size, sku and options
+ * related to this product instance
  *
+ * @author carlsamson
  */
 @Controller
 @RequestMapping("/api/v1")
@@ -41,27 +40,27 @@ import springfox.documentation.annotations.ApiIgnore;
     @Tag(name = "Product instances resource", description = "Manage inventory for a given product")
 })
 public class ProductInstanceApi {
-  
+
   @Autowired
   private ProductInventoryFacade productInventoryFacade;
-  
-  private static final Logger LOGGER = LoggerFactory.getLogger(ProductInstanceApi.class);
-  
-  
-	@GetMapping(value = { "/private/product/instance" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiImplicitParams({ 
-		@ApiImplicitParam(name = "store", dataType = "string", defaultValue = "DEFAULT"),
-			@ApiImplicitParam(name = "lang", dataType = "string", defaultValue = "en") })
-	@ApiOperation(httpMethod = "GET", value = "Check if option set code already exists", notes = "", response = EntityExists.class)
-	public ResponseEntity<EntityExists> exists(
-			@RequestParam(value = "code") String code,
-			@ApiIgnore MerchantStore merchantStore, 
-			@ApiIgnore Language language) {
 
-		//boolean isOptionExist = productVariationFacade.exists(code, merchantStore);
-		//return new ResponseEntity<EntityExists>(new EntityExists(isOptionExist), HttpStatus.OK);
-		return null;
-		
-	}
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProductInstanceApi.class);
+
+
+  @GetMapping(value = {"/private/product/instance"}, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "string", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "string", defaultValue = "en")})
+  @ApiOperation(httpMethod = "GET", value = "Check if option set code already exists", notes = "", response = EntityExists.class)
+  public ResponseEntity<EntityExists> exists(
+      @RequestParam(value = "code") String code,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
+
+    //boolean isOptionExist = productVariationFacade.exists(code, merchantStore);
+    //return new ResponseEntity<EntityExists>(new EntityExists(isOptionExist), HttpStatus.OK);
+    return null;
+
+  }
 
 }

@@ -22,7 +22,7 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
   private EntityManager em;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MerchantRepositoryImpl.class);
-  
+
 
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Override
@@ -51,7 +51,7 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
 
       if (!StringUtils.isBlank(criteria.getCriteriaOrderByField())) {
         req.append(" order by m.").append(criteria.getCriteriaOrderByField()).append(" ")
-                .append(criteria.getOrderBy().name().toLowerCase());
+            .append(criteria.getOrderBy().name().toLowerCase());
       }
 
       Query countQ = this.em.createQuery(countBuilder.toString());
@@ -68,21 +68,17 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
         q.setParameter("name", "%" + criteria.getCode().toLowerCase() + "%");
       }
 
-
       Number count = (Number) countQ.getSingleResult();
 
       GenericEntityList entityList = new GenericEntityList();
       entityList.setTotalCount(count.intValue());
-      
-      q = RepositoryHelper.paginateQuery(q, count, entityList, criteria);
 
+      q = RepositoryHelper.paginateQuery(q, count, entityList, criteria);
 
       List<MerchantStore> stores = q.getResultList();
       entityList.setList(stores);
 
-
       return entityList;
-
 
 
     } catch (javax.persistence.NoResultException ers) {

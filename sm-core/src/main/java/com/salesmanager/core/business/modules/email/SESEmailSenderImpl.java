@@ -20,16 +20,15 @@ import freemarker.template.TemplateException;
 
 /**
  * AWS HTML email sender
- * 
- * @author carlsamson
  *
+ * @author carlsamson
  */
 @Component("sesEmailSender")
 public class SESEmailSenderImpl implements EmailModule {
 
   @Inject
   private Configuration freemarkerMailConfiguration;
-  
+
   @Value("${config.emailSender.region}")
   private String region;
 
@@ -48,37 +47,35 @@ public class SESEmailSenderImpl implements EmailModule {
   @Override
   public void send(Email email) throws Exception {
 
+    //String eml = email.getFrom();
 
+    Validate.notNull(region, "AWS region is null");
 
-      //String eml = email.getFrom();
-
-      Validate.notNull(region,"AWS region is null");
-
-      AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard()
-          // Replace US_WEST_2 with the AWS Region you're using for
-          // Amazon SES.
-          .withRegion(Regions.valueOf(region.toUpperCase())).build();
-      SendEmailRequest request = new SendEmailRequest()
-          .withDestination(new Destination().withToAddresses(email.getTo()))
-          .withMessage(new Message()
-              .withBody(new Body().withHtml(new Content().withCharset("UTF-8").withData(prepareHtml(email)))
-                  .withText(new Content().withCharset("UTF-8").withData(TEXTBODY)))
-              .withSubject(new Content().withCharset("UTF-8").withData(email.getSubject())))
-          .withSource(email.getFromEmail());
-          // Comment or remove the next line if you are not using a
-          // configuration set
-          //.withConfigurationSetName(CONFIGSET);
-      client.sendEmail(request);
+    AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard()
+        // Replace US_WEST_2 with the AWS Region you're using for
+        // Amazon SES.
+        .withRegion(Regions.valueOf(region.toUpperCase())).build();
+    SendEmailRequest request = new SendEmailRequest()
+        .withDestination(new Destination().withToAddresses(email.getTo()))
+        .withMessage(new Message()
+            .withBody(
+                new Body().withHtml(new Content().withCharset("UTF-8").withData(prepareHtml(email)))
+                    .withText(new Content().withCharset("UTF-8").withData(TEXTBODY)))
+            .withSubject(new Content().withCharset("UTF-8").withData(email.getSubject())))
+        .withSource(email.getFromEmail());
+    // Comment or remove the next line if you are not using a
+    // configuration set
+    //.withConfigurationSetName(CONFIGSET);
+    client.sendEmail(request);
 
 
   }
 
   private String prepareHtml(Email email) throws Exception {
 
-
     freemarkerMailConfiguration.setClassForTemplateLoading(DefaultEmailSenderImpl.class, "/");
     Template htmlTemplate = freemarkerMailConfiguration.getTemplate(new StringBuilder(TEMPLATE_PATH)
-            .append("/").append(email.getTemplateName()).toString());
+        .append("/").append(email.getTemplateName()).toString());
     final StringWriter htmlWriter = new StringWriter();
     try {
       htmlTemplate.process(email.getTemplateTokens(), htmlWriter);

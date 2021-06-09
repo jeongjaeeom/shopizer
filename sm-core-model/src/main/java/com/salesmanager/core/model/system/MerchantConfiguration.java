@@ -26,9 +26,8 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 
 /**
  * Merchant configuration information
- * 
- * @author Carl Samson
  *
+ * @author Carl Samson
  */
 @Entity
 @EntityListeners(value = AuditListener.class)
@@ -38,7 +37,7 @@ public class MerchantConfiguration extends SalesManagerEntity<Long, MerchantConf
     implements Serializable, Auditable {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 4246917986731953459L;
 
@@ -108,7 +107,6 @@ public class MerchantConfiguration extends SalesManagerEntity<Long, MerchantConf
   public void setId(Long id) {
     this.id = id;
   }
-
 
 
   public MerchantStore getMerchantStore() {

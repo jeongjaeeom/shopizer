@@ -12,28 +12,28 @@ import com.salesmanager.shop.store.controller.configurations.ConfigurationsFacad
 @Service("shippingConfigurationFacade")
 public class ShippingConfigurationFacadeImpl implements ConfigurationsFacade {
 
-	@Override
-	public List<ReadableConfiguration> configurations(MerchantStore store) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public List<ReadableConfiguration> configurations(MerchantStore store) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	@Override
-	public ReadableConfiguration configuration(String module, MerchantStore store) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public ReadableConfiguration configuration(String module, MerchantStore store) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	@Override
-	public void saveConfiguration(PersistableConfiguration configuration, MerchantStore store) {
-		// TODO Auto-generated method stub
-		
-	}
+  @Override
+  public void saveConfiguration(PersistableConfiguration configuration, MerchantStore store) {
+    // TODO Auto-generated method stub
 
-	@Override
-	public void deleteConfiguration(String module, MerchantStore store) {
-		// TODO Auto-generated method stub
-		
-	}
+  }
+
+  @Override
+  public void deleteConfiguration(String module, MerchantStore store) {
+    // TODO Auto-generated method stub
+
+  }
 
 }

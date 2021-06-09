@@ -20,121 +20,122 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.salesmanager.core.constants.SchemaConstant;
 
 @Entity
-@Table (name="ORDER_PRODUCT_PRICE" )
+@Table(name = "ORDER_PRODUCT_PRICE")
 public class OrderProductPrice implements Serializable {
-	private static final long serialVersionUID = 3734737890163564311L;
 
-	@Id
-	@Column (name="ORDER_PRODUCT_PRICE_ID")
-	@TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-		pkColumnValue = "ORDER_PRD_PRICE_ID_NEXT_VAL")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
-	private Long id;
+  private static final long serialVersionUID = 3734737890163564311L;
 
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "ORDER_PRODUCT_ID", nullable = false)
-	private OrderProduct orderProduct;
+  @Id
+  @Column(name = "ORDER_PRODUCT_PRICE_ID")
+  @TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+      pkColumnValue = "ORDER_PRD_PRICE_ID_NEXT_VAL")
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
+  private Long id;
 
-
-	@Column(name = "PRODUCT_PRICE_CODE", nullable = false , length=64 )
-	private String productPriceCode;
-
-	@Column(name = "PRODUCT_PRICE", nullable = false)
-	private BigDecimal productPrice;
-	
-	@Column(name = "PRODUCT_PRICE_SPECIAL")
-	private BigDecimal productPriceSpecial;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column (name="PRD_PRICE_SPECIAL_ST_DT" , length=0)
-	private Date productPriceSpecialStartDate;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column (name="PRD_PRICE_SPECIAL_END_DT" , length=0)
-	private Date productPriceSpecialEndDate;
+  @JsonIgnore
+  @ManyToOne
+  @JoinColumn(name = "ORDER_PRODUCT_ID", nullable = false)
+  private OrderProduct orderProduct;
 
 
-	@Column(name = "DEFAULT_PRICE", nullable = false)
-	private Boolean defaultPrice;
+  @Column(name = "PRODUCT_PRICE_CODE", nullable = false, length = 64)
+  private String productPriceCode;
+
+  @Column(name = "PRODUCT_PRICE", nullable = false)
+  private BigDecimal productPrice;
+
+  @Column(name = "PRODUCT_PRICE_SPECIAL")
+  private BigDecimal productPriceSpecial;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "PRD_PRICE_SPECIAL_ST_DT", length = 0)
+  private Date productPriceSpecialStartDate;
+
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "PRD_PRICE_SPECIAL_END_DT", length = 0)
+  private Date productPriceSpecialEndDate;
 
 
-	@Column(name = "PRODUCT_PRICE_NAME", nullable = true)
-	private String productPriceName;
-	
-	public OrderProductPrice() {
-	}
+  @Column(name = "DEFAULT_PRICE", nullable = false)
+  private Boolean defaultPrice;
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  @Column(name = "PRODUCT_PRICE_NAME", nullable = true)
+  private String productPriceName;
 
-	public Boolean getDefaultPrice() {
-		return defaultPrice;
-	}
+  public OrderProductPrice() {
+  }
 
-	public void setDefaultPrice(Boolean defaultPrice) {
-		this.defaultPrice = defaultPrice;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public String getProductPriceName() {
-		return productPriceName;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public void setProductPriceName(String productPriceName) {
-		this.productPriceName = productPriceName;
-	}
+  public Boolean getDefaultPrice() {
+    return defaultPrice;
+  }
 
-	public OrderProduct getOrderProduct() {
-		return orderProduct;
-	}
+  public void setDefaultPrice(Boolean defaultPrice) {
+    this.defaultPrice = defaultPrice;
+  }
 
-	public void setOrderProduct(OrderProduct orderProduct) {
-		this.orderProduct = orderProduct;
-	}
+  public String getProductPriceName() {
+    return productPriceName;
+  }
 
-	public void setProductPriceCode(String productPriceCode) {
-		this.productPriceCode = productPriceCode;
-	}
+  public void setProductPriceName(String productPriceName) {
+    this.productPriceName = productPriceName;
+  }
 
-	public String getProductPriceCode() {
-		return productPriceCode;
-	}
+  public OrderProduct getOrderProduct() {
+    return orderProduct;
+  }
 
-	public void setProductPriceSpecialStartDate(
-			Date productPriceSpecialStartDate) {
-		this.productPriceSpecialStartDate = productPriceSpecialStartDate;
-	}
+  public void setOrderProduct(OrderProduct orderProduct) {
+    this.orderProduct = orderProduct;
+  }
 
-	public Date getProductPriceSpecialStartDate() {
-		return productPriceSpecialStartDate;
-	}
+  public void setProductPriceCode(String productPriceCode) {
+    this.productPriceCode = productPriceCode;
+  }
 
-	public void setProductPriceSpecialEndDate(Date productPriceSpecialEndDate) {
-		this.productPriceSpecialEndDate = productPriceSpecialEndDate;
-	}
+  public String getProductPriceCode() {
+    return productPriceCode;
+  }
 
-	public Date getProductPriceSpecialEndDate() {
-		return productPriceSpecialEndDate;
-	}
+  public void setProductPriceSpecialStartDate(
+      Date productPriceSpecialStartDate) {
+    this.productPriceSpecialStartDate = productPriceSpecialStartDate;
+  }
 
-	public void setProductPriceSpecial(BigDecimal productPriceSpecial) {
-		this.productPriceSpecial = productPriceSpecial;
-	}
+  public Date getProductPriceSpecialStartDate() {
+    return productPriceSpecialStartDate;
+  }
 
-	public BigDecimal getProductPriceSpecial() {
-		return productPriceSpecial;
-	}
+  public void setProductPriceSpecialEndDate(Date productPriceSpecialEndDate) {
+    this.productPriceSpecialEndDate = productPriceSpecialEndDate;
+  }
 
-	public void setProductPrice(BigDecimal productPrice) {
-		this.productPrice = productPrice;
-	}
+  public Date getProductPriceSpecialEndDate() {
+    return productPriceSpecialEndDate;
+  }
 
-	public BigDecimal getProductPrice() {
-		return productPrice;
-	}
+  public void setProductPriceSpecial(BigDecimal productPriceSpecial) {
+    this.productPriceSpecial = productPriceSpecial;
+  }
+
+  public BigDecimal getProductPriceSpecial() {
+    return productPriceSpecial;
+  }
+
+  public void setProductPrice(BigDecimal productPrice) {
+    this.productPrice = productPrice;
+  }
+
+  public BigDecimal getProductPrice() {
+    return productPrice;
+  }
 }

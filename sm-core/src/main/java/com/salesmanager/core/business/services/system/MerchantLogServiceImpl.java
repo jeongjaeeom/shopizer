@@ -12,27 +12,21 @@ import com.salesmanager.core.model.system.MerchantLog;
 
 @Service("merchantLogService")
 public class MerchantLogServiceImpl extends
-		SalesManagerEntityServiceImpl<Long, MerchantLog> implements
-		MerchantLogService {
-	
-	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory.getLogger(MerchantLogServiceImpl.class);
+    SalesManagerEntityServiceImpl<Long, MerchantLog> implements
+    MerchantLogService {
+
+  @SuppressWarnings("unused")
+  private static final Logger LOGGER = LoggerFactory.getLogger(MerchantLogServiceImpl.class);
 
 
-	
-	private MerchantLogRepository merchantLogRepository;
-	
-	@Inject
-	public MerchantLogServiceImpl(
-			MerchantLogRepository merchantLogRepository) {
-			super(merchantLogRepository);
-			this.merchantLogRepository = merchantLogRepository;
-	}
+  private MerchantLogRepository merchantLogRepository;
 
-
-	
-
-
+  @Inject
+  public MerchantLogServiceImpl(
+      MerchantLogRepository merchantLogRepository) {
+    super(merchantLogRepository);
+    this.merchantLogRepository = merchantLogRepository;
+  }
 
 
 }

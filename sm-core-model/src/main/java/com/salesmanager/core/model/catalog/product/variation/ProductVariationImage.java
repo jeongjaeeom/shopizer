@@ -16,62 +16,62 @@ import com.salesmanager.core.model.generic.SalesManagerEntity;
 @Entity
 @Table(name = "PRODUCT_VAR_IMAGE")
 public class ProductVariationImage extends SalesManagerEntity<Long, ProductVariationImage> {
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@Column(name = "PRODUCT_VAR_IMAGE_ID")
-	@TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "PRD_VAR_IMG_SEQ_NEXT_VAL")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
-	private Long id;
 
-	@Column(name = "PRODUCT_IMAGE")
-	private String productImage;
-	
-	@Column(name = "DEFAULT_IMAGE")
-	private boolean defaultImage = true;
-	
-	@ManyToOne(targetEntity = ProductAvailability.class)
-	@JoinColumn(name = "PRODUCT_AVAIL_ID", nullable = false)
-	private ProductAvailability productAvailability;
+  private static final long serialVersionUID = 1L;
 
-	
-	//private MultiPartFile image
+  @Id
+  @Column(name = "PRODUCT_VAR_IMAGE_ID")
+  @TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "PRD_VAR_IMG_SEQ_NEXT_VAL")
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
+  private Long id;
 
-	public ProductVariationImage(){
-	}
+  @Column(name = "PRODUCT_IMAGE")
+  private String productImage;
 
-	public String getProductImage() {
-		return productImage;
-	}
+  @Column(name = "DEFAULT_IMAGE")
+  private boolean defaultImage = true;
 
-	public void setProductImage(String productImage) {
-		this.productImage = productImage;
-	}
+  @ManyToOne(targetEntity = ProductAvailability.class)
+  @JoinColumn(name = "PRODUCT_AVAIL_ID", nullable = false)
+  private ProductAvailability productAvailability;
 
-	public boolean isDefaultImage() {
-		return defaultImage;
-	}
+  //private MultiPartFile image
 
-	public void setDefaultImage(boolean defaultImage) {
-		this.defaultImage = defaultImage;
-	}
+  public ProductVariationImage() {
+  }
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+  public String getProductImage() {
+    return productImage;
+  }
 
-	@Override
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setProductImage(String productImage) {
+    this.productImage = productImage;
+  }
 
-	public ProductAvailability getProductAvailability() {
-		return productAvailability;
-	}
+  public boolean isDefaultImage() {
+    return defaultImage;
+  }
 
-	public void setProductAvailability(ProductAvailability productAvailability) {
-		this.productAvailability = productAvailability;
-	}
+  public void setDefaultImage(boolean defaultImage) {
+    this.defaultImage = defaultImage;
+  }
+
+  @Override
+  public Long getId() {
+    return id;
+  }
+
+  @Override
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public ProductAvailability getProductAvailability() {
+    return productAvailability;
+  }
+
+  public void setProductAvailability(ProductAvailability productAvailability) {
+    this.productAvailability = productAvailability;
+  }
 
 }

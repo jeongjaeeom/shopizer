@@ -28,102 +28,103 @@ import com.salesmanager.core.model.reference.zone.Zone;
 @Table(name = "COUNTRY")
 @Cacheable
 public class Country extends SalesManagerEntity<Integer, Country> {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="COUNTRY_ID")
-	@TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-	pkColumnValue = "COUNTRY_SEQ_NEXT_VAL")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
-	private Integer id;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
-	private Set<CountryDescription> descriptions = new HashSet<CountryDescription>();
+  private static final long serialVersionUID = 1L;
 
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "country")
-	private Set<Zone> zones = new HashSet<Zone>();
-	
-	@ManyToOne(targetEntity = GeoZone.class)
-	@JoinColumn(name = "GEOZONE_ID")
-	private GeoZone geoZone;
-	
-	@Column(name = "COUNTRY_SUPPORTED")
-	private boolean supported = true;
-	
-	@Column(name = "COUNTRY_ISOCODE", unique=true, nullable = false)
-	private String isoCode;
-	
-	@Transient
-	private String name;
-	
-	public String getName() {
-		return name;
-	}
+  @Id
+  @Column(name = "COUNTRY_ID")
+  @TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+      pkColumnValue = "COUNTRY_SEQ_NEXT_VAL")
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
+  private Integer id;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  @JsonIgnore
+  @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
+  private Set<CountryDescription> descriptions = new HashSet<CountryDescription>();
 
-	public Country() {
-	}
-	
-	public Country(String isoCode) {
-		this.setIsoCode(isoCode);
-	}
-	
-	public boolean getSupported() {
-		return supported;
-	}
+  @JsonIgnore
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "country")
+  private Set<Zone> zones = new HashSet<Zone>();
 
-	public void setSupported(boolean supported) {
-		this.supported = supported;
-	}
+  @ManyToOne(targetEntity = GeoZone.class)
+  @JoinColumn(name = "GEOZONE_ID")
+  private GeoZone geoZone;
 
-	public String getIsoCode() {
-		return isoCode;
-	}
+  @Column(name = "COUNTRY_SUPPORTED")
+  private boolean supported = true;
 
-	public void setIsoCode(String isoCode) {
-		this.isoCode = isoCode;
-	}
+  @Column(name = "COUNTRY_ISOCODE", unique = true, nullable = false)
+  private String isoCode;
 
+  @Transient
+  private String name;
 
-	@Override
-	public Integer getId() {
-		return id;
-	}
+  public String getName() {
+    return name;
+  }
 
-	@Override
-	public void setId(Integer id) {
-		this.id = id;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public Country() {
+  }
+
+  public Country(String isoCode) {
+    this.setIsoCode(isoCode);
+  }
+
+  public boolean getSupported() {
+    return supported;
+  }
+
+  public void setSupported(boolean supported) {
+    this.supported = supported;
+  }
+
+  public String getIsoCode() {
+    return isoCode;
+  }
+
+  public void setIsoCode(String isoCode) {
+    this.isoCode = isoCode;
+  }
 
 
-	public Set<Zone> getZones() {
-		return zones;
-	}
+  @Override
+  public Integer getId() {
+    return id;
+  }
 
-	public void setZones(Set<Zone> zones) {
-		this.zones = zones;
-	}
+  @Override
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
 
-	public GeoZone getGeoZone() {
-		return geoZone;
-	}
+  public Set<Zone> getZones() {
+    return zones;
+  }
 
-	public void setGeoZone(GeoZone geoZone) {
-		this.geoZone = geoZone;
-	}
-	
-	
-	public Set<CountryDescription> getDescriptions() {
-		return descriptions;
-	}
+  public void setZones(Set<Zone> zones) {
+    this.zones = zones;
+  }
 
-	public void setDescriptions(Set<CountryDescription> descriptions) {
-		this.descriptions = descriptions;
-	}
+
+  public GeoZone getGeoZone() {
+    return geoZone;
+  }
+
+  public void setGeoZone(GeoZone geoZone) {
+    this.geoZone = geoZone;
+  }
+
+
+  public Set<CountryDescription> getDescriptions() {
+    return descriptions;
+  }
+
+  public void setDescriptions(Set<CountryDescription> descriptions) {
+    this.descriptions = descriptions;
+  }
 }

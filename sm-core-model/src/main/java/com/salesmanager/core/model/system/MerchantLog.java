@@ -26,81 +26,80 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 @Table(name = "MERCHANT_LOG")
 public class MerchantLog extends SalesManagerEntity<Long, MerchantLog> implements Serializable {
 
-	
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "MERCHANT_LOG_ID")
-	@TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "MR_LOG_SEQ_NEXT_VAL")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
-	private Long id;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="MERCHANT_ID", nullable=false)
-	private MerchantStore store;
+  @Id
+  @Column(name = "MERCHANT_LOG_ID")
+  @TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "MR_LOG_SEQ_NEXT_VAL")
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
+  private Long id;
 
-	@Column(name="MODULE", length=25, nullable=true)
-	private String module;
-	
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "MERCHANT_ID", nullable = false)
+  private MerchantStore store;
 
-	@Column(name="LOG")
-	@Type(type = "org.hibernate.type.TextType")
-	private String log;
-	
-	public MerchantLog(MerchantStore store, String log) {
-		this.store = store;
-		this.log = log;
-	}
-	
-	public MerchantLog(MerchantStore store, String module, String log) {
-		this.store = store;
-		this.module = module;
-		this.log = log;
-	}
+  @Column(name = "MODULE", length = 25, nullable = true)
+  private String module;
 
 
-	public Long getId() {
-		return id;
-	}
+  @Column(name = "LOG")
+  @Type(type = "org.hibernate.type.TextType")
+  private String log;
+
+  public MerchantLog(MerchantStore store, String log) {
+    this.store = store;
+    this.log = log;
+  }
+
+  public MerchantLog(MerchantStore store, String module, String log) {
+    this.store = store;
+    this.module = module;
+    this.log = log;
+  }
 
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public Long getId() {
+    return id;
+  }
 
 
-	public MerchantStore getStore() {
-		return store;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
 
-	public void setStore(MerchantStore store) {
-		this.store = store;
-	}
+  public MerchantStore getStore() {
+    return store;
+  }
 
 
-	public String getModule() {
-		return module;
-	}
+  public void setStore(MerchantStore store) {
+    this.store = store;
+  }
 
 
-	public void setModule(String module) {
-		this.module = module;
-	}
+  public String getModule() {
+    return module;
+  }
 
 
-	public String getLog() {
-		return log;
-	}
+  public void setModule(String module) {
+    this.module = module;
+  }
 
 
-	public void setLog(String log) {
-		this.log = log;
-	}
+  public String getLog() {
+    return log;
+  }
+
+
+  public void setLog(String log) {
+    this.log = log;
+  }
 
 
 }

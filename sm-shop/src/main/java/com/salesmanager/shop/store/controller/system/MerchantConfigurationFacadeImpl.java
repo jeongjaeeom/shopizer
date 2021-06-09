@@ -4,6 +4,7 @@ import static com.salesmanager.shop.constants.Constants.KEY_FACEBOOK_PAGE_URL;
 import static com.salesmanager.shop.constants.Constants.KEY_GOOGLE_ANALYTICS_URL;
 import static com.salesmanager.shop.constants.Constants.KEY_INSTAGRAM_URL;
 import static com.salesmanager.shop.constants.Constants.KEY_PINTEREST_PAGE_URL;
+
 import java.util.Optional;
 import javax.inject.Inject;
 
@@ -60,16 +61,15 @@ public class MerchantConfigurationFacadeImpl implements MerchantConfigurationFac
     Optional<String> instagramConfigValue = getConfigValue(KEY_INSTAGRAM_URL, merchantStore);
     instagramConfigValue.ifPresent(readableConfig::setInstagram);
 
-
     Optional<String> pinterestConfigValue = getConfigValue(KEY_PINTEREST_PAGE_URL, merchantStore);
     pinterestConfigValue.ifPresent(readableConfig::setPinterest);
 
     readableConfig.setDisplayShipping(false);
     try {
-      if(!StringUtils.isBlank(displayShipping)) {
+      if (!StringUtils.isBlank(displayShipping)) {
         readableConfig.setDisplayShipping(Boolean.valueOf(displayShipping));
       }
-    } catch(Exception e) {
+    } catch (Exception e) {
       LOGGER.error("Cannot parse value of " + displayShipping);
     }
 
@@ -77,9 +77,9 @@ public class MerchantConfigurationFacadeImpl implements MerchantConfigurationFac
   }
 
   private MerchantConfig getMerchantConfig(MerchantStore merchantStore) {
-    try{
+    try {
       return merchantConfigurationService.getMerchantConfig(merchantStore);
-    } catch (ServiceException e){
+    } catch (ServiceException e) {
       throw new ServiceRuntimeException(e);
     }
   }
@@ -89,9 +89,11 @@ public class MerchantConfigurationFacadeImpl implements MerchantConfigurationFac
         .map(MerchantConfiguration::getValue);
   }
 
-  private Optional<MerchantConfiguration> getMerchantConfiguration(String key, MerchantStore merchantStore) {
-    try{
-      return Optional.ofNullable(merchantConfigurationService.getMerchantConfiguration(key, merchantStore));
+  private Optional<MerchantConfiguration> getMerchantConfiguration(String key,
+      MerchantStore merchantStore) {
+    try {
+      return Optional
+          .ofNullable(merchantConfigurationService.getMerchantConfiguration(key, merchantStore));
     } catch (ServiceException e) {
       throw new ServiceRuntimeException(e);
     }

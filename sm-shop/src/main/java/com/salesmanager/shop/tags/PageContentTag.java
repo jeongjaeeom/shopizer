@@ -17,75 +17,69 @@ import com.salesmanager.core.model.reference.language.Language;
 import com.salesmanager.shop.constants.Constants;
 
 
-public class PageContentTag extends RequestContextAwareTag  {
-	
-	
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(PageContentTag.class);
+public class PageContentTag extends RequestContextAwareTag {
 
 
-	@Inject
-	private ContentService contentService;
-	
-	private String contentCode;
-	
-	
-	
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-	public String getContentCode() {
-		return contentCode;
-	}
+  private static final Logger LOGGER = LoggerFactory.getLogger(PageContentTag.class);
 
 
-	public void setContentCode(String contentCode) {
-		this.contentCode = contentCode;
-	}
+  @Inject
+  private ContentService contentService;
+
+  private String contentCode;
 
 
-	@Override
-	protected int doStartTagInternal() throws Exception {
-		if (contentService == null || contentService==null) {
-			LOGGER.debug("Autowiring contentService");
-            WebApplicationContext wac = getRequestContext().getWebApplicationContext();
-            AutowireCapableBeanFactory factory = wac.getAutowireCapableBeanFactory();
-            factory.autowireBean(this);
-        }
-		
-		HttpServletRequest request = (HttpServletRequest) pageContext
-		.getRequest();
-		
-		Language language = (Language)request.getAttribute(Constants.LANGUAGE);
-
-		MerchantStore store = (MerchantStore)request.getAttribute(Constants.MERCHANT_STORE);
-
-		Content content = contentService.getByCode(contentCode, store, language);
-		
-		String pageContent = "";
-		if(content!=null) {
-			ContentDescription description = content.getDescription();
-			if(description != null) {
-				pageContent = description.getDescription();
-			}
-		}
-		
-		
-		pageContext.getOut().print(pageContent);
-		
-		return SKIP_BODY;
-
-	}
+  public String getContentCode() {
+    return contentCode;
+  }
 
 
-	public int doEndTag() {
-		return EVAL_PAGE;
-	}
+  public void setContentCode(String contentCode) {
+    this.contentCode = contentCode;
+  }
 
 
-	
+  @Override
+  protected int doStartTagInternal() throws Exception {
+    if (contentService == null || contentService == null) {
+      LOGGER.debug("Autowiring contentService");
+      WebApplicationContext wac = getRequestContext().getWebApplicationContext();
+      AutowireCapableBeanFactory factory = wac.getAutowireCapableBeanFactory();
+      factory.autowireBean(this);
+    }
+
+    HttpServletRequest request = (HttpServletRequest) pageContext
+        .getRequest();
+
+    Language language = (Language) request.getAttribute(Constants.LANGUAGE);
+
+    MerchantStore store = (MerchantStore) request.getAttribute(Constants.MERCHANT_STORE);
+
+    Content content = contentService.getByCode(contentCode, store, language);
+
+    String pageContent = "";
+    if (content != null) {
+      ContentDescription description = content.getDescription();
+      if (description != null) {
+        pageContent = description.getDescription();
+      }
+    }
+
+    pageContext.getOut().print(pageContent);
+
+    return SKIP_BODY;
+
+  }
+
+
+  public int doEndTag() {
+    return EVAL_PAGE;
+  }
+
 
 }

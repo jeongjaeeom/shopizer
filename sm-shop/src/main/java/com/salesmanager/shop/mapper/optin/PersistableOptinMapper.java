@@ -24,7 +24,7 @@ public class PersistableOptinMapper implements Mapper<PersistableOptin, Optin> {
 
   @Override
   public Optin merge(PersistableOptin source, Optin destination, MerchantStore store,
-                     Language language) {
+      Language language) {
     return destination;
   }
 }

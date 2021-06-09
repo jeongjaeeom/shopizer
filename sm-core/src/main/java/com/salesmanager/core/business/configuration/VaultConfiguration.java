@@ -7,20 +7,20 @@ package com.salesmanager.core.business.configuration;
 //@PropertySource("classpath:vault.properties")
 //@Import(EnvironmentVaultConfiguration.class)
 //public class VaultConfiguration {
-public class VaultConfiguration  { //extends AbstractVaultConfiguration {
-	
-    //@Value("${vault.uri}")
-    //URI vaultUri;
-    
-    //@Value("${vault.token}")
-    //String vaultToken;
+public class VaultConfiguration { //extends AbstractVaultConfiguration {
+
+  //@Value("${vault.uri}")
+  //URI vaultUri;
+
+  //@Value("${vault.token}")
+  //String vaultToken;
 
 /*	@Override
 	public VaultEndpoint vaultEndpoint() {
 		
 		*//**
-		 * To be uncommented
-		 *//*
+   * To be uncommented
+   *//*
 	ClassPathResource resource = new ClassPathResource("vault.properties");
 		try {
 			Properties props = PropertiesLoaderUtils.loadProperties(resource);

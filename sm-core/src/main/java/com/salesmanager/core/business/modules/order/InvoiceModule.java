@@ -8,7 +8,8 @@ import com.salesmanager.core.model.reference.language.Language;
 
 
 public interface InvoiceModule {
-	
-	ByteArrayOutputStream createInvoice(MerchantStore store, Order order, Language language) throws Exception;
+
+  ByteArrayOutputStream createInvoice(MerchantStore store, Order order, Language language)
+      throws Exception;
 
 }

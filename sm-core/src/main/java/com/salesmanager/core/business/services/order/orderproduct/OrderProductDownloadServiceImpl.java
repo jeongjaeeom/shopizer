@@ -13,26 +13,28 @@ import com.salesmanager.core.business.services.common.generic.SalesManagerEntity
 import com.salesmanager.core.model.order.orderproduct.OrderProductDownload;
 
 
-
-
 @Service("orderProductDownloadService")
-public class OrderProductDownloadServiceImpl  extends SalesManagerEntityServiceImpl<Long, OrderProductDownload> implements OrderProductDownloadService {
+public class OrderProductDownloadServiceImpl extends
+    SalesManagerEntityServiceImpl<Long, OrderProductDownload> implements
+    OrderProductDownloadService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OrderProductDownloadServiceImpl.class);
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(OrderProductDownloadServiceImpl.class);
 
 
-    private final OrderProductDownloadRepository orderProductDownloadRepository;
+  private final OrderProductDownloadRepository orderProductDownloadRepository;
 
-    @Inject
-    public OrderProductDownloadServiceImpl(OrderProductDownloadRepository orderProductDownloadRepository) {
-        super(orderProductDownloadRepository);
-        this.orderProductDownloadRepository = orderProductDownloadRepository;
-    }
-    
-    @Override
-    public List<OrderProductDownload> getByOrderId(Long orderId) {
-    	return orderProductDownloadRepository.findByOrderId(orderId);
-    }
+  @Inject
+  public OrderProductDownloadServiceImpl(
+      OrderProductDownloadRepository orderProductDownloadRepository) {
+    super(orderProductDownloadRepository);
+    this.orderProductDownloadRepository = orderProductDownloadRepository;
+  }
+
+  @Override
+  public List<OrderProductDownload> getByOrderId(Long orderId) {
+    return orderProductDownloadRepository.findByOrderId(orderId);
+  }
 
 
 }

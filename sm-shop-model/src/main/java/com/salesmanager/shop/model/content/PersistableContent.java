@@ -6,9 +6,9 @@ import java.util.List;
 import com.salesmanager.shop.model.entity.Entity;
 
 public class PersistableContent extends Entity implements Serializable {
-  
+
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
   private String code;
@@ -21,7 +21,7 @@ public class PersistableContent extends Entity implements Serializable {
   public void setCode(String code) {
     this.code = code;
   }
-  
+
   public List<ObjectContent> getDescriptions() {
     return descriptions;
   }

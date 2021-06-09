@@ -34,155 +34,157 @@ import io.swagger.annotations.Tag;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
- * This API is for payment modules configurations. For payment of orders see
- * order
- * 
- * @author carlsamson
+ * This API is for payment modules configurations. For payment of orders see order
  *
+ * @author carlsamson
  */
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(tags = { "Payment api" })
-@SwaggerDefinition(tags = { @Tag(name = "Payment management resources", description = "Payment management resources") })
+@Api(tags = {"Payment api"})
+@SwaggerDefinition(tags = {
+    @Tag(name = "Payment management resources", description = "Payment management resources")})
 public class PaymentApi {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PaymentApi.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(PaymentApi.class);
 
-	@Autowired
-	private PaymentService paymentService;
+  @Autowired
+  private PaymentService paymentService;
 
-	/**
-	 * Get available payment modules
-	 * 
-	 * @param merchantStore
-	 * @param language
-	 * @return
-	 */
-	@GetMapping("/private/modules/payment")
-	@ApiOperation(httpMethod = "GET", value = "List list of payment modules", notes = "Requires administration access", produces = "application/json", response = List.class)
-	@ApiImplicitParams({ @ApiImplicitParam(name = "store", dataType = "string", defaultValue = "DEFAULT") })
-	public List<IntegrationModuleSummaryEntity> paymentModules(
-			@ApiIgnore MerchantStore merchantStore,
-			@ApiIgnore Language language) {
+  /**
+   * Get available payment modules
+   *
+   * @param merchantStore
+   * @param language
+   * @return
+   */
+  @GetMapping("/private/modules/payment")
+  @ApiOperation(httpMethod = "GET", value = "List list of payment modules", notes = "Requires administration access", produces = "application/json", response = List.class)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "string", defaultValue = "DEFAULT")})
+  public List<IntegrationModuleSummaryEntity> paymentModules(
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
 
-		try {
-			List<IntegrationModule> modules = paymentService.getPaymentMethods(merchantStore);
+    try {
+      List<IntegrationModule> modules = paymentService.getPaymentMethods(merchantStore);
 
-			// configured modules
-			Map<String, IntegrationConfiguration> configuredModules = paymentService
-					.getPaymentModulesConfigured(merchantStore);
-			return modules.stream().map(m -> integrationModule(m, configuredModules)).collect(Collectors.toList());
+      // configured modules
+      Map<String, IntegrationConfiguration> configuredModules = paymentService
+          .getPaymentModulesConfigured(merchantStore);
+      return modules.stream().map(m -> integrationModule(m, configuredModules))
+          .collect(Collectors.toList());
 
-		} catch (ServiceException e) {
-			LOGGER.error("Error getting payment modules", e);
-			throw new ServiceRuntimeException("Error getting payment modules", e);
-		}
+    } catch (ServiceException e) {
+      LOGGER.error("Error getting payment modules", e);
+      throw new ServiceRuntimeException("Error getting payment modules", e);
+    }
 
-	}
+  }
 
-	@PostMapping(value = "/private/modules/payment")
-	public void configure(
-			@RequestBody IntegrationModuleConfiguration configuration,
-			@ApiIgnore MerchantStore merchantStore) {
-		
-		try {
-			
-			List<IntegrationModule> modules = paymentService.getPaymentMethods(merchantStore);
-			
-		    Map<String, IntegrationModule> map = modules.stream()
-		    	      .collect(Collectors.toMap(IntegrationModule::getCode, module -> module));
-		    
-		    IntegrationModule config = map.get(configuration.getCode());
+  @PostMapping(value = "/private/modules/payment")
+  public void configure(
+      @RequestBody IntegrationModuleConfiguration configuration,
+      @ApiIgnore MerchantStore merchantStore) {
 
-			if (config == null) {
-				throw new ResourceNotFoundException("Payment module [" + configuration.getCode() + "] not found");
-			}
-			
-			Map<String, IntegrationConfiguration> configuredModules = paymentService
-					.getPaymentModulesConfigured(merchantStore);
-			
-			IntegrationConfiguration integrationConfiguration = configuredModules.get(configuration.getCode());
-			
-			if(integrationConfiguration == null) {
-				integrationConfiguration = new IntegrationConfiguration();
-				integrationConfiguration.setModuleCode(configuration.getCode());
-			}
+    try {
 
+      List<IntegrationModule> modules = paymentService.getPaymentMethods(merchantStore);
 
-			integrationConfiguration.setActive(configuration.isActive());
-			integrationConfiguration.setDefaultSelected(configuration.isDefaultSelected());
-			integrationConfiguration.setIntegrationKeys(configuration.getIntegrationKeys());
-			integrationConfiguration.setIntegrationOptions(configuration.getIntegrationOptions());
+      Map<String, IntegrationModule> map = modules.stream()
+          .collect(Collectors.toMap(IntegrationModule::getCode, module -> module));
 
-			
-			paymentService.savePaymentModuleConfiguration(integrationConfiguration, merchantStore);
-		} catch (ServiceException e) {
-			LOGGER.error("Error getting payment modules", e);
-			throw new ServiceRuntimeException("Error saving payment module", e);
-		}
+      IntegrationModule config = map.get(configuration.getCode());
 
-	}
+      if (config == null) {
+        throw new ResourceNotFoundException(
+            "Payment module [" + configuration.getCode() + "] not found");
+      }
 
-	/**
-	 * Get merchant payment module details
-	 * 
-	 * @param code
-	 * @param merchantStore
-	 * @param language
-	 * @return
-	 */
-	@GetMapping("/private/modules/payment/{code}")
-	@ApiOperation(httpMethod = "GET", value = "Payment module by code", produces = "application/json", response = List.class)
-	@ApiImplicitParams({ @ApiImplicitParam(name = "store", dataType = "string", defaultValue = "DEFAULT") })
-	public IntegrationModuleConfiguration paymentModule(@PathVariable String code,
-			@ApiIgnore MerchantStore merchantStore, @ApiIgnore Language language) {
+      Map<String, IntegrationConfiguration> configuredModules = paymentService
+          .getPaymentModulesConfigured(merchantStore);
 
-		try {
+      IntegrationConfiguration integrationConfiguration = configuredModules
+          .get(configuration.getCode());
 
-			// configured modules
-			Map<String, IntegrationConfiguration> configuredModules = paymentService
-					.getPaymentModulesConfigured(merchantStore);
-			IntegrationConfiguration config = configuredModules.get(code);
-			if (config == null) {
-				throw new ResourceNotFoundException("Payment module [" + code + "] not found");
-			}
+      if (integrationConfiguration == null) {
+        integrationConfiguration = new IntegrationConfiguration();
+        integrationConfiguration.setModuleCode(configuration.getCode());
+      }
 
-			/**
-			 * Build return object for now this is a read copy
-			 */
+      integrationConfiguration.setActive(configuration.isActive());
+      integrationConfiguration.setDefaultSelected(configuration.isDefaultSelected());
+      integrationConfiguration.setIntegrationKeys(configuration.getIntegrationKeys());
+      integrationConfiguration.setIntegrationOptions(configuration.getIntegrationOptions());
 
-			IntegrationModuleConfiguration returnConfig = new IntegrationModuleConfiguration();
-			returnConfig.setActive(config.isActive());
-			returnConfig.setDefaultSelected(config.isDefaultSelected());
-			returnConfig.setCode(code);
-			returnConfig.setIntegrationKeys(config.getIntegrationKeys());
-			returnConfig.setIntegrationOptions(config.getIntegrationOptions());
+      paymentService.savePaymentModuleConfiguration(integrationConfiguration, merchantStore);
+    } catch (ServiceException e) {
+      LOGGER.error("Error getting payment modules", e);
+      throw new ServiceRuntimeException("Error saving payment module", e);
+    }
 
-			return returnConfig;
+  }
 
-		} catch (ServiceException e) {
-			LOGGER.error("Error getting payment module [" + code + "]", e);
-			throw new ServiceRuntimeException("Error getting payment module [" + code + "]", e);
-		}
+  /**
+   * Get merchant payment module details
+   *
+   * @param code
+   * @param merchantStore
+   * @param language
+   * @return
+   */
+  @GetMapping("/private/modules/payment/{code}")
+  @ApiOperation(httpMethod = "GET", value = "Payment module by code", produces = "application/json", response = List.class)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "string", defaultValue = "DEFAULT")})
+  public IntegrationModuleConfiguration paymentModule(@PathVariable String code,
+      @ApiIgnore MerchantStore merchantStore, @ApiIgnore Language language) {
 
-	}
+    try {
 
-	private IntegrationModuleSummaryEntity integrationModule(IntegrationModule module,
-			Map<String, IntegrationConfiguration> configuredModules) {
+      // configured modules
+      Map<String, IntegrationConfiguration> configuredModules = paymentService
+          .getPaymentModulesConfigured(merchantStore);
+      IntegrationConfiguration config = configuredModules.get(code);
+      if (config == null) {
+        throw new ResourceNotFoundException("Payment module [" + code + "] not found");
+      }
 
-		IntegrationModuleSummaryEntity readable = null;
-		readable = new IntegrationModuleSummaryEntity();
+      /**
+       * Build return object for now this is a read copy
+       */
 
-		readable.setCode(module.getCode());
-		readable.setImage(module.getImage());
-		if (configuredModules.containsKey(module.getCode())) {
-			readable.setConfigured(true);
-			if(configuredModules.get(module.getCode()).isActive()) {
-				readable.setActive(true);
-			}
-		}
-		return readable;
+      IntegrationModuleConfiguration returnConfig = new IntegrationModuleConfiguration();
+      returnConfig.setActive(config.isActive());
+      returnConfig.setDefaultSelected(config.isDefaultSelected());
+      returnConfig.setCode(code);
+      returnConfig.setIntegrationKeys(config.getIntegrationKeys());
+      returnConfig.setIntegrationOptions(config.getIntegrationOptions());
 
-	}
+      return returnConfig;
+
+    } catch (ServiceException e) {
+      LOGGER.error("Error getting payment module [" + code + "]", e);
+      throw new ServiceRuntimeException("Error getting payment module [" + code + "]", e);
+    }
+
+  }
+
+  private IntegrationModuleSummaryEntity integrationModule(IntegrationModule module,
+      Map<String, IntegrationConfiguration> configuredModules) {
+
+    IntegrationModuleSummaryEntity readable = null;
+    readable = new IntegrationModuleSummaryEntity();
+
+    readable.setCode(module.getCode());
+    readable.setImage(module.getImage());
+    if (configuredModules.containsKey(module.getCode())) {
+      readable.setConfigured(true);
+      if (configuredModules.get(module.getCode()).isActive()) {
+        readable.setActive(true);
+      }
+    }
+    return readable;
+
+  }
 
 }

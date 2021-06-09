@@ -29,8 +29,9 @@ public class CountryFacadeImpl implements CountryFacade {
         .collect(Collectors.toList());
   }
 
-  private ReadableCountry convertToReadableCountry(Country country, Language language, MerchantStore merchantStore) {
-    try{
+  private ReadableCountry convertToReadableCountry(Country country, Language language,
+      MerchantStore merchantStore) {
+    try {
       ReadableCountryPopulator populator = new ReadableCountryPopulator();
       return populator.populate(country, new ReadableCountry(), merchantStore, language);
     } catch (ConversionException e) {
@@ -39,7 +40,7 @@ public class CountryFacadeImpl implements CountryFacade {
   }
 
   private List<Country> getListOfCountryZones(Language language) {
-    try{
+    try {
       return countryService.listCountryZones(language);
     } catch (ServiceException e) {
       throw new ServiceRuntimeException(e);

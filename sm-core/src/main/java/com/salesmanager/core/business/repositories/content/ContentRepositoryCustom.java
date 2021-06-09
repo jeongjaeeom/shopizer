@@ -10,10 +10,10 @@ import com.salesmanager.core.model.reference.language.Language;
 
 public interface ContentRepositoryCustom {
 
-	List<ContentDescription> listNameByType(List<ContentType> contentType,
-			MerchantStore store, Language language);
+  List<ContentDescription> listNameByType(List<ContentType> contentType,
+      MerchantStore store, Language language);
 
-	ContentDescription getBySeUrl(MerchantStore store, String seUrl);
-	
+  ContentDescription getBySeUrl(MerchantStore store, String seUrl);
+
 
 }

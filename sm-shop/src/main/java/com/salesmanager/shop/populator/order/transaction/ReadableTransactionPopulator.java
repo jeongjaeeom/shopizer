@@ -13,71 +13,69 @@ import com.salesmanager.shop.model.order.transaction.ReadableTransaction;
 import com.salesmanager.shop.utils.DateUtil;
 
 
-public class ReadableTransactionPopulator extends AbstractDataPopulator<Transaction, ReadableTransaction> {
+public class ReadableTransactionPopulator extends
+    AbstractDataPopulator<Transaction, ReadableTransaction> {
 
-	
-	private OrderService orderService;
-	private PricingService pricingService;
-	
-	@Override
-	public ReadableTransaction populate(Transaction source, ReadableTransaction target, MerchantStore store,
-			Language language) throws ConversionException {
 
-		
-		Validate.notNull(source,"PersistableTransaction must not be null");
-		Validate.notNull(orderService,"OrderService must not be null");
-		Validate.notNull(pricingService,"OrderService must not be null");
-		
-		if(target == null) {
-			target = new ReadableTransaction();
-		}
-		
-		
-		try {
-			
+  private OrderService orderService;
+  private PricingService pricingService;
 
-			target.setAmount(pricingService.getDisplayAmount(source.getAmount(), store));
-			target.setDetails(source.getDetails());
-			target.setPaymentType(source.getPaymentType());
-			target.setTransactionType(source.getTransactionType());
-			target.setTransactionDate(DateUtil.formatDate(source.getTransactionDate()));
-			target.setId(source.getId());
-			
-			if(source.getOrder() != null) {
-				target.setOrderId(source.getOrder().getId());
+  @Override
+  public ReadableTransaction populate(Transaction source, ReadableTransaction target,
+      MerchantStore store,
+      Language language) throws ConversionException {
 
-			}
-			
-			return target;
-			
-			
-		
-		} catch(Exception e) {
-			throw new ConversionException(e);
-		}
-		
-	}
+    Validate.notNull(source, "PersistableTransaction must not be null");
+    Validate.notNull(orderService, "OrderService must not be null");
+    Validate.notNull(pricingService, "OrderService must not be null");
 
-	@Override
-	protected ReadableTransaction createTarget() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public OrderService getOrderService() {
-		return orderService;
-	}
+    if (target == null) {
+      target = new ReadableTransaction();
+    }
 
-	public void setOrderService(OrderService orderService) {
-		this.orderService = orderService;
-	}
+    try {
 
-	public PricingService getPricingService() {
-		return pricingService;
-	}
+      target.setAmount(pricingService.getDisplayAmount(source.getAmount(), store));
+      target.setDetails(source.getDetails());
+      target.setPaymentType(source.getPaymentType());
+      target.setTransactionType(source.getTransactionType());
+      target.setTransactionDate(DateUtil.formatDate(source.getTransactionDate()));
+      target.setId(source.getId());
 
-	public void setPricingService(PricingService pricingService) {
-		this.pricingService = pricingService;
-	}
+      if (source.getOrder() != null) {
+        target.setOrderId(source.getOrder().getId());
+
+      }
+
+      return target;
+
+
+    } catch (Exception e) {
+      throw new ConversionException(e);
+    }
+
+  }
+
+  @Override
+  protected ReadableTransaction createTarget() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public OrderService getOrderService() {
+    return orderService;
+  }
+
+  public void setOrderService(OrderService orderService) {
+    this.orderService = orderService;
+  }
+
+  public PricingService getPricingService() {
+    return pricingService;
+  }
+
+  public void setPricingService(PricingService pricingService) {
+    this.pricingService = pricingService;
+  }
 
 }

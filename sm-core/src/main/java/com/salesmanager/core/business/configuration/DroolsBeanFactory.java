@@ -23,90 +23,91 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DroolsBeanFactory {
-	
-	
-	@Value("${config.shipping.rule.priceByDistance}")
-	private String priceByDistance;
-	
-	@Value("${config.shipping.rule.shippingModuleDecision}")
-	private String shippingDecision;
-	
 
-    private static final String RULES_PATH = "com/salesmanager/drools/rules/";
-    private KieServices kieServices = KieServices.Factory.get();
 
-    private  KieFileSystem getKieFileSystem() throws IOException{
-        KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
-        List<String> rules=Arrays.asList(priceByDistance,shippingDecision);
-        for(String rule:rules){
-            kieFileSystem.write(ResourceFactory.newClassPathResource(rule));
-        }
-        return kieFileSystem;
+  @Value("${config.shipping.rule.priceByDistance}")
+  private String priceByDistance;
+
+  @Value("${config.shipping.rule.shippingModuleDecision}")
+  private String shippingDecision;
+
+
+  private static final String RULES_PATH = "com/salesmanager/drools/rules/";
+  private KieServices kieServices = KieServices.Factory.get();
+
+  private KieFileSystem getKieFileSystem() throws IOException {
+    KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
+    List<String> rules = Arrays.asList(priceByDistance, shippingDecision);
+    for (String rule : rules) {
+      kieFileSystem.write(ResourceFactory.newClassPathResource(rule));
     }
+    return kieFileSystem;
+  }
 
-    public KieContainer getKieContainer() throws IOException {
-        getKieRepository();
+  public KieContainer getKieContainer() throws IOException {
+    getKieRepository();
 
-        KieBuilder kb = kieServices.newKieBuilder(getKieFileSystem());
-        kb.buildAll();
+    KieBuilder kb = kieServices.newKieBuilder(getKieFileSystem());
+    kb.buildAll();
 
-        KieModule kieModule = kb.getKieModule();
+    KieModule kieModule = kb.getKieModule();
 
-        return kieServices.newKieContainer(kieModule.getReleaseId());
+    return kieServices.newKieContainer(kieModule.getReleaseId());
 
-    }
+  }
 
-    private void getKieRepository() {
-        final KieRepository kieRepository = kieServices.getRepository();
-        kieRepository.addKieModule(kieRepository::getDefaultReleaseId);
-    }
+  private void getKieRepository() {
+    final KieRepository kieRepository = kieServices.getRepository();
+    kieRepository.addKieModule(kieRepository::getDefaultReleaseId);
+  }
 
-    public KieSession getKieSession(){
-        getKieRepository();
-        KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
+  public KieSession getKieSession() {
+    getKieRepository();
+    KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
 
-        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + priceByDistance));
-        kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + shippingDecision));
-        
-        KieBuilder kb = kieServices.newKieBuilder(kieFileSystem);
-        kb.buildAll();
-        KieModule kieModule = kb.getKieModule();
+    kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + priceByDistance));
+    kieFileSystem.write(ResourceFactory.newClassPathResource(RULES_PATH + shippingDecision));
 
-        KieContainer kContainer = kieServices.newKieContainer(kieModule.getReleaseId());
+    KieBuilder kb = kieServices.newKieBuilder(kieFileSystem);
+    kb.buildAll();
+    KieModule kieModule = kb.getKieModule();
 
-        return kContainer.newKieSession();
+    KieContainer kContainer = kieServices.newKieContainer(kieModule.getReleaseId());
 
-    }
+    return kContainer.newKieSession();
 
-    public KieSession getKieSession(Resource dt) {
-        KieFileSystem kieFileSystem = kieServices.newKieFileSystem()
-            .write(dt);
+  }
 
-       KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem)
-            .buildAll();
+  public KieSession getKieSession(Resource dt) {
+    KieFileSystem kieFileSystem = kieServices.newKieFileSystem()
+        .write(dt);
 
-        KieRepository kieRepository = kieServices.getRepository();
+    KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem)
+        .buildAll();
 
-        ReleaseId krDefaultReleaseId = kieRepository.getDefaultReleaseId();
+    KieRepository kieRepository = kieServices.getRepository();
 
-        KieContainer kieContainer = kieServices.newKieContainer(krDefaultReleaseId);
+    ReleaseId krDefaultReleaseId = kieRepository.getDefaultReleaseId();
 
-        return kieContainer.newKieSession();
-    }
+    KieContainer kieContainer = kieServices.newKieContainer(krDefaultReleaseId);
 
-    /*
-     * Can be used for debugging
-     * Input excelFile example: com/baeldung/drools/rules/Discount.xls
-     */
-    public String getDrlFromExcel(String excelFile) {
-        DecisionTableConfiguration configuration = KnowledgeBuilderFactory.newDecisionTableConfiguration();
-        configuration.setInputType(DecisionTableInputType.XLS);
+    return kieContainer.newKieSession();
+  }
 
-        Resource dt = ResourceFactory.newClassPathResource(excelFile, getClass());
+  /*
+   * Can be used for debugging
+   * Input excelFile example: com/baeldung/drools/rules/Discount.xls
+   */
+  public String getDrlFromExcel(String excelFile) {
+    DecisionTableConfiguration configuration = KnowledgeBuilderFactory
+        .newDecisionTableConfiguration();
+    configuration.setInputType(DecisionTableInputType.XLS);
 
-        DecisionTableProviderImpl decisionTableProvider = new DecisionTableProviderImpl();
+    Resource dt = ResourceFactory.newClassPathResource(excelFile, getClass());
 
-        return decisionTableProvider.loadFromResource(dt, null);
-    }
+    DecisionTableProviderImpl decisionTableProvider = new DecisionTableProviderImpl();
+
+    return decisionTableProvider.loadFromResource(dt, null);
+  }
 
 }

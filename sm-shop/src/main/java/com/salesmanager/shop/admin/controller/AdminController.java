@@ -22,56 +22,54 @@ import com.salesmanager.core.model.user.User;
 import com.salesmanager.shop.constants.Constants;
 
 
-
 @Controller
 public class AdminController {
-	
-	@Inject
-	CountryService countryService;
-	
-	@Inject
-	UserService userService;
-	
-	@PreAuthorize("hasRole('AUTH')")
-	@RequestMapping(value={"/admin/home.html","/admin/"}, method=RequestMethod.GET)
-	public String displayDashboard(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Language language = (Language)request.getAttribute("LANGUAGE");
-		
-		//display menu
-		Map<String,String> activeMenus = new HashMap<String,String>();
-		activeMenus.put("home", "home");
-		
-		model.addAttribute("activeMenus",activeMenus);
-		
-		
-		//get store information
-		MerchantStore store = (MerchantStore)request.getAttribute(Constants.ADMIN_STORE);
-		
-		Map<String,Country> countries = countryService.getCountriesMap(language);
-		
-		Country storeCountry = store.getCountry();
-		Country country = countries.get(storeCountry.getIsoCode());
-		
-		String sCurrentUser = request.getRemoteUser();
-		User currentUser = userService.getByUserName(sCurrentUser);
-		
-		model.addAttribute("store", store);
-		model.addAttribute("country", country);
-		model.addAttribute("user", currentUser);
-		//get last 10 orders
-		//OrderCriteria orderCriteria = new OrderCriteria();
-		//orderCriteria.setMaxCount(10);
-		//orderCriteria.setOrderBy(CriteriaOrderBy.DESC);
-		
-		return ControllerConstants.Tiles.adminDashboard;
-	}
-	
-	@RequestMapping( value=Constants.ADMIN_URI , method=RequestMethod.GET)
-	public String displayStoreLanding(HttpServletRequest request, HttpServletResponse response) {
 
-		return "redirect:" + Constants.ADMIN_URI + Constants.SLASH;
-	}
+  @Inject
+  CountryService countryService;
 
+  @Inject
+  UserService userService;
+
+  @PreAuthorize("hasRole('AUTH')")
+  @RequestMapping(value = {"/admin/home.html", "/admin/"}, method = RequestMethod.GET)
+  public String displayDashboard(Model model, HttpServletRequest request,
+      HttpServletResponse response) throws Exception {
+    Language language = (Language) request.getAttribute("LANGUAGE");
+
+    //display menu
+    Map<String, String> activeMenus = new HashMap<String, String>();
+    activeMenus.put("home", "home");
+
+    model.addAttribute("activeMenus", activeMenus);
+
+    //get store information
+    MerchantStore store = (MerchantStore) request.getAttribute(Constants.ADMIN_STORE);
+
+    Map<String, Country> countries = countryService.getCountriesMap(language);
+
+    Country storeCountry = store.getCountry();
+    Country country = countries.get(storeCountry.getIsoCode());
+
+    String sCurrentUser = request.getRemoteUser();
+    User currentUser = userService.getByUserName(sCurrentUser);
+
+    model.addAttribute("store", store);
+    model.addAttribute("country", country);
+    model.addAttribute("user", currentUser);
+    //get last 10 orders
+    //OrderCriteria orderCriteria = new OrderCriteria();
+    //orderCriteria.setMaxCount(10);
+    //orderCriteria.setOrderBy(CriteriaOrderBy.DESC);
+
+    return ControllerConstants.Tiles.adminDashboard;
+  }
+
+  @RequestMapping(value = Constants.ADMIN_URI, method = RequestMethod.GET)
+  public String displayStoreLanding(HttpServletRequest request, HttpServletResponse response) {
+
+    return "redirect:" + Constants.ADMIN_URI + Constants.SLASH;
+  }
 
 
 }

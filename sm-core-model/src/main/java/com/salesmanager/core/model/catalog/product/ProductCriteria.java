@@ -6,106 +6,105 @@ import com.salesmanager.core.model.catalog.product.attribute.AttributeCriteria;
 import com.salesmanager.core.model.common.Criteria;
 
 public class ProductCriteria extends Criteria {
-	
-	
-	private String productName;
-	private List<AttributeCriteria> attributeCriteria;
-
-	
-	private Boolean available = null;
-	
-	private List<Long> categoryIds;
-	private List<String> availabilities;
-	private List<Long> productIds;
-	private List<Long> optionValueIds;
-	
-	private String status;
-	
-	private Long manufacturerId = null;
-	
-	private Long ownerId = null;
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
 
 
-	public List<Long> getCategoryIds() {
-		return categoryIds;
-	}
+  private String productName;
+  private List<AttributeCriteria> attributeCriteria;
 
-	public void setCategoryIds(List<Long> categoryIds) {
-		this.categoryIds = categoryIds;
-	}
 
-	public List<String> getAvailabilities() {
-		return availabilities;
-	}
+  private Boolean available = null;
 
-	public void setAvailabilities(List<String> availabilities) {
-		this.availabilities = availabilities;
-	}
+  private List<Long> categoryIds;
+  private List<String> availabilities;
+  private List<Long> productIds;
+  private List<Long> optionValueIds;
 
-	public Boolean getAvailable() {
-		return available;
-	}
+  private String status;
 
-	public void setAvailable(Boolean available) {
-		this.available = available;
-	}
+  private Long manufacturerId = null;
 
-	public void setAttributeCriteria(List<AttributeCriteria> attributeCriteria) {
-		this.attributeCriteria = attributeCriteria;
-	}
+  private Long ownerId = null;
 
-	public List<AttributeCriteria> getAttributeCriteria() {
-		return attributeCriteria;
-	}
+  public String getProductName() {
+    return productName;
+  }
 
-	public void setProductIds(List<Long> productIds) {
-		this.productIds = productIds;
-	}
+  public void setProductName(String productName) {
+    this.productName = productName;
+  }
 
-	public List<Long> getProductIds() {
-		return productIds;
-	}
 
-	public void setManufacturerId(Long manufacturerId) {
-		this.manufacturerId = manufacturerId;
-	}
+  public List<Long> getCategoryIds() {
+    return categoryIds;
+  }
 
-	public Long getManufacturerId() {
-		return manufacturerId;
-	}
+  public void setCategoryIds(List<Long> categoryIds) {
+    this.categoryIds = categoryIds;
+  }
 
-	public String getStatus() {
-		return status;
-	}
+  public List<String> getAvailabilities() {
+    return availabilities;
+  }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+  public void setAvailabilities(List<String> availabilities) {
+    this.availabilities = availabilities;
+  }
 
-	public Long getOwnerId() {
-		return ownerId;
-	}
+  public Boolean getAvailable() {
+    return available;
+  }
 
-	public void setOwnerId(Long ownerId) {
-		this.ownerId = ownerId;
-	}
+  public void setAvailable(Boolean available) {
+    this.available = available;
+  }
 
-	public List<Long> getOptionValueIds() {
-		return optionValueIds;
-	}
+  public void setAttributeCriteria(List<AttributeCriteria> attributeCriteria) {
+    this.attributeCriteria = attributeCriteria;
+  }
 
-	public void setOptionValueIds(List<Long> optionValueIds) {
-		this.optionValueIds = optionValueIds;
-	}
+  public List<AttributeCriteria> getAttributeCriteria() {
+    return attributeCriteria;
+  }
 
+  public void setProductIds(List<Long> productIds) {
+    this.productIds = productIds;
+  }
+
+  public List<Long> getProductIds() {
+    return productIds;
+  }
+
+  public void setManufacturerId(Long manufacturerId) {
+    this.manufacturerId = manufacturerId;
+  }
+
+  public Long getManufacturerId() {
+    return manufacturerId;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public Long getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(Long ownerId) {
+    this.ownerId = ownerId;
+  }
+
+  public List<Long> getOptionValueIds() {
+    return optionValueIds;
+  }
+
+  public void setOptionValueIds(List<Long> optionValueIds) {
+    this.optionValueIds = optionValueIds;
+  }
 
 
 }

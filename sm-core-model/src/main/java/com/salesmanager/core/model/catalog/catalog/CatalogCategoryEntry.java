@@ -21,88 +21,89 @@ import com.salesmanager.core.model.generic.SalesManagerEntity;
 
 @Entity
 @EntityListeners(value = com.salesmanager.core.model.common.audit.AuditListener.class)
-@Table(name = "CATALOG_ENTRY",uniqueConstraints=
-@UniqueConstraint(columnNames = {"CATEGORY_ID", "CATALOG_ID"}) )
-public class CatalogCategoryEntry extends SalesManagerEntity<Long, CatalogCategoryEntry> implements Auditable {
-	
-	
-    @Embedded
-    private AuditSection auditSection = new AuditSection();
-	
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+@Table(name = "CATALOG_ENTRY", uniqueConstraints =
+@UniqueConstraint(columnNames = {"CATEGORY_ID", "CATALOG_ID"}))
+public class CatalogCategoryEntry extends SalesManagerEntity<Long, CatalogCategoryEntry> implements
+    Auditable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE, 
-	generator = "TABLE_GEN")
-	
-	@TableGenerator(name = "TABLE_GEN", 
-	table = "SM_SEQUENCER", 
-	pkColumnName = "SEQ_NAME",
-	valueColumnName = "SEQ_COUNT",
-	allocationSize = SchemaConstant.DESCRIPTION_ID_ALLOCATION_SIZE, 
-	initialValue = SchemaConstant.DESCRIPTION_ID_START_VALUE,
-	pkColumnValue = "CATALOG_ENT_SEQ_NEXT_VAL")
-	private Long id;
- 
-    @ManyToOne
-    @JoinColumn(name = "CATEGORY_ID", nullable = false)
-    Category category;
-    
-	@ManyToOne
-	@JoinColumn(name = "CATALOG_ID", nullable = false)
-	private Catalog catalog;
-	
-	//TODO d products ????
-	
-    @Column(name = "VISIBLE")
-    private boolean visible;
 
-	public Category getCategory() {
-		return category;
-	}
+  @Embedded
+  private AuditSection auditSection = new AuditSection();
 
-	public void setCategory(Category category) {
-		this.category = category;
-	}
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-	public Catalog getCatalog() {
-		return catalog;
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.TABLE,
+      generator = "TABLE_GEN")
 
-	public void setCatalog(Catalog catalog) {
-		this.catalog = catalog;
-	}
+  @TableGenerator(name = "TABLE_GEN",
+      table = "SM_SEQUENCER",
+      pkColumnName = "SEQ_NAME",
+      valueColumnName = "SEQ_COUNT",
+      allocationSize = SchemaConstant.DESCRIPTION_ID_ALLOCATION_SIZE,
+      initialValue = SchemaConstant.DESCRIPTION_ID_START_VALUE,
+      pkColumnValue = "CATALOG_ENT_SEQ_NEXT_VAL")
+  private Long id;
 
-	public Long getId() {
-		return id;
-	}
+  @ManyToOne
+  @JoinColumn(name = "CATEGORY_ID", nullable = false)
+  Category category;
 
-	@Override
-	public void setId(Long id) {
-		this.id = id;
-		
-	}
+  @ManyToOne
+  @JoinColumn(name = "CATALOG_ID", nullable = false)
+  private Catalog catalog;
 
-	@Override
-	public AuditSection getAuditSection() {
-		return auditSection;
-	}
+  //TODO d products ????
 
-	@Override
-	public void setAuditSection(AuditSection audit) {
-		auditSection = audit;
-		
-	}
+  @Column(name = "VISIBLE")
+  private boolean visible;
 
-	public boolean isVisible() {
-		return visible;
-	}
+  public Category getCategory() {
+    return category;
+  }
 
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
+  public void setCategory(Category category) {
+    this.category = category;
+  }
+
+  public Catalog getCatalog() {
+    return catalog;
+  }
+
+  public void setCatalog(Catalog catalog) {
+    this.catalog = catalog;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  @Override
+  public void setId(Long id) {
+    this.id = id;
+
+  }
+
+  @Override
+  public AuditSection getAuditSection() {
+    return auditSection;
+  }
+
+  @Override
+  public void setAuditSection(AuditSection audit) {
+    auditSection = audit;
+
+  }
+
+  public boolean isVisible() {
+    return visible;
+  }
+
+  public void setVisible(boolean visible) {
+    this.visible = visible;
+  }
 
 }

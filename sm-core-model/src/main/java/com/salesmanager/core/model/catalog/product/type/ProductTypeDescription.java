@@ -18,7 +18,7 @@ import com.salesmanager.core.model.common.description.Description;
 public class ProductTypeDescription extends Description {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 

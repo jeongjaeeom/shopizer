@@ -1,7 +1,6 @@
 package com.salesmanager.core.business.services.customer.optin;
 
 
-
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.Validate;
@@ -15,38 +14,40 @@ import com.salesmanager.core.model.system.optin.CustomerOptin;
 
 
 @Service
-public class CustomerOptinServiceImpl extends SalesManagerEntityServiceImpl<Long, CustomerOptin> implements CustomerOptinService {
-	
-	
-	private CustomerOptinRepository customerOptinRepository;
-	
-	
-	@Inject
-	public CustomerOptinServiceImpl(CustomerOptinRepository customerOptinRepository) {
-		super(customerOptinRepository);
-		this.customerOptinRepository = customerOptinRepository;
-	}
+public class CustomerOptinServiceImpl extends
+    SalesManagerEntityServiceImpl<Long, CustomerOptin> implements CustomerOptinService {
 
-	@Override
-	public void optinCumtomer(CustomerOptin optin) throws ServiceException {
-		Validate.notNull(optin,"CustomerOptin must not be null");
-		
-		customerOptinRepository.save(optin);
-		
 
-	}
+  private CustomerOptinRepository customerOptinRepository;
 
-	@Override
-	public void optoutCumtomer(CustomerOptin optin) throws ServiceException {
-		Validate.notNull(optin,"CustomerOptin must not be null");
-		
-		customerOptinRepository.delete(optin);
 
-	}
+  @Inject
+  public CustomerOptinServiceImpl(CustomerOptinRepository customerOptinRepository) {
+    super(customerOptinRepository);
+    this.customerOptinRepository = customerOptinRepository;
+  }
 
-	@Override
-	public CustomerOptin findByEmailAddress(MerchantStore store, String emailAddress, String code) throws ServiceException {
-		return customerOptinRepository.findByMerchantAndCodeAndEmail(store.getId(), code, emailAddress);
-	}
+  @Override
+  public void optinCumtomer(CustomerOptin optin) throws ServiceException {
+    Validate.notNull(optin, "CustomerOptin must not be null");
+
+    customerOptinRepository.save(optin);
+
+
+  }
+
+  @Override
+  public void optoutCumtomer(CustomerOptin optin) throws ServiceException {
+    Validate.notNull(optin, "CustomerOptin must not be null");
+
+    customerOptinRepository.delete(optin);
+
+  }
+
+  @Override
+  public CustomerOptin findByEmailAddress(MerchantStore store, String emailAddress, String code)
+      throws ServiceException {
+    return customerOptinRepository.findByMerchantAndCodeAndEmail(store.getId(), code, emailAddress);
+  }
 
 }

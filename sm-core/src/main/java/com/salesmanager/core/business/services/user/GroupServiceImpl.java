@@ -38,11 +38,11 @@ public class GroupServiceImpl extends SalesManagerEntityServiceImpl<Integer, Gro
 
   public List<Group> listGroupByIds(Set<Integer> ids) throws ServiceException {
 
-      try {
-        return ids.isEmpty() ? new ArrayList<Group>() : groupRepository.findByIds(ids);
-      } catch (Exception e) {
-        throw new ServiceException(e);
-      }
+    try {
+      return ids.isEmpty() ? new ArrayList<Group>() : groupRepository.findByIds(ids);
+    } catch (Exception e) {
+      throw new ServiceException(e);
+    }
 
   }
 

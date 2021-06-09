@@ -33,236 +33,221 @@ import com.salesmanager.core.model.shoppingcart.ShoppingCartAttributeItem;
 import com.salesmanager.core.model.shoppingcart.ShoppingCartItem;
 
 
-
 /**
- * Test 
- * 
- * - Add a product to persistent shopping cart
- * - Retrieve an item from the persistent shopping cart
+ * Test
+ * <p>
+ * - Add a product to persistent shopping cart - Retrieve an item from the persistent shopping cart
  * - Rebuild a shopping cart item after the product definition has been modified
- * @author Carl Samson
  *
+ * @author Carl Samson
  */
-public class ShoppingCartTest extends com.salesmanager.test.common.AbstractSalesManagerCoreTestCase {
-	
+public class ShoppingCartTest extends
+    com.salesmanager.test.common.AbstractSalesManagerCoreTestCase {
 
 
-	@Test
-	public void createShoppingCart() throws Exception {
+  @Test
+  public void createShoppingCart() throws Exception {
 
-        MerchantStore store = merchantService.getByCode( MerchantStore.DEFAULT_STORE );
-        
-		
-	    Language en = languageService.getByCode("en");
+    MerchantStore store = merchantService.getByCode(MerchantStore.DEFAULT_STORE);
 
+    Language en = languageService.getByCode("en");
 
-	    /** CATALOG CREATION **/
-	    
-	    ProductType generalType = productTypeService.getProductType(ProductType.GENERAL_TYPE);
+    /** CATALOG CREATION **/
 
-	    /**
-	     * Create the category
-	     */
-	    Category shirts = new Category();
-	    shirts.setMerchantStore(store);
-	    shirts.setCode("shirts");
+    ProductType generalType = productTypeService.getProductType(ProductType.GENERAL_TYPE);
 
-	    CategoryDescription shirtsEnglishDescription = new CategoryDescription();
-	    shirtsEnglishDescription.setName("Shirts");
-	    shirtsEnglishDescription.setCategory(shirts);
-	    shirtsEnglishDescription.setLanguage(en);
+    /**
+     * Create the category
+     */
+    Category shirts = new Category();
+    shirts.setMerchantStore(store);
+    shirts.setCode("shirts");
 
-	    Set<CategoryDescription> descriptions = new HashSet<CategoryDescription>();
-	    descriptions.add(shirtsEnglishDescription);
+    CategoryDescription shirtsEnglishDescription = new CategoryDescription();
+    shirtsEnglishDescription.setName("Shirts");
+    shirtsEnglishDescription.setCategory(shirts);
+    shirtsEnglishDescription.setLanguage(en);
 
+    Set<CategoryDescription> descriptions = new HashSet<CategoryDescription>();
+    descriptions.add(shirtsEnglishDescription);
 
-	    shirts.setDescriptions(descriptions);
-	    categoryService.create(shirts);
-	    
-	    
-	    /**
-	     * Create a manufacturer
-	     */
-	    Manufacturer addidas = new Manufacturer();
-	    addidas.setMerchantStore(store);
-	    addidas.setCode("addidas");
+    shirts.setDescriptions(descriptions);
+    categoryService.create(shirts);
 
-	    ManufacturerDescription addidasDesc = new ManufacturerDescription();
-	    addidasDesc.setLanguage(en);
-	    addidasDesc.setManufacturer(addidas);
-	    addidasDesc.setName("Addidas");
-	    addidas.getDescriptions().add(addidasDesc);
+    /**
+     * Create a manufacturer
+     */
+    Manufacturer addidas = new Manufacturer();
+    addidas.setMerchantStore(store);
+    addidas.setCode("addidas");
 
-	    manufacturerService.create(addidas);
-	    
-	    /**
-	     * Create an option
-	     */
-	    ProductOption option = new ProductOption();
-	    option.setMerchantStore(store);
-	    option.setCode("color");
-	    option.setProductOptionType(ProductOptionType.Radio.name());
-	    
-	    ProductOptionDescription optionDescription = new ProductOptionDescription();
-	    optionDescription.setLanguage(en);
-	    optionDescription.setName("Color");
-	    optionDescription.setDescription("Item color");
-	    optionDescription.setProductOption(option);
-	    
-	    option.getDescriptions().add(optionDescription);
-	    
-	    productOptionService.saveOrUpdate(option);
-	    
-	    
-	    /** first option value **/
-	    ProductOptionValue white = new ProductOptionValue();
-	    white.setMerchantStore(store);
-	    white.setCode("white");
-	    
-	    ProductOptionValueDescription whiteDescription = new ProductOptionValueDescription();
-	    whiteDescription.setLanguage(en);
-	    whiteDescription.setName("White");
-	    whiteDescription.setDescription("White color");
-	    whiteDescription.setProductOptionValue(white);
-	    
-	    white.getDescriptions().add(whiteDescription);
-	    
-	    productOptionValueService.saveOrUpdate(white);
-	    
-	    
-	    ProductOptionValue black = new ProductOptionValue();
-	    black.setMerchantStore(store);
-	    black.setCode("black");
-	    
-	    /** second option value **/
-	    ProductOptionValueDescription blackDesc = new ProductOptionValueDescription();
-	    blackDesc.setLanguage(en);
-	    blackDesc.setName("Black");
-	    blackDesc.setDescription("Black color");
-	    blackDesc.setProductOptionValue(black);
-	    
-	    black.getDescriptions().add(blackDesc);
+    ManufacturerDescription addidasDesc = new ManufacturerDescription();
+    addidasDesc.setLanguage(en);
+    addidasDesc.setManufacturer(addidas);
+    addidasDesc.setName("Addidas");
+    addidas.getDescriptions().add(addidasDesc);
 
-	    productOptionValueService.saveOrUpdate(black);
-	    
-	    
-	    /**
-	     * Create a complex product
-	     */
-	    Product product = new Product();
-	    product.setProductHeight(new BigDecimal(4));
-	    product.setProductLength(new BigDecimal(3));
-	    product.setProductWidth(new BigDecimal(1));
-	    product.setSku("XABC12");
-	    product.setManufacturer(addidas);
-	    product.setType(generalType);
-	    product.setMerchantStore(store);
+    manufacturerService.create(addidas);
 
-	    // Product description
-	    ProductDescription description = new ProductDescription();
-	    description.setName("Short sleeves shirt");
-	    description.setLanguage(en);
-	    description.setProduct(product);
+    /**
+     * Create an option
+     */
+    ProductOption option = new ProductOption();
+    option.setMerchantStore(store);
+    option.setCode("color");
+    option.setProductOptionType(ProductOptionType.Radio.name());
 
-	    product.getDescriptions().add(description);
-	    product.getCategories().add(shirts);
-	    
-	    
-	    //availability
-	    ProductAvailability availability = new ProductAvailability();
-	    availability.setProductDateAvailable(new Date());
-	    availability.setProductQuantity(100);
-	    availability.setRegion("*");
-	    availability.setProduct(product);// associate with product
-	    
-	    //price
-	    ProductPrice dprice = new ProductPrice();
-	    dprice.setDefaultPrice(true);
-	    dprice.setProductPriceAmount(new BigDecimal(29.99));
-	    dprice.setProductAvailability(availability);
-	    
-	    
+    ProductOptionDescription optionDescription = new ProductOptionDescription();
+    optionDescription.setLanguage(en);
+    optionDescription.setName("Color");
+    optionDescription.setDescription("Item color");
+    optionDescription.setProductOption(option);
 
-	    ProductPriceDescription dpd = new ProductPriceDescription();
-	    dpd.setName("Base price");
-	    dpd.setProductPrice(dprice);
-	    dpd.setLanguage(en);
+    option.getDescriptions().add(optionDescription);
 
-	    dprice.getDescriptions().add(dpd);
-	    availability.getPrices().add(dprice);
-	    product.getAvailabilities().add(availability);
-	    
-	    
-	    //attributes
-	    //white
-	    ProductAttribute whiteAttribute = new ProductAttribute();
-	    whiteAttribute.setProduct(product);
-	    whiteAttribute.setProductOption(option);
-	    whiteAttribute.setAttributeDefault(true);
-	    whiteAttribute.setProductAttributePrice(new BigDecimal(0));//no price variation
-	    whiteAttribute.setProductAttributeWeight(new BigDecimal(0));//no weight variation
-	    whiteAttribute.setProductOption(option);
-	    whiteAttribute.setProductOptionValue(white);
-	    
-	    product.getAttributes().add(whiteAttribute);
-	    //black
-	    ProductAttribute blackAttribute = new ProductAttribute();
-	    blackAttribute.setProduct(product);
-	    blackAttribute.setProductOption(option);
-	    blackAttribute.setProductAttributePrice(new BigDecimal(5));//5 + dollars
-	    blackAttribute.setProductAttributeWeight(new BigDecimal(0));//no weight variation
-	    blackAttribute.setProductOption(option);
-	    blackAttribute.setProductOptionValue(black);
-	    
-	    product.getAttributes().add(blackAttribute);
+    productOptionService.saveOrUpdate(option);
 
-	    productService.create(product);
-	    
-	    /** Create Shopping cart **/
-	    
-	    ShoppingCart shoppingCart = new ShoppingCart();
-	    shoppingCart.setMerchantStore(store);
-	    
-	    UUID cartCode = UUID.randomUUID();
-	    shoppingCart.setShoppingCartCode(cartCode.toString());
+    /** first option value **/
+    ProductOptionValue white = new ProductOptionValue();
+    white.setMerchantStore(store);
+    white.setCode("white");
 
-	    ShoppingCartItem item = new ShoppingCartItem(shoppingCart,product);
-	    item.setShoppingCart(shoppingCart);
-	    
-	    FinalPrice price = pricingService.calculateProductPrice(product);
+    ProductOptionValueDescription whiteDescription = new ProductOptionValueDescription();
+    whiteDescription.setLanguage(en);
+    whiteDescription.setName("White");
+    whiteDescription.setDescription("White color");
+    whiteDescription.setProductOptionValue(white);
 
-	    item.setItemPrice(price.getFinalPrice());
-	    item.setQuantity(1);
-	    
-	    /** user selects black **/
-	    ShoppingCartAttributeItem attributeItem = new ShoppingCartAttributeItem(item,blackAttribute);
-	    item.getAttributes().add(attributeItem);
-	    
-	    shoppingCart.getLineItems().add(item);
+    white.getDescriptions().add(whiteDescription);
 
-	    
-	    //create cart
-	    shoppingCartService.create(shoppingCart);
+    productOptionValueService.saveOrUpdate(white);
 
-	    
-	    /** Retrieve cart **/
+    ProductOptionValue black = new ProductOptionValue();
+    black.setMerchantStore(store);
+    black.setCode("black");
 
-	    ShoppingCart retrievedCart = shoppingCartService.getByCode(cartCode.toString(), store);
-	    
-	    Assert.assertNotNull(retrievedCart);
-	    
-	    /** Delete cart **/
-	    shoppingCartService.delete(retrievedCart);
-	    
-	    /** Check if cart has been deleted **/
-	    retrievedCart = shoppingCartService.getByCode(cartCode.toString(), store);
-	    
-	    Assert.assertNull(retrievedCart);
+    /** second option value **/
+    ProductOptionValueDescription blackDesc = new ProductOptionValueDescription();
+    blackDesc.setLanguage(en);
+    blackDesc.setName("Black");
+    blackDesc.setDescription("Black color");
+    blackDesc.setProductOptionValue(black);
 
-		// Clean up for other tests
-	    categoryService.delete(shirts);
-	    
-	}
-	
+    black.getDescriptions().add(blackDesc);
+
+    productOptionValueService.saveOrUpdate(black);
+
+    /**
+     * Create a complex product
+     */
+    Product product = new Product();
+    product.setProductHeight(new BigDecimal(4));
+    product.setProductLength(new BigDecimal(3));
+    product.setProductWidth(new BigDecimal(1));
+    product.setSku("XABC12");
+    product.setManufacturer(addidas);
+    product.setType(generalType);
+    product.setMerchantStore(store);
+
+    // Product description
+    ProductDescription description = new ProductDescription();
+    description.setName("Short sleeves shirt");
+    description.setLanguage(en);
+    description.setProduct(product);
+
+    product.getDescriptions().add(description);
+    product.getCategories().add(shirts);
+
+    //availability
+    ProductAvailability availability = new ProductAvailability();
+    availability.setProductDateAvailable(new Date());
+    availability.setProductQuantity(100);
+    availability.setRegion("*");
+    availability.setProduct(product);// associate with product
+
+    //price
+    ProductPrice dprice = new ProductPrice();
+    dprice.setDefaultPrice(true);
+    dprice.setProductPriceAmount(new BigDecimal(29.99));
+    dprice.setProductAvailability(availability);
+
+    ProductPriceDescription dpd = new ProductPriceDescription();
+    dpd.setName("Base price");
+    dpd.setProductPrice(dprice);
+    dpd.setLanguage(en);
+
+    dprice.getDescriptions().add(dpd);
+    availability.getPrices().add(dprice);
+    product.getAvailabilities().add(availability);
+
+    //attributes
+    //white
+    ProductAttribute whiteAttribute = new ProductAttribute();
+    whiteAttribute.setProduct(product);
+    whiteAttribute.setProductOption(option);
+    whiteAttribute.setAttributeDefault(true);
+    whiteAttribute.setProductAttributePrice(new BigDecimal(0));//no price variation
+    whiteAttribute.setProductAttributeWeight(new BigDecimal(0));//no weight variation
+    whiteAttribute.setProductOption(option);
+    whiteAttribute.setProductOptionValue(white);
+
+    product.getAttributes().add(whiteAttribute);
+    //black
+    ProductAttribute blackAttribute = new ProductAttribute();
+    blackAttribute.setProduct(product);
+    blackAttribute.setProductOption(option);
+    blackAttribute.setProductAttributePrice(new BigDecimal(5));//5 + dollars
+    blackAttribute.setProductAttributeWeight(new BigDecimal(0));//no weight variation
+    blackAttribute.setProductOption(option);
+    blackAttribute.setProductOptionValue(black);
+
+    product.getAttributes().add(blackAttribute);
+
+    productService.create(product);
+
+    /** Create Shopping cart **/
+
+    ShoppingCart shoppingCart = new ShoppingCart();
+    shoppingCart.setMerchantStore(store);
+
+    UUID cartCode = UUID.randomUUID();
+    shoppingCart.setShoppingCartCode(cartCode.toString());
+
+    ShoppingCartItem item = new ShoppingCartItem(shoppingCart, product);
+    item.setShoppingCart(shoppingCart);
+
+    FinalPrice price = pricingService.calculateProductPrice(product);
+
+    item.setItemPrice(price.getFinalPrice());
+    item.setQuantity(1);
+
+    /** user selects black **/
+    ShoppingCartAttributeItem attributeItem = new ShoppingCartAttributeItem(item, blackAttribute);
+    item.getAttributes().add(attributeItem);
+
+    shoppingCart.getLineItems().add(item);
+
+    //create cart
+    shoppingCartService.create(shoppingCart);
+
+    /** Retrieve cart **/
+
+    ShoppingCart retrievedCart = shoppingCartService.getByCode(cartCode.toString(), store);
+
+    Assert.assertNotNull(retrievedCart);
+
+    /** Delete cart **/
+    shoppingCartService.delete(retrievedCart);
+
+    /** Check if cart has been deleted **/
+    retrievedCart = shoppingCartService.getByCode(cartCode.toString(), store);
+
+    Assert.assertNull(retrievedCart);
+
+    // Clean up for other tests
+    categoryService.delete(shirts);
+
+  }
+
 
 }

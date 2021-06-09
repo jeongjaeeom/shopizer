@@ -7,24 +7,24 @@ import java.util.List;
 
 public class CartTestBean {
 
-    private String cartId;
+  private String cartId;
 
-    private List<ReadableProduct> products = new ArrayList<>();
+  private List<ReadableProduct> products = new ArrayList<>();
 
-    public String getCartId() {
-        return cartId;
-    }
+  public String getCartId() {
+    return cartId;
+  }
 
-    void setCartId(String cartId) {
-        this.cartId = cartId;
-    }
+  void setCartId(String cartId) {
+    this.cartId = cartId;
+  }
 
-    public void setProducts(List<ReadableProduct> products) {
-        this.products = products;
-    }
+  public void setProducts(List<ReadableProduct> products) {
+    this.products = products;
+  }
 
-    public List<ReadableProduct> getProducts() {
-        return products;
-    }
+  public List<ReadableProduct> getProducts() {
+    return products;
+  }
 
 }

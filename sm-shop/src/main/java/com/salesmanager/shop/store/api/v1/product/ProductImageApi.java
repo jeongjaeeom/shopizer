@@ -40,10 +40,12 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/v1")
 public class ProductImageApi {
 
-  @Inject private ProductImageService productImageService;
+  @Inject
+  private ProductImageService productImageService;
 
 
-  @Inject private ProductService productService;
+  @Inject
+  private ProductService productService;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProductImageApi.class);
 
@@ -62,12 +64,12 @@ public class ProductImageApi {
       consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
       method = RequestMethod.POST)
   @ApiImplicitParams({
-    @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-    @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
   })
-  public void uploadImages (
+  public void uploadImages(
       @PathVariable Long id,
-      @RequestParam(value="file",required = true) MultipartFile[] files,
+      @RequestParam(value = "file", required = true) MultipartFile[] files,
       @ApiIgnore MerchantStore merchantStore,
       @ApiIgnore Language language) throws IOException {
 
@@ -78,10 +80,10 @@ public class ProductImageApi {
       if (product == null) {
         throw new ResourceNotFoundException("Product not found");
       }
-      
+
       //security validation
       //product belongs to merchant store
-      if(product.getMerchantStore().getId().intValue() != merchantStore.getId().intValue()) {
+      if (product.getMerchantStore().getId().intValue() != merchantStore.getId().intValue()) {
         throw new UnauthorizedException("Resource not authorized for this merchant");
       }
 
@@ -130,8 +132,8 @@ public class ProductImageApi {
       value = {"/private/products/images/{id}", "/auth/products/images/{id}"},
       method = RequestMethod.DELETE)
   public void deleteImage(
-      @PathVariable Long id, 
-      HttpServletRequest request, 
+      @PathVariable Long id,
+      HttpServletRequest request,
       HttpServletResponse response)
       throws Exception {
 
@@ -140,7 +142,7 @@ public class ProductImageApi {
 
       if (productImage != null) {
         productImageService
-        .delete(productImage);
+            .delete(productImage);
       } else {
         response.sendError(404, "No ProductImage found for ID : " + id);
       }
@@ -153,31 +155,35 @@ public class ProductImageApi {
       }
     }
   }
-  
-  
+
+
   @ResponseStatus(HttpStatus.OK)
   @RequestMapping(
       value = {"/private/products/{id}/image/{imageId}"},
       method = RequestMethod.DELETE)
   public void deleteImage(
-	  @PathVariable Long id,
-	  @PathVariable Long imageId,
+      @PathVariable Long id,
+      @PathVariable Long imageId,
       @Valid NameEntity imageName,
       @ApiIgnore MerchantStore merchantStore,
       @ApiIgnore Language language) {
 
     try {
-      Optional<ProductImage> productImage = productImageService.getProductImage(imageId, id, merchantStore);
+      Optional<ProductImage> productImage = productImageService
+          .getProductImage(imageId, id, merchantStore);
 
       if (productImage.isPresent()) {
         productImageService.delete(productImage.get());
       } else {
-    	throw new ResourceNotFoundException("Product image [" + imageName.getName() + "] not found for product id [" + id + "] and merchant [" + merchantStore.getCode() + "]");
+        throw new ResourceNotFoundException(
+            "Product image [" + imageName.getName() + "] not found for product id [" + id
+                + "] and merchant [" + merchantStore.getCode() + "]");
       }
 
     } catch (Exception e) {
       LOGGER.error("Error while deleting ProductImage", e);
-      throw new ServiceRuntimeException("ProductImage [" + imageName.getName() + "] cannot be deleted");
+      throw new ServiceRuntimeException(
+          "ProductImage [" + imageName.getName() + "] cannot be deleted");
     }
   }
 }

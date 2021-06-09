@@ -6,7 +6,7 @@ import com.salesmanager.shop.model.entity.ResourceUrlAccess;
 public class ObjectContent extends ContentPath implements ResourceUrlAccess {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 
@@ -15,11 +15,13 @@ public class ObjectContent extends ContentPath implements ResourceUrlAccess {
   private String title;
   private String pageContent;
   private String language;
+
   public String getPageContent() {
-      return pageContent;
+    return pageContent;
   }
+
   public void setPageContent(String pageContent) {
-      this.pageContent = pageContent;
+    this.pageContent = pageContent;
   }
 
   public String getSlug() {
@@ -45,9 +47,11 @@ public class ObjectContent extends ContentPath implements ResourceUrlAccess {
   public void setTitle(String title) {
     this.title = title;
   }
+
   public String getLanguage() {
     return language;
   }
+
   public void setLanguage(String language) {
     this.language = language;
   }

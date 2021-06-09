@@ -34,105 +34,111 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @Controller
 @RequestMapping("/api/v1")
-@Api(tags = {"Product variation api - options and option value used for creating a product instance"})
+@Api(tags = {
+    "Product variation api - options and option value used for creating a product instance"})
 @SwaggerDefinition(tags = {
     @Tag(name = "Product variation resource", description = "Manage product variation")
 })
 public class ProductVariationApi {
-	
-	@Autowired
-	private ProductVariationFacade productVariationFacade;
-	
 
-	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/variation" }, method = RequestMethod.POST)
-	@ApiImplicitParams({ @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-			@ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en") })
-	public void create(
-			@Valid @RequestBody PersistableProductVariation variation, 
-			@ApiIgnore MerchantStore merchantStore,
-			@ApiIgnore Language language) {
-
-		productVariationFacade.create(variation, merchantStore, language);
-
-	}
-
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = { "/private/product/variation/unique" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiImplicitParams({ 
-		@ApiImplicitParam(name = "store", dataType = "string", defaultValue = "DEFAULT"),
-			@ApiImplicitParam(name = "lang", dataType = "string", defaultValue = "en") })
-	@ApiOperation(httpMethod = "GET", value = "Check if option set code already exists", notes = "", response = EntityExists.class)
-	public ResponseEntity<EntityExists> exists(
-			@RequestParam(value = "code") String code,
-			@ApiIgnore MerchantStore merchantStore, 
-			@ApiIgnore Language language) {
-
-		boolean isOptionExist = productVariationFacade.exists(code, merchantStore);
-		return new ResponseEntity<EntityExists>(new EntityExists(isOptionExist), HttpStatus.OK);
-	}
+  @Autowired
+  private ProductVariationFacade productVariationFacade;
 
 
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/variation/{id}" }, method = RequestMethod.GET)
-	@ApiImplicitParams({ @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-			@ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en") })
-	@ResponseBody
-	public ReadableProductVariation get(
-			@PathVariable Long id, 
-			@ApiIgnore MerchantStore merchantStore,
-			@ApiIgnore Language language) {
+  @ResponseStatus(HttpStatus.CREATED)
+  @RequestMapping(value = {"/private/product/variation"}, method = RequestMethod.POST)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")})
+  public void create(
+      @Valid @RequestBody PersistableProductVariation variation,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
 
-		return productVariationFacade.get(id, merchantStore, language);
+    productVariationFacade.create(variation, merchantStore, language);
 
-	}
+  }
+
+  @ResponseStatus(HttpStatus.OK)
+  @GetMapping(value = {
+      "/private/product/variation/unique"}, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "string", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "string", defaultValue = "en")})
+  @ApiOperation(httpMethod = "GET", value = "Check if option set code already exists", notes = "", response = EntityExists.class)
+  public ResponseEntity<EntityExists> exists(
+      @RequestParam(value = "code") String code,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
+
+    boolean isOptionExist = productVariationFacade.exists(code, merchantStore);
+    return new ResponseEntity<EntityExists>(new EntityExists(isOptionExist), HttpStatus.OK);
+  }
 
 
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/variation/{id}" }, method = RequestMethod.PUT)
-	@ApiImplicitParams({ @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-			@ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en") })
-	public void update(
-			@Valid @RequestBody PersistableProductVariation variation, 
-			@PathVariable Long id,
-			@ApiIgnore MerchantStore merchantStore, 
-			@ApiIgnore Language language) {
-		
-		variation.setId(id);
-		productVariationFacade.update(id, variation, merchantStore, language);
+  @ResponseStatus(HttpStatus.OK)
+  @RequestMapping(value = {"/private/product/variation/{id}"}, method = RequestMethod.GET)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")})
+  @ResponseBody
+  public ReadableProductVariation get(
+      @PathVariable Long id,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
 
-	}
+    return productVariationFacade.get(id, merchantStore, language);
+
+  }
 
 
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/variation/{id}" }, method = RequestMethod.DELETE)
-	@ApiImplicitParams({ 
-		@ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-			@ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en") })
-	public void delete(
-			@PathVariable Long id,
-			@ApiIgnore MerchantStore merchantStore,
-			@ApiIgnore Language language) {
+  @ResponseStatus(HttpStatus.OK)
+  @RequestMapping(value = {"/private/product/variation/{id}"}, method = RequestMethod.PUT)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")})
+  public void update(
+      @Valid @RequestBody PersistableProductVariation variation,
+      @PathVariable Long id,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
 
-		productVariationFacade.delete(id, merchantStore);
+    variation.setId(id);
+    productVariationFacade.update(id, variation, merchantStore, language);
 
-	}
+  }
 
-	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/variation" }, method = RequestMethod.GET)
-	@ApiImplicitParams({ 
-		@ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-			@ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en") })
-	public @ResponseBody ReadableEntityList<ReadableProductVariation> list(
-			@ApiIgnore MerchantStore merchantStore,
-			@ApiIgnore Language language,
-			@RequestParam(value = "page", required = false, defaultValue="0") Integer page,
-		    @RequestParam(value = "count", required = false, defaultValue="10") Integer count) {
 
-		return productVariationFacade.list(merchantStore, language, page, count);
+  @ResponseStatus(HttpStatus.OK)
+  @RequestMapping(value = {"/private/product/variation/{id}"}, method = RequestMethod.DELETE)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")})
+  public void delete(
+      @PathVariable Long id,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
 
-		
-	}
+    productVariationFacade.delete(id, merchantStore);
+
+  }
+
+  @ResponseStatus(HttpStatus.OK)
+  @RequestMapping(value = {"/private/product/variation"}, method = RequestMethod.GET)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")})
+  public @ResponseBody
+  ReadableEntityList<ReadableProductVariation> list(
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language,
+      @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+      @RequestParam(value = "count", required = false, defaultValue = "10") Integer count) {
+
+    return productVariationFacade.list(merchantStore, language, page, count);
+
+
+  }
 
 
 }

@@ -30,90 +30,91 @@ import com.salesmanager.shop.store.controller.product.facade.ProductDefinitionFa
 import com.salesmanager.shop.utils.ImageFilePath;
 
 @Service("productDefinitionFacade")
-@Profile({ "default", "cloud", "gcp", "aws", "mysql" })
+@Profile({"default", "cloud", "gcp", "aws", "mysql"})
 public class ProductDefinitionFacadeImpl implements ProductDefinitionFacade {
-	
-	
-	@Inject
-	private CategoryService categoryService;
 
-	@Inject
-	private LanguageService languageService;
-	
-	@Inject
-	private ProductAttributeService productAttributeService;
 
-	@Inject
-	private ProductService productService;
+  @Inject
+  private CategoryService categoryService;
 
-	@Inject
-	private PricingService pricingService;
+  @Inject
+  private LanguageService languageService;
 
-	@Inject
-	private CustomerService customerService;
+  @Inject
+  private ProductAttributeService productAttributeService;
 
-	@Inject
-	private ProductReviewService productReviewService;
+  @Inject
+  private ProductService productService;
 
-	@Inject
-	private ProductRelationshipService productRelationshipService;
+  @Inject
+  private PricingService pricingService;
 
-	@Autowired
-	private PersistableProductDefinitionMapper persistableProductDefinitionMapper;
-	
-	@Autowired
-	private ReadableProductDefinitionMapper readableProductDefinitionMapper;
+  @Inject
+  private CustomerService customerService;
 
-	@Inject
-	@Qualifier("img")
-	private ImageFilePath imageUtils;
+  @Inject
+  private ProductReviewService productReviewService;
 
-	@Override
-	public Long saveProductDefinition(MerchantStore store, PersistableProductDefinition product, Language language) {
-		
+  @Inject
+  private ProductRelationshipService productRelationshipService;
 
-		Product target = null;
-		if (product.getId() != null && product.getId().longValue() > 0) {
-			target = productService.getById(product.getId());
-		} else {
-			target = new Product();
-		}
+  @Autowired
+  private PersistableProductDefinitionMapper persistableProductDefinitionMapper;
 
-		try {
-			target = persistableProductDefinitionMapper.merge(product, target, store, language);
-			if (target.getId() != null && target.getId() > 0) {
-				productService.update(target);
-			} else {
-				productService.create(target);
-				product.setId(target.getId());
-			}
+  @Autowired
+  private ReadableProductDefinitionMapper readableProductDefinitionMapper;
 
-			return target.getId();
-		} catch (Exception e) {
-			throw new ServiceRuntimeException(e);
-		}
-		
-	}
+  @Inject
+  @Qualifier("img")
+  private ImageFilePath imageUtils;
 
-	@Override
-	public void update(Long id, PersistableProductDefinition product, MerchantStore merchant,
-			Language language) {
-		product.setId(id);
-		this.saveProductDefinition(merchant, product, language);
-	}
+  @Override
+  public Long saveProductDefinition(MerchantStore store, PersistableProductDefinition product,
+      Language language) {
 
-	@Override
-	public ReadableProductDefinition getProduct(MerchantStore store, Long id, Language language) {
-		Product product = productService.findOne(id, store);
-		return readableProductDefinitionMapper.convert(product, store, language);
-	}
+    Product target = null;
+    if (product.getId() != null && product.getId().longValue() > 0) {
+      target = productService.getById(product.getId());
+    } else {
+      target = new Product();
+    }
 
-	@Override
-	public ReadableProductDefinition getProductByCode(MerchantStore store, String uniqueCode, Language language) {
-		
-		Product product = productService.getByCode(uniqueCode, store);
-		return readableProductDefinitionMapper.convert(product, store, language);
+    try {
+      target = persistableProductDefinitionMapper.merge(product, target, store, language);
+      if (target.getId() != null && target.getId() > 0) {
+        productService.update(target);
+      } else {
+        productService.create(target);
+        product.setId(target.getId());
+      }
 
-	}
+      return target.getId();
+    } catch (Exception e) {
+      throw new ServiceRuntimeException(e);
+    }
+
+  }
+
+  @Override
+  public void update(Long id, PersistableProductDefinition product, MerchantStore merchant,
+      Language language) {
+    product.setId(id);
+    this.saveProductDefinition(merchant, product, language);
+  }
+
+  @Override
+  public ReadableProductDefinition getProduct(MerchantStore store, Long id, Language language) {
+    Product product = productService.findOne(id, store);
+    return readableProductDefinitionMapper.convert(product, store, language);
+  }
+
+  @Override
+  public ReadableProductDefinition getProductByCode(MerchantStore store, String uniqueCode,
+      Language language) {
+
+    Product product = productService.getByCode(uniqueCode, store);
+    return readableProductDefinitionMapper.convert(product, store, language);
+
+  }
 
 }

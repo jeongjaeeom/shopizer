@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 
 
 @Service("socialCustomerDetailsService")
-public class SocialCustomerServicesImpl implements UserDetailsService{
-	
-	@Inject
-	UserDetailsService customerDetailsService;
+public class SocialCustomerServicesImpl implements UserDetailsService {
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		//delegates to Customer fetch service
-		UserDetails userDetails =  customerDetailsService.loadUserByUsername(username);
-        if (userDetails == null) {
-        	return null;
-        }
-        
-        return userDetails;
-	}
+  @Inject
+  UserDetailsService customerDetailsService;
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    //delegates to Customer fetch service
+    UserDetails userDetails = customerDetailsService.loadUserByUsername(username);
+    if (userDetails == null) {
+      return null;
+    }
+
+    return userDetails;
+  }
 
 }

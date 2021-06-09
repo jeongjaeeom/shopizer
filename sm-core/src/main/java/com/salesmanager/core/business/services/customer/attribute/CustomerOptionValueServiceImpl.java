@@ -18,79 +18,79 @@ import com.salesmanager.core.model.reference.language.Language;
 
 @Service("customerOptionValueService")
 public class CustomerOptionValueServiceImpl extends
-		SalesManagerEntityServiceImpl<Long, CustomerOptionValue> implements
-		CustomerOptionValueService {
+    SalesManagerEntityServiceImpl<Long, CustomerOptionValue> implements
+    CustomerOptionValueService {
 
-	@Inject
-	private CustomerAttributeService customerAttributeService;
-	
-	private CustomerOptionValueRepository customerOptionValueRepository;
-	
-	@Inject
-	private CustomerOptionSetService customerOptionSetService;
-	
-	@Inject
-	public CustomerOptionValueServiceImpl(
-			CustomerOptionValueRepository customerOptionValueRepository) {
-			super(customerOptionValueRepository);
-			this.customerOptionValueRepository = customerOptionValueRepository;
-	}
-	
-	
-	@Override
-	public List<CustomerOptionValue> listByStore(MerchantStore store, Language language) throws ServiceException {
-		
-		return customerOptionValueRepository.findByStore(store.getId(), language.getId());
-	}
-	
+  @Inject
+  private CustomerAttributeService customerAttributeService;
+
+  private CustomerOptionValueRepository customerOptionValueRepository;
+
+  @Inject
+  private CustomerOptionSetService customerOptionSetService;
+
+  @Inject
+  public CustomerOptionValueServiceImpl(
+      CustomerOptionValueRepository customerOptionValueRepository) {
+    super(customerOptionValueRepository);
+    this.customerOptionValueRepository = customerOptionValueRepository;
+  }
 
 
-	
-	@Override
-	public void saveOrUpdate(CustomerOptionValue entity) throws ServiceException {
-		
-		
-		//save or update (persist and attach entities
-		if(entity.getId()!=null && entity.getId()>0) {
+  @Override
+  public List<CustomerOptionValue> listByStore(MerchantStore store, Language language)
+      throws ServiceException {
 
-			super.update(entity);
-			
-		} else {
-			
-			super.save(entity);
-			
-		}
-		
-	}
-	
-	
-	public void delete(CustomerOptionValue customerOptionValue) throws ServiceException {
-		
-		//remove all attributes having this option
-		List<CustomerAttribute> attributes = customerAttributeService.getByCustomerOptionValueId(customerOptionValue.getMerchantStore(), customerOptionValue.getId());
-		
-		for(CustomerAttribute attribute : attributes) {
-			customerAttributeService.delete(attribute);
-		}
-		
-		List<CustomerOptionSet> optionSets = customerOptionSetService.listByOptionValue(customerOptionValue, customerOptionValue.getMerchantStore());
-		
-		for(CustomerOptionSet optionSet : optionSets) {
-			customerOptionSetService.delete(optionSet);
-		}
-		
-		CustomerOptionValue option = super.getById(customerOptionValue.getId());
-		
-		//remove option
-		super.delete(option);
-		
-	}
-	
-	@Override
-	public CustomerOptionValue getByCode(MerchantStore store, String optionValueCode) {
-		return customerOptionValueRepository.findByCode(store.getId(), optionValueCode);
-	}
+    return customerOptionValueRepository.findByStore(store.getId(), language.getId());
+  }
 
+
+  @Override
+  public void saveOrUpdate(CustomerOptionValue entity) throws ServiceException {
+
+    //save or update (persist and attach entities
+    if (entity.getId() != null && entity.getId() > 0) {
+
+      super.update(entity);
+
+    } else {
+
+      super.save(entity);
+
+    }
+
+  }
+
+
+  public void delete(CustomerOptionValue customerOptionValue) throws ServiceException {
+
+    //remove all attributes having this option
+    List<CustomerAttribute> attributes = customerAttributeService
+        .getByCustomerOptionValueId(customerOptionValue.getMerchantStore(),
+            customerOptionValue.getId());
+
+    for (CustomerAttribute attribute : attributes) {
+      customerAttributeService.delete(attribute);
+    }
+
+    List<CustomerOptionSet> optionSets = customerOptionSetService
+        .listByOptionValue(customerOptionValue, customerOptionValue.getMerchantStore());
+
+    for (CustomerOptionSet optionSet : optionSets) {
+      customerOptionSetService.delete(optionSet);
+    }
+
+    CustomerOptionValue option = super.getById(customerOptionValue.getId());
+
+    //remove option
+    super.delete(option);
+
+  }
+
+  @Override
+  public CustomerOptionValue getByCode(MerchantStore store, String optionValueCode) {
+    return customerOptionValueRepository.findByCode(store.getId(), optionValueCode);
+  }
 
 
 }

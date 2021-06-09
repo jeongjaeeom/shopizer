@@ -7,6 +7,6 @@ import com.salesmanager.core.model.system.SystemConfiguration;
 public interface SystemConfigurationRepository extends JpaRepository<SystemConfiguration, Long> {
 
 
-	SystemConfiguration findByKey(String key);
+  SystemConfiguration findByKey(String key);
 
 }

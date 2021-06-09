@@ -16,7 +16,7 @@ import com.salesmanager.shop.model.catalog.category.ReadableCategoryFull;
 
 @Component
 public class ReadableCategoryMapper implements Mapper<Category, ReadableCategory> {
-  
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ReadableCategoryMapper.class);
 
   @Override
@@ -24,18 +24,20 @@ public class ReadableCategoryMapper implements Mapper<Category, ReadableCategory
 
     if (Objects.isNull(language)) {
       ReadableCategoryFull target = new ReadableCategoryFull();
-      List<com.salesmanager.shop.model.catalog.category.CategoryDescription> descriptions = source.getDescriptions().stream()
-              .map(this::convertDescription)
-              .collect(Collectors.toList());
+      List<com.salesmanager.shop.model.catalog.category.CategoryDescription> descriptions = source
+          .getDescriptions().stream()
+          .map(this::convertDescription)
+          .collect(Collectors.toList());
       target.setDescriptions(descriptions);
       fillReadableCategory(target, source);
       return target;
     } else {
       ReadableCategory target = new ReadableCategory();
-      Optional<com.salesmanager.shop.model.catalog.category.CategoryDescription> description = source.getDescriptions().stream()
-              .filter(d -> language.getId().equals(d.getLanguage().getId()))
-              .map(this::convertDescription)
-              .findAny();
+      Optional<com.salesmanager.shop.model.catalog.category.CategoryDescription> description = source
+          .getDescriptions().stream()
+          .filter(d -> language.getId().equals(d.getLanguage().getId()))
+          .map(this::convertDescription)
+          .findAny();
       description.ifPresent(target::setDescription);
       fillReadableCategory(target, source);
       return target;
@@ -89,7 +91,7 @@ public class ReadableCategoryMapper implements Mapper<Category, ReadableCategory
 
   @Override
   public ReadableCategory merge(Category source, ReadableCategory destination,
-                                MerchantStore store, Language language) {
+      MerchantStore store, Language language) {
     return destination;
   }
 }

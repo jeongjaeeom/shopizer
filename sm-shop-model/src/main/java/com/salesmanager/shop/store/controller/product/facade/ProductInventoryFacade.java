@@ -9,20 +9,22 @@ import com.salesmanager.shop.model.entity.ReadableEntityList;
 
 public interface ProductInventoryFacade {
 
-  ReadableEntityList<ReadableInventory> getInventory(Long productId, MerchantStore store, String child, Language language, int page, int count);
-  
+  ReadableEntityList<ReadableInventory> getInventory(Long productId, MerchantStore store,
+      String child, Language language, int page, int count);
+
   ReadableInventory get(Long inventoryId, MerchantStore store, Language language);
-  
+
   ReadableInventory get(Long productId, Long inventoryId, MerchantStore store, Language language);
-  
+
   ReadableInventory get(Long productId, String child, Language language);
-  
-  ReadableInventory add(Long productId, PersistableInventory inventory, MerchantStore store, Language language);
-  
-  void update(Long productId, PersistableInventory inventory, MerchantStore store, Language language);
-  
+
+  ReadableInventory add(Long productId, PersistableInventory inventory, MerchantStore store,
+      Language language);
+
+  void update(Long productId, PersistableInventory inventory, MerchantStore store,
+      Language language);
+
   void delete(Long inventoryId, MerchantStore store);
-  
-  
+
 
 }

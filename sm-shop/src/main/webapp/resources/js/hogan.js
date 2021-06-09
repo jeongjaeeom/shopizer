@@ -13,8 +13,6 @@
  *  limitations under the License.
  */
 
-
-
 var Hogan = {};
 
 (function (Hogan, useArrayBuffer) {
@@ -28,7 +26,9 @@ var Hogan = {};
 
   Hogan.Template.prototype = {
     // render: replaced by generated code.
-    r: function (context, partials, indent) { return ''; },
+    r: function (context, partials, indent) {
+      return '';
+    },
 
     // variable escaping
     v: hoganEscape,
@@ -46,7 +46,7 @@ var Hogan = {};
     },
 
     // tries to find a partial in the curent scope and render it
-    rp: function(name, context, partials, indent) {
+    rp: function (name, context, partials, indent) {
       var partial = partials[name];
 
       if (!partial) {
@@ -61,7 +61,7 @@ var Hogan = {};
     },
 
     // render a section
-    rs: function(context, partials, section) {
+    rs: function (context, partials, section) {
       var tail = context[context.length - 1];
 
       if (!isArray(tail)) {
@@ -77,7 +77,7 @@ var Hogan = {};
     },
 
     // maybe start a section
-    s: function(val, ctx, partials, inverted, start, end, tags) {
+    s: function (val, ctx, partials, inverted, start, end, tags) {
       var pass;
 
       if (isArray(val) && val.length === 0) {
@@ -98,7 +98,7 @@ var Hogan = {};
     },
 
     // find values with dotted names
-    d: function(key, ctx, partials, returnFound) {
+    d: function (key, ctx, partials, returnFound) {
       var names = key.split('.'),
           val = this.f(names[0], ctx, partials, returnFound),
           cx = null;
@@ -130,7 +130,7 @@ var Hogan = {};
     },
 
     // find values with normal names
-    f: function(key, ctx, partials, returnFound) {
+    f: function (key, ctx, partials, returnFound) {
       var val = false,
           v = null,
           found = false;
@@ -156,7 +156,7 @@ var Hogan = {};
     },
 
     // higher order templates
-    ho: function(val, cx, partials, text, tags) {
+    ho: function (val, cx, partials, text, tags) {
       var compiler = this.c;
       var options = this.options;
       options.delimiters = tags;
@@ -167,18 +167,31 @@ var Hogan = {};
     },
 
     // template result buffering
-    b: (useArrayBuffer) ? function(s) { this.buf.push(s); } :
-                          function(s) { this.buf += s; },
-    fl: (useArrayBuffer) ? function() { var r = this.buf.join(''); this.buf = []; return r; } :
-                           function() { var r = this.buf; this.buf = ''; return r; },
+    b: (useArrayBuffer) ? function (s) {
+          this.buf.push(s);
+        } :
+        function (s) {
+          this.buf += s;
+        },
+    fl: (useArrayBuffer) ? function () {
+          var r = this.buf.join('');
+          this.buf = [];
+          return r;
+        } :
+        function () {
+          var r = this.buf;
+          this.buf = '';
+          return r;
+        },
 
     // lambda replace section
-    ls: function(val, ctx, partials, inverted, start, end, tags) {
+    ls: function (val, ctx, partials, inverted, start, end, tags) {
       var cx = ctx[ctx.length - 1],
           t = null;
 
       if (!inverted && this.c && val.length > 0) {
-        return this.ho(val, cx, partials, this.text.substring(start, end), tags);
+        return this.ho(val, cx, partials, this.text.substring(start, end),
+            tags);
       }
 
       t = val.call(cx);
@@ -187,7 +200,8 @@ var Hogan = {};
         if (inverted) {
           return true;
         } else if (this.c) {
-          return this.ho(t, cx, partials, this.text.substring(start, end), tags);
+          return this.ho(t, cx, partials, this.text.substring(start, end),
+              tags);
         }
       }
 
@@ -195,7 +209,7 @@ var Hogan = {};
     },
 
     // lambda replace variable
-    lv: function(val, ctx, partials) {
+    lv: function (val, ctx, partials) {
       var cx = ctx[ctx.length - 1];
       var result = val.call(cx);
 
@@ -214,10 +228,9 @@ var Hogan = {};
   var rAmp = /&/g,
       rLt = /</g,
       rGt = />/g,
-      rApos =/\'/g,
+      rApos = /\'/g,
       rQuot = /\"/g,
-      hChars =/[&<>\"\']/;
-
+      hChars = /[&<>\"\']/;
 
   function coerceToString(val) {
     return String((val === null || val === undefined) ? '' : val);
@@ -226,34 +239,31 @@ var Hogan = {};
   function hoganEscape(str) {
     str = coerceToString(str);
     return hChars.test(str) ?
-      str
-        .replace(rAmp,'&amp;')
-        .replace(rLt,'&lt;')
-        .replace(rGt,'&gt;')
-        .replace(rApos,'&#39;')
+        str
+        .replace(rAmp, '&amp;')
+        .replace(rLt, '&lt;')
+        .replace(rGt, '&gt;')
+        .replace(rApos, '&#39;')
         .replace(rQuot, '&quot;') :
-      str;
+        str;
   }
 
-  var isArray = Array.isArray || function(a) {
+  var isArray = Array.isArray || function (a) {
     return Object.prototype.toString.call(a) === '[object Array]';
   };
 
 })(typeof exports !== 'undefined' ? exports : Hogan);
-
-
-
 
 (function (Hogan) {
   // Setup regex  assignments
   // remove whitespace according to Mustache spec
   var rIsWhitespace = /\S/,
       rQuot = /\"/g,
-      rNewline =  /\n/g,
+      rNewline = /\n/g,
       rCr = /\r/g,
       rSlash = /\\/g,
       tagTypes = {
-        '#': 1, '^': 2, '/': 3,  '!': 4, '>': 5,
+        '#': 1, '^': 2, '/': 3, '!': 4, '>': 5,
         '<': 6, '=': 7, '_v': 8, '{': 9, '&': 10
       };
 
@@ -284,8 +294,8 @@ var Hogan = {};
       var isAllWhitespace = true;
       for (var j = lineStart; j < tokens.length; j++) {
         isAllWhitespace =
-          (tokens[j].tag && tagTypes[tokens[j].tag] < tagTypes['_v']) ||
-          (!tokens[j].tag && tokens[j].match(rIsWhitespace) === null);
+            (tokens[j].tag && tagTypes[tokens[j].tag] < tagTypes['_v']) ||
+            (!tokens[j].tag && tokens[j].match(rIsWhitespace) === null);
         if (!isAllWhitespace) {
           return false;
         }
@@ -300,7 +310,7 @@ var Hogan = {};
       if (haveSeenTag && lineIsWhitespace()) {
         for (var j = lineStart, next; j < tokens.length; j++) {
           if (!tokens[j].tag) {
-            if ((next = tokens[j+1]) && next.tag == '>') {
+            if ((next = tokens[j + 1]) && next.tag == '>') {
               // set indent to token value
               next.indent = tokens[j].toString()
             }
@@ -308,7 +318,7 @@ var Hogan = {};
           }
         }
       } else if (!noNewLine) {
-        tokens.push({tag:'\n'});
+        tokens.push({tag: '\n'});
       }
 
       seenTag = false;
@@ -319,7 +329,7 @@ var Hogan = {};
       var close = '=' + ctag,
           closeIndex = text.indexOf(close, index),
           delimiters = trim(
-            text.substring(text.indexOf('=', index) + 1, closeIndex)
+              text.substring(text.indexOf('=', index) + 1, closeIndex)
           ).split(' ');
 
       otag = delimiters[0];
@@ -363,8 +373,10 @@ var Hogan = {};
         seenTag = i;
       } else {
         if (tagChange(ctag, text, i)) {
-          tokens.push({tag: tagType, n: trim(buf), otag: otag, ctag: ctag,
-                       i: (tagType == '/') ? seenTag - ctag.length : i + otag.length});
+          tokens.push({
+            tag: tagType, n: trim(buf), otag: otag, ctag: ctag,
+            i: (tagType == '/') ? seenTag - ctag.length : i + otag.length
+          });
           buf = '';
           i += ctag.length - 1;
           state = IN_TEXT;
@@ -470,14 +482,15 @@ var Hogan = {};
       return 'function(c,p,i){' + code + ';}';
     }
 
-    return new Hogan.Template(new Function('c', 'p', 'i', code), text, Hogan, options);
+    return new Hogan.Template(new Function('c', 'p', 'i', code), text, Hogan,
+        options);
   }
 
   function esc(s) {
     return s.replace(rSlash, '\\\\')
-            .replace(rQuot, '\\\"')
-            .replace(rNewline, '\\n')
-            .replace(rCr, '\\r');
+    .replace(rQuot, '\\\"')
+    .replace(rNewline, '\\n')
+    .replace(rCr, '\\r');
   }
 
   function chooseMethod(s) {
@@ -490,16 +503,16 @@ var Hogan = {};
       var tag = tree[i].tag;
       if (tag == '#') {
         code += section(tree[i].nodes, tree[i].n, chooseMethod(tree[i].n),
-                        tree[i].i, tree[i].end, tree[i].otag + " " + tree[i].ctag);
+            tree[i].i, tree[i].end, tree[i].otag + " " + tree[i].ctag);
       } else if (tag == '^') {
         code += invertedSection(tree[i].nodes, tree[i].n,
-                                chooseMethod(tree[i].n));
+            chooseMethod(tree[i].n));
       } else if (tag == '<' || tag == '>') {
         code += partial(tree[i]);
       } else if (tag == '{' || tag == '&') {
         code += tripleStache(tree[i].n, chooseMethod(tree[i].n));
       } else if (tag == '\n') {
-        code += text('"\\n"' + (tree.length-1 == i ? '' : ' + i'));
+        code += text('"\\n"' + (tree.length - 1 == i ? '' : ' + i'));
       } else if (tag == '_v') {
         code += variable(tree[i].n, chooseMethod(tree[i].n));
       } else if (tag === undefined) {
@@ -511,21 +524,21 @@ var Hogan = {};
 
   function section(nodes, id, method, start, end, tags) {
     return 'if(_.s(_.' + method + '("' + esc(id) + '",c,p,1),' +
-           'c,p,0,' + start + ',' + end + ',"' + tags + '")){' +
-           '_.rs(c,p,' +
-           'function(c,p,_){' +
-           walk(nodes) +
-           '});c.pop();}';
+        'c,p,0,' + start + ',' + end + ',"' + tags + '")){' +
+        '_.rs(c,p,' +
+        'function(c,p,_){' +
+        walk(nodes) +
+        '});c.pop();}';
   }
 
   function invertedSection(nodes, id, method) {
     return 'if(!_.s(_.' + method + '("' + esc(id) + '",c,p,1),c,p,1,0,0,"")){' +
-           walk(nodes) +
-           '};';
+        walk(nodes) +
+        '};';
   }
 
   function partial(tok) {
-    return '_.b(_.rp("' +  esc(tok.n) + '",c,p,"' + (tok.indent || '') + '"));';
+    return '_.b(_.rp("' + esc(tok.n) + '",c,p,"' + (tok.indent || '') + '"));';
   }
 
   function tripleStache(id, method) {
@@ -540,14 +553,14 @@ var Hogan = {};
     return '_.b(' + id + ');';
   }
 
-  Hogan.parse = function(tokens, text, options) {
+  Hogan.parse = function (tokens, text, options) {
     options = options || {};
     return buildTree(tokens, '', [], options.sectionTags || []);
   },
 
-  Hogan.cache = {};
+      Hogan.cache = {};
 
-  Hogan.compile = function(text, options) {
+  Hogan.compile = function (text, options) {
     // options
     //
     // asString: false (default)
@@ -569,7 +582,9 @@ var Hogan = {};
       return t;
     }
 
-    t = this.generate(this.parse(this.scan(text, options.delimiters), text, options), text, options);
+    t = this.generate(
+        this.parse(this.scan(text, options.delimiters), text, options), text,
+        options);
     return this.cache[key] = t;
   };
 })(typeof exports !== 'undefined' ? exports : Hogan);

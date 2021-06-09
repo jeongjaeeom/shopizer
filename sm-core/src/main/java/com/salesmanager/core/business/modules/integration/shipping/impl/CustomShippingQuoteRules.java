@@ -32,143 +32,138 @@ import com.salesmanager.core.modules.integration.shipping.model.ShippingQuoteMod
 
 
 public class CustomShippingQuoteRules implements ShippingQuoteModule {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CustomShippingQuoteRules.class);
-	
-	@Inject
-	private DroolsBeanFactory droolsBeanFactory;
 
-	public final static String MODULE_CODE = "customQuotesRules";
+  private static final Logger LOGGER = LoggerFactory.getLogger(CustomShippingQuoteRules.class);
 
-	@Override
-	public void validateModuleConfiguration(
-			IntegrationConfiguration integrationConfiguration,
-			MerchantStore store) throws IntegrationException {
-		// Not used
+  @Inject
+  private DroolsBeanFactory droolsBeanFactory;
 
-	}
+  public final static String MODULE_CODE = "customQuotesRules";
 
-	@Override
-	public CustomIntegrationConfiguration getCustomModuleConfiguration(
-			MerchantStore store) throws IntegrationException {
-		// Not used
-		return null;
-	}
+  @Override
+  public void validateModuleConfiguration(
+      IntegrationConfiguration integrationConfiguration,
+      MerchantStore store) throws IntegrationException {
+    // Not used
 
-	@Override
-	public List<ShippingOption> getShippingQuotes(ShippingQuote quote,
-			List<PackageDetails> packages, BigDecimal orderTotal,
-			Delivery delivery, ShippingOrigin origin, MerchantStore store,
-			IntegrationConfiguration configuration, IntegrationModule module,
-			ShippingConfiguration shippingConfiguration, Locale locale)
-			throws IntegrationException {
+  }
 
-		
-		
-		Validate.notNull(delivery, "Delivery cannot be null");
-		Validate.notNull(delivery.getCountry(), "Delivery.country cannot be null");
-		Validate.notNull(packages, "packages cannot be null");
-		Validate.notEmpty(packages, "packages cannot be empty");
-		
-		//requires the postal code
-		if(StringUtils.isBlank(delivery.getPostalCode())) {
-			return null;
-		}
+  @Override
+  public CustomIntegrationConfiguration getCustomModuleConfiguration(
+      MerchantStore store) throws IntegrationException {
+    // Not used
+    return null;
+  }
 
-		Double distance = null;
-		
-		if(quote!=null) {
-			//look if distance has been calculated
-			if(quote.getQuoteInformations()!=null) {
-				if(quote.getQuoteInformations().containsKey(Constants.DISTANCE_KEY)) {
-					distance = (Double)quote.getQuoteInformations().get(Constants.DISTANCE_KEY);
-				}
-			}
-		}
-		
-		//calculate volume (L x W x H)
-		Double volume = null;
-		Double weight = 0D;
-		Double size = null;
-		//calculate weight
-		for(PackageDetails pack : packages) {
-			weight = weight + pack.getShippingWeight();
-			Double tmpVolume = pack.getShippingHeight() * pack.getShippingLength() * pack.getShippingWidth();
-			if(volume == null || tmpVolume > volume) { //take the largest volume
-				volume = tmpVolume;
-			} 
-			//largest size
-			List<Double> sizeList = new ArrayList<Double>();
-			sizeList.add(pack.getShippingHeight());
-			sizeList.add(pack.getShippingWidth());
-			sizeList.add(pack.getShippingLength());
-			Double maxSize = Collections.max(sizeList);
-			if(size==null || maxSize > size) {
-				size = maxSize;
-			}
-		}
-		
-		//Build a ShippingInputParameters
-		ShippingInputParameters inputParameters = new ShippingInputParameters();
-		
-		inputParameters.setWeight((long)weight.doubleValue());
-		inputParameters.setCountry(delivery.getCountry().getIsoCode());
-		inputParameters.setProvince("*");
-		inputParameters.setModuleName(module.getCode());
-		
-		if(delivery.getZone() != null && delivery.getZone().getCode()!=null) {
-			inputParameters.setProvince(delivery.getZone().getCode());
-		}
-		
-		if(distance!=null) {
-			double ddistance = distance;
-			long ldistance = (long)ddistance;
-			inputParameters.setDistance(ldistance);
-		}
-		
-		if(volume!=null) {
-			inputParameters.setVolume((long)volume.doubleValue());
-		}
-		
-		List<ShippingOption> options = quote.getShippingOptions();
-		
-		if(options == null) {
-			options = new ArrayList<ShippingOption>();
-			quote.setShippingOptions(options);
-		}
-		
-		
-		
-		LOGGER.debug("Setting input parameters " + inputParameters.toString());
-		
-		
-		KieSession kieSession=droolsBeanFactory.getKieSession(ResourceFactory.newClassPathResource("com/salesmanager/drools/rules/PriceByDistance.drl"));
-		
-		DecisionResponse resp = new DecisionResponse();
-		
-        kieSession.insert(inputParameters);
-        kieSession.setGlobal("decision",resp);
-        kieSession.fireAllRules();
-        //System.out.println(resp.getCustomPrice());
+  @Override
+  public List<ShippingOption> getShippingQuotes(ShippingQuote quote,
+      List<PackageDetails> packages, BigDecimal orderTotal,
+      Delivery delivery, ShippingOrigin origin, MerchantStore store,
+      IntegrationConfiguration configuration, IntegrationModule module,
+      ShippingConfiguration shippingConfiguration, Locale locale)
+      throws IntegrationException {
 
-		if(resp.getCustomPrice() != null) {
+    Validate.notNull(delivery, "Delivery cannot be null");
+    Validate.notNull(delivery.getCountry(), "Delivery.country cannot be null");
+    Validate.notNull(packages, "packages cannot be null");
+    Validate.notEmpty(packages, "packages cannot be empty");
 
-			ShippingOption shippingOption = new ShippingOption();
-			
-			
-			shippingOption.setOptionPrice(new BigDecimal(resp.getCustomPrice()));
-			shippingOption.setShippingModuleCode(MODULE_CODE);
-			shippingOption.setOptionCode(MODULE_CODE);
-			shippingOption.setOptionId(MODULE_CODE);
+    //requires the postal code
+    if (StringUtils.isBlank(delivery.getPostalCode())) {
+      return null;
+    }
 
-			options.add(shippingOption);
-		}
+    Double distance = null;
 
-		
-		return options;
-		
-		
-	}
+    if (quote != null) {
+      //look if distance has been calculated
+      if (quote.getQuoteInformations() != null) {
+        if (quote.getQuoteInformations().containsKey(Constants.DISTANCE_KEY)) {
+          distance = (Double) quote.getQuoteInformations().get(Constants.DISTANCE_KEY);
+        }
+      }
+    }
+
+    //calculate volume (L x W x H)
+    Double volume = null;
+    Double weight = 0D;
+    Double size = null;
+    //calculate weight
+    for (PackageDetails pack : packages) {
+      weight = weight + pack.getShippingWeight();
+      Double tmpVolume =
+          pack.getShippingHeight() * pack.getShippingLength() * pack.getShippingWidth();
+      if (volume == null || tmpVolume > volume) { //take the largest volume
+        volume = tmpVolume;
+      }
+      //largest size
+      List<Double> sizeList = new ArrayList<Double>();
+      sizeList.add(pack.getShippingHeight());
+      sizeList.add(pack.getShippingWidth());
+      sizeList.add(pack.getShippingLength());
+      Double maxSize = Collections.max(sizeList);
+      if (size == null || maxSize > size) {
+        size = maxSize;
+      }
+    }
+
+    //Build a ShippingInputParameters
+    ShippingInputParameters inputParameters = new ShippingInputParameters();
+
+    inputParameters.setWeight((long) weight.doubleValue());
+    inputParameters.setCountry(delivery.getCountry().getIsoCode());
+    inputParameters.setProvince("*");
+    inputParameters.setModuleName(module.getCode());
+
+    if (delivery.getZone() != null && delivery.getZone().getCode() != null) {
+      inputParameters.setProvince(delivery.getZone().getCode());
+    }
+
+    if (distance != null) {
+      double ddistance = distance;
+      long ldistance = (long) ddistance;
+      inputParameters.setDistance(ldistance);
+    }
+
+    if (volume != null) {
+      inputParameters.setVolume((long) volume.doubleValue());
+    }
+
+    List<ShippingOption> options = quote.getShippingOptions();
+
+    if (options == null) {
+      options = new ArrayList<ShippingOption>();
+      quote.setShippingOptions(options);
+    }
+
+    LOGGER.debug("Setting input parameters " + inputParameters.toString());
+
+    KieSession kieSession = droolsBeanFactory.getKieSession(
+        ResourceFactory.newClassPathResource("com/salesmanager/drools/rules/PriceByDistance.drl"));
+
+    DecisionResponse resp = new DecisionResponse();
+
+    kieSession.insert(inputParameters);
+    kieSession.setGlobal("decision", resp);
+    kieSession.fireAllRules();
+    //System.out.println(resp.getCustomPrice());
+
+    if (resp.getCustomPrice() != null) {
+
+      ShippingOption shippingOption = new ShippingOption();
+
+      shippingOption.setOptionPrice(new BigDecimal(resp.getCustomPrice()));
+      shippingOption.setShippingModuleCode(MODULE_CODE);
+      shippingOption.setOptionCode(MODULE_CODE);
+      shippingOption.setOptionId(MODULE_CODE);
+
+      options.add(shippingOption);
+    }
+
+    return options;
+
+
+  }
 
 /*	public StatelessKnowledgeSession getShippingPriceRule() {
 		return shippingPriceRule;

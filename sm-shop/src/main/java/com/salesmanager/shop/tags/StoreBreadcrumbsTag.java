@@ -17,95 +17,87 @@ import com.salesmanager.shop.model.shop.Breadcrumb;
 
 
 public class StoreBreadcrumbsTag extends TagSupport {
-	
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(StoreBreadcrumbsTag.class);
-
-	private Long categoryId = null;
-	private Long productId = null;
-
-	public int doStartTag() throws JspException {
-		try {
 
 
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-			HttpServletRequest request = (HttpServletRequest) pageContext
-					.getRequest();
+  private static final Logger LOGGER = LoggerFactory.getLogger(StoreBreadcrumbsTag.class);
 
-			Breadcrumb breadCrumb = (Breadcrumb)request.getAttribute(Constants.BREADCRUMB);
-			
-			StringBuilder ref = new StringBuilder();
-			
-			if(breadCrumb!=null && !StringUtils.isBlank(breadCrumb.getUrlRefContent())) {
-				ref.append(Constants.SLASH).append(Constants.REF).append(Constants.EQUALS).append(breadCrumb.getUrlRefContent());
-				if(categoryId!=null) {
-					List<String> ids = this.parseBreadCrumb(breadCrumb.getUrlRefContent());
-					if(!ids.contains(String.valueOf(this.getCategoryId()))) {
-						ref.append(",").append(this.getCategoryId().longValue());
-					}
-				}
-			} else {
-				if(categoryId!=null) {
-					ref.append(Constants.SLASH).append(Constants.REF).append(Constants.EQUALS).append(Constants.REF_C).append(this.getCategoryId());
-				} else {
-					ref.append("");
-				}
-			}
+  private Long categoryId = null;
+  private Long productId = null;
 
+  public int doStartTag() throws JspException {
+    try {
 
-			pageContext.getOut().print(ref.toString());
+      HttpServletRequest request = (HttpServletRequest) pageContext
+          .getRequest();
 
+      Breadcrumb breadCrumb = (Breadcrumb) request.getAttribute(Constants.BREADCRUMB);
 
-			
-		} catch (Exception ex) {
-			LOGGER.error("Error while getting content url", ex);
-		}
-		return SKIP_BODY;
-	}
-	
-	/** only category **/
-	private List<String> parseBreadCrumb(String refContent) throws Exception {
-		
-		/** c:1,2,3 **/
-		String[] categoryComa = refContent.split(":");
-		String[] categoryIds = categoryComa[1].split(",");
-		return new LinkedList(Arrays.asList(categoryIds));
-		
-		
-	}
+      StringBuilder ref = new StringBuilder();
 
-	public int doEndTag() {
-		return EVAL_PAGE;
-	}
+      if (breadCrumb != null && !StringUtils.isBlank(breadCrumb.getUrlRefContent())) {
+        ref.append(Constants.SLASH).append(Constants.REF).append(Constants.EQUALS)
+            .append(breadCrumb.getUrlRefContent());
+        if (categoryId != null) {
+          List<String> ids = this.parseBreadCrumb(breadCrumb.getUrlRefContent());
+          if (!ids.contains(String.valueOf(this.getCategoryId()))) {
+            ref.append(",").append(this.getCategoryId().longValue());
+          }
+        }
+      } else {
+        if (categoryId != null) {
+          ref.append(Constants.SLASH).append(Constants.REF).append(Constants.EQUALS)
+              .append(Constants.REF_C).append(this.getCategoryId());
+        } else {
+          ref.append("");
+        }
+      }
 
-	public Long getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
-	}
-
-	public Long getProductId() {
-		return productId;
-	}
-
-	public void setProductId(Long productId) {
-		this.productId = productId;
-	}
+      pageContext.getOut().print(ref.toString());
 
 
+    } catch (Exception ex) {
+      LOGGER.error("Error while getting content url", ex);
+    }
+    return SKIP_BODY;
+  }
+
+  /**
+   * only category
+   **/
+  private List<String> parseBreadCrumb(String refContent) throws Exception {
+
+    /** c:1,2,3 **/
+    String[] categoryComa = refContent.split(":");
+    String[] categoryIds = categoryComa[1].split(",");
+    return new LinkedList(Arrays.asList(categoryIds));
 
 
+  }
 
+  public int doEndTag() {
+    return EVAL_PAGE;
+  }
 
+  public Long getCategoryId() {
+    return categoryId;
+  }
 
+  public void setCategoryId(Long categoryId) {
+    this.categoryId = categoryId;
+  }
 
-	
+  public Long getProductId() {
+    return productId;
+  }
+
+  public void setProductId(Long productId) {
+    this.productId = productId;
+  }
+
 
 }

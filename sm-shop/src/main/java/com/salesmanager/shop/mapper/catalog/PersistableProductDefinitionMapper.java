@@ -34,199 +34,196 @@ import com.salesmanager.shop.store.api.exception.ConversionRuntimeException;
 import com.salesmanager.shop.utils.DateUtil;
 
 @Component
-public class PersistableProductDefinitionMapper implements Mapper<PersistableProductDefinition, Product> {
+public class PersistableProductDefinitionMapper implements
+    Mapper<PersistableProductDefinition, Product> {
 
-	@Autowired
-	private CategoryService categoryService;
-	@Autowired
-	private LanguageService languageService;
-	@Autowired
-	private PersistableProductAttributeMapper persistableProductAttributeMapper;
-	
-	@Autowired
-	private ProductTypeService productTypeService;
-	@Override
-	public Product convert(PersistableProductDefinition source, MerchantStore store, Language language) {
-		Product product = new Product();
-		return this.merge(source, product, store, language);
-	}
+  @Autowired
+  private CategoryService categoryService;
+  @Autowired
+  private LanguageService languageService;
+  @Autowired
+  private PersistableProductAttributeMapper persistableProductAttributeMapper;
 
-	@Override
-	public Product merge(PersistableProductDefinition source, Product destination, MerchantStore store,
-			Language language) {
+  @Autowired
+  private ProductTypeService productTypeService;
 
-		
-		  
-	    Validate.notNull(destination,"Product must not be null");
+  @Override
+  public Product convert(PersistableProductDefinition source, MerchantStore store,
+      Language language) {
+    Product product = new Product();
+    return this.merge(source, product, store, language);
+  }
 
-		try {
+  @Override
+  public Product merge(PersistableProductDefinition source, Product destination,
+      MerchantStore store,
+      Language language) {
 
-			destination.setSku(source.getIdentifier());
-			destination.setAvailable(source.isVisible());
-			destination.setRefSku(source.getIdentifier());
-			if(source.getId() != null && source.getId().longValue()==0) {
-				destination.setId(null);
-			} else {
-				destination.setId(source.getId());
-			}
+    Validate.notNull(destination, "Product must not be null");
 
-			
-			//PRODUCT TYPE
-			if(!StringUtils.isBlank(source.getType())) {
-				ProductType type = productTypeService.getByCode(source.getType(), store, language);
-				if(type == null) {
-					throw new ConversionException("Product type [" + source.getType() + "] does not exist");
-				}
+    try {
 
-				destination.setType(type);
-			}
+      destination.setSku(source.getIdentifier());
+      destination.setAvailable(source.isVisible());
+      destination.setRefSku(source.getIdentifier());
+      if (source.getId() != null && source.getId().longValue() == 0) {
+        destination.setId(null);
+      } else {
+        destination.setId(source.getId());
+      }
 
-			
-			if(!StringUtils.isBlank(source.getDateAvailable())) {
-				destination.setDateAvailable(DateUtil.getDate(source.getDateAvailable()));
-			}
+      //PRODUCT TYPE
+      if (!StringUtils.isBlank(source.getType())) {
+        ProductType type = productTypeService.getByCode(source.getType(), store, language);
+        if (type == null) {
+          throw new ConversionException("Product type [" + source.getType() + "] does not exist");
+        }
 
+        destination.setType(type);
+      }
 
-			
-			destination.setMerchantStore(store);
-			
-			List<Language> languages = new ArrayList<Language>();
-			Set<ProductDescription> descriptions = new HashSet<ProductDescription>();
-			if(!CollectionUtils.isEmpty(source.getDescriptions())) {
-				for(com.salesmanager.shop.model.catalog.product.ProductDescription description : source.getDescriptions()) {
-					
-				  ProductDescription productDescription = new ProductDescription();
-				  Language lang = languageService.getByCode(description.getLanguage());
-	              if(lang==null) {
-	                    throw new ConversionException("Language code " + description.getLanguage() + " is invalid, use ISO code (en, fr ...)");
-	               }
-				   if(!CollectionUtils.isEmpty(destination.getDescriptions())) {
-				      for(ProductDescription desc : destination.getDescriptions()) {
-				        if(desc.getLanguage().getCode().equals(description.getLanguage())) {
-				          productDescription = desc;
-				          break;
-				        }
-				      }
-				    }
+      if (!StringUtils.isBlank(source.getDateAvailable())) {
+        destination.setDateAvailable(DateUtil.getDate(source.getDateAvailable()));
+      }
 
-					productDescription.setProduct(destination);
-					productDescription.setDescription(description.getDescription());
+      destination.setMerchantStore(store);
 
-					productDescription.setProductHighlight(description.getHighlights());
+      List<Language> languages = new ArrayList<Language>();
+      Set<ProductDescription> descriptions = new HashSet<ProductDescription>();
+      if (!CollectionUtils.isEmpty(source.getDescriptions())) {
+        for (com.salesmanager.shop.model.catalog.product.ProductDescription description : source
+            .getDescriptions()) {
 
-					productDescription.setName(description.getName());
-					productDescription.setSeUrl(description.getFriendlyUrl());
-					productDescription.setMetatagKeywords(description.getKeyWords());
-					productDescription.setMetatagDescription(description.getMetaDescription());
-					productDescription.setTitle(description.getTitle());
-					
-					languages.add(lang);
-					productDescription.setLanguage(lang);
-					descriptions.add(productDescription);
-				}
-			}
-			
-			if(descriptions.size()>0) {
-				destination.setDescriptions(descriptions);
-			}
+          ProductDescription productDescription = new ProductDescription();
+          Language lang = languageService.getByCode(description.getLanguage());
+          if (lang == null) {
+            throw new ConversionException("Language code " + description.getLanguage()
+                + " is invalid, use ISO code (en, fr ...)");
+          }
+          if (!CollectionUtils.isEmpty(destination.getDescriptions())) {
+            for (ProductDescription desc : destination.getDescriptions()) {
+              if (desc.getLanguage().getCode().equals(description.getLanguage())) {
+                productDescription = desc;
+                break;
+              }
+            }
+          }
 
-			if(source.getRating() != null) {
-				destination.setProductReviewAvg(new BigDecimal(source.getRating()));
-			}
-			destination.setProductReviewCount(source.getRatingCount());
-			
-			/**
-			 * Product definition
-			 */
-			ProductAvailability productAvailability = null;
-		    ProductPrice defaultPrice = null;
-		    if(!CollectionUtils.isEmpty(destination.getAvailabilities())) {
-		      for(ProductAvailability avail : destination.getAvailabilities()) {
-			        Set<ProductPrice> prices = avail.getPrices();
-			        for(ProductPrice p : prices) {
-			          if(p.isDefaultPrice()) {
-			            if(productAvailability == null) {
-			              productAvailability = avail;
-			              defaultPrice = p;
-			              break;
-			            }
-			            p.setDefaultPrice(false);
-			          }
-			        }
-		      }
-		    }
-			
-		    if(productAvailability == null) { //create with default values
-		      productAvailability = new ProductAvailability(destination, store);
-		      destination.getAvailabilities().add(productAvailability);
-		      
-		      productAvailability.setProductQuantity(1);
-			  productAvailability.setProductQuantityOrderMin(1);
-			  productAvailability.setProductQuantityOrderMax(1);
-			  productAvailability.setRegion(Constants.ALL_REGIONS);
-			  productAvailability.setAvailable(Boolean.valueOf(destination.isAvailable()));
-		    }
+          productDescription.setProduct(destination);
+          productDescription.setDescription(description.getDescription());
 
+          productDescription.setProductHighlight(description.getHighlights());
 
+          productDescription.setName(description.getName());
+          productDescription.setSeUrl(description.getFriendlyUrl());
+          productDescription.setMetatagKeywords(description.getKeyWords());
+          productDescription.setMetatagDescription(description.getMetaDescription());
+          productDescription.setTitle(description.getTitle());
 
+          languages.add(lang);
+          productDescription.setLanguage(lang);
+          descriptions.add(productDescription);
+        }
+      }
 
-			if(defaultPrice == null) {
+      if (descriptions.size() > 0) {
+        destination.setDescriptions(descriptions);
+      }
 
-			    defaultPrice = new ProductPrice();
-			    defaultPrice.setDefaultPrice(true);
-			    defaultPrice.setProductPriceAmount(new BigDecimal(0));
-			    defaultPrice.setCode(ProductPriceEntity.DEFAULT_PRICE_CODE);
-			    defaultPrice.setProductAvailability(productAvailability);
-                productAvailability.getPrices().add(defaultPrice);
-                for(Language lang : languages) {
-                
-                  ProductPriceDescription ppd = new ProductPriceDescription();
-                  ppd.setProductPrice(defaultPrice);
-                  ppd.setLanguage(lang);
-                  ppd.setName(ProductPriceDescription.DEFAULT_PRICE_DESCRIPTION);
-                  defaultPrice.getDescriptions().add(ppd);
-                }
-			}
-			
-			
-			//attributes
-			if(source.getProperties()!=null) {
-				for(com.salesmanager.shop.model.catalog.product.attribute.PersistableProductAttribute attr : source.getProperties()) {
-					ProductAttribute attribute = persistableProductAttributeMapper.convert(attr, store, language);
-					
-					attribute.setProduct(destination);
-					destination.getAttributes().add(attribute);
+      if (source.getRating() != null) {
+        destination.setProductReviewAvg(new BigDecimal(source.getRating()));
+      }
+      destination.setProductReviewCount(source.getRatingCount());
 
-				}
-			}
+      /**
+       * Product definition
+       */
+      ProductAvailability productAvailability = null;
+      ProductPrice defaultPrice = null;
+      if (!CollectionUtils.isEmpty(destination.getAvailabilities())) {
+        for (ProductAvailability avail : destination.getAvailabilities()) {
+          Set<ProductPrice> prices = avail.getPrices();
+          for (ProductPrice p : prices) {
+            if (p.isDefaultPrice()) {
+              if (productAvailability == null) {
+                productAvailability = avail;
+                defaultPrice = p;
+                break;
+              }
+              p.setDefaultPrice(false);
+            }
+          }
+        }
+      }
 
-			
-			//categories
-			if(!CollectionUtils.isEmpty(source.getCategories())) {
-				for(com.salesmanager.shop.model.catalog.category.Category categ : source.getCategories()) {
-					
-					Category c = null;
-					if(!StringUtils.isBlank(categ.getCode())) {
-						c = categoryService.getByCode(store, categ.getCode());
-					} else {
-						Validate.notNull(categ.getId(), "Category id nust not be null");
-						c = categoryService.getById(categ.getId(), store.getId());
-					}
-					
-					if(c==null) {
-						throw new ConversionException("Category id " + categ.getId() + " does not exist");
-					}
-					if(c.getMerchantStore().getId().intValue()!=store.getId().intValue()) {
-						throw new ConversionException("Invalid category id");
-					}
-					destination.getCategories().add(c);
-				}
-			}
-			return destination;
-		
-		} catch (Exception e) {
-			throw new ConversionRuntimeException("Error converting product mapper",e);
-		}
-	}
+      if (productAvailability == null) { //create with default values
+        productAvailability = new ProductAvailability(destination, store);
+        destination.getAvailabilities().add(productAvailability);
+
+        productAvailability.setProductQuantity(1);
+        productAvailability.setProductQuantityOrderMin(1);
+        productAvailability.setProductQuantityOrderMax(1);
+        productAvailability.setRegion(Constants.ALL_REGIONS);
+        productAvailability.setAvailable(Boolean.valueOf(destination.isAvailable()));
+      }
+
+      if (defaultPrice == null) {
+
+        defaultPrice = new ProductPrice();
+        defaultPrice.setDefaultPrice(true);
+        defaultPrice.setProductPriceAmount(new BigDecimal(0));
+        defaultPrice.setCode(ProductPriceEntity.DEFAULT_PRICE_CODE);
+        defaultPrice.setProductAvailability(productAvailability);
+        productAvailability.getPrices().add(defaultPrice);
+        for (Language lang : languages) {
+
+          ProductPriceDescription ppd = new ProductPriceDescription();
+          ppd.setProductPrice(defaultPrice);
+          ppd.setLanguage(lang);
+          ppd.setName(ProductPriceDescription.DEFAULT_PRICE_DESCRIPTION);
+          defaultPrice.getDescriptions().add(ppd);
+        }
+      }
+
+      //attributes
+      if (source.getProperties() != null) {
+        for (com.salesmanager.shop.model.catalog.product.attribute.PersistableProductAttribute attr : source
+            .getProperties()) {
+          ProductAttribute attribute = persistableProductAttributeMapper
+              .convert(attr, store, language);
+
+          attribute.setProduct(destination);
+          destination.getAttributes().add(attribute);
+
+        }
+      }
+
+      //categories
+      if (!CollectionUtils.isEmpty(source.getCategories())) {
+        for (com.salesmanager.shop.model.catalog.category.Category categ : source.getCategories()) {
+
+          Category c = null;
+          if (!StringUtils.isBlank(categ.getCode())) {
+            c = categoryService.getByCode(store, categ.getCode());
+          } else {
+            Validate.notNull(categ.getId(), "Category id nust not be null");
+            c = categoryService.getById(categ.getId(), store.getId());
+          }
+
+          if (c == null) {
+            throw new ConversionException("Category id " + categ.getId() + " does not exist");
+          }
+          if (c.getMerchantStore().getId().intValue() != store.getId().intValue()) {
+            throw new ConversionException("Invalid category id");
+          }
+          destination.getCategories().add(c);
+        }
+      }
+      return destination;
+
+    } catch (Exception e) {
+      throw new ConversionRuntimeException("Error converting product mapper", e);
+    }
+  }
 
 }

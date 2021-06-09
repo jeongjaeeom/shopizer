@@ -1,7 +1,6 @@
 package com.salesmanager.test.utils;
 
 
-
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -28,69 +27,66 @@ import com.salesmanager.test.configuration.ConfigurationTest;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {ConfigurationTest.class})
 @Ignore
-public class UtilsTestCase  {
-	
-	
-	@Inject
-	private CountryService countryService;
-	
-	@Inject
-	private CurrencyService currencyService;
-	
-	@Inject
-	private Encryption encryption;
-	
-	@Inject
-	private CacheUtils cache;
-	
-	@Inject
-	private GeoLocation geoLoaction;
-	
+public class UtilsTestCase {
 
-	
-	//@Test
-	@Ignore
-	public void testCache() throws Exception {
-		
 
-		
-		@SuppressWarnings("rawtypes")
-		List countries = countryService.list();
+  @Inject
+  private CountryService countryService;
 
-		//CacheUtils cache = CacheUtils.getInstance();
-		cache.putInCache(countries, "COUNTRIES");
-		
-		@SuppressWarnings("rawtypes")
-		List objects = (List) cache.getFromCache("COUNTRIES");
-		
-		Assert.assertNotNull(objects);
-		
-	}
-	
-	//@Test
-	@Ignore
-	public void testCurrency() throws Exception {
-		
-		Currency currency = currencyService.getByCode("BGN");
-		
-		java.util.Currency c = currency.getCurrency();
-		
-		NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
-		numberFormat.setCurrency(c);
-		
-		System.out.println("Done");
-		
-	}
-	
-	@Test
-	public void testGeoLocation() throws Exception {
-		
-		Address address = geoLoaction.getAddress("96.21.132.0");
-		if(address!=null) {
-			System.out.println(address.getCountry());
-		}
-		
-	}
-	
+  @Inject
+  private CurrencyService currencyService;
+
+  @Inject
+  private Encryption encryption;
+
+  @Inject
+  private CacheUtils cache;
+
+  @Inject
+  private GeoLocation geoLoaction;
+
+
+  //@Test
+  @Ignore
+  public void testCache() throws Exception {
+
+    @SuppressWarnings("rawtypes")
+    List countries = countryService.list();
+
+    //CacheUtils cache = CacheUtils.getInstance();
+    cache.putInCache(countries, "COUNTRIES");
+
+    @SuppressWarnings("rawtypes")
+    List objects = (List) cache.getFromCache("COUNTRIES");
+
+    Assert.assertNotNull(objects);
+
+  }
+
+  //@Test
+  @Ignore
+  public void testCurrency() throws Exception {
+
+    Currency currency = currencyService.getByCode("BGN");
+
+    java.util.Currency c = currency.getCurrency();
+
+    NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
+    numberFormat.setCurrency(c);
+
+    System.out.println("Done");
+
+  }
+
+  @Test
+  public void testGeoLocation() throws Exception {
+
+    Address address = geoLoaction.getAddress("96.21.132.0");
+    if (address != null) {
+      System.out.println(address.getCountry());
+    }
+
+  }
+
 
 }

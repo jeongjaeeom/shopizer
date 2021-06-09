@@ -33,122 +33,129 @@ import com.salesmanager.shop.utils.ImageFilePath;
 
 @Controller
 public class SearchController {
-	
-	@Inject
-	private MerchantStoreService merchantStoreService;
 
-	@Inject
-	private SearchService searchService;
-	
-	@Inject
-	private SearchFacade searchFacade;
-	
-	@Inject
-	@Qualifier("img")
-	private ImageFilePath imageUtils;
+  @Inject
+  private MerchantStoreService merchantStoreService;
 
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(SearchController.class);
-	
-	private final static int AUTOCOMPLETE_ENTRIES_COUNT = 15;
+  @Inject
+  private SearchService searchService;
 
-	
-	
-	/**
-	 * Retrieves a list of keywords for a given series of character typed by the end user
-	 * This is used for auto complete on search input field
-	 * @param json
-	 * @param store
-	 * @param language
-	 * @param model
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/services/public/search/{store}/{language}/autocomplete.json", produces="application/json;charset=UTF-8")
-	@ResponseBody
-	public String autocomplete(@RequestParam("q") String query, @PathVariable String store, @PathVariable final String language, Model model, HttpServletRequest request, HttpServletResponse response)  {
+  @Inject
+  private SearchFacade searchFacade;
 
-		MerchantStore merchantStore = (MerchantStore)request.getAttribute(Constants.MERCHANT_STORE);
+  @Inject
+  @Qualifier("img")
+  private ImageFilePath imageUtils;
 
-		if(merchantStore!=null) {
-			if(!merchantStore.getCode().equals(store)) {
-				merchantStore = null; //reset for the current request
-			}
-		}
-		
-		try {
-		
-			if(merchantStore== null) {
-					merchantStore = merchantStoreService.getByCode(store);
-			}
-			
-			if(merchantStore==null) {
-				LOGGER.error("Merchant store is null for code " + store);
-				response.sendError(503, "Merchant store is null for code " + store);//TODO localized message
-				return null;
-			}
-			
-			AutoCompleteRequest req = new AutoCompleteRequest(store,language);
-			/** formatted toJSONString because of te specific field names required in the UI **/
-			SearchKeywords keywords = searchService.searchForKeywords(req.getCollectionName(), query, AUTOCOMPLETE_ENTRIES_COUNT);
-			return keywords.toJSONString();
 
-			
-		} catch (Exception e) {
-			LOGGER.error("Exception while autocomplete " + e);
-		}
-		
-		return null;
-		
-	}
+  private static final Logger LOGGER = LoggerFactory.getLogger(SearchController.class);
 
-	
-	/**
-	 * Search results page
-	 * @param searchRequest
-	 * @param model
-	 * @param language
-	 * @param store
-	 * @return
-	 */
-	@RequestMapping(value="/services/public/search.json", method=RequestMethod.POST)
-	@ResponseBody
-	public SearchProductList search(
-	    @RequestBody SearchProductRequest searchRequest,
-	    Model model, 
-	    Language language, 
-	    MerchantStore store) {
+  private final static int AUTOCOMPLETE_ENTRIES_COUNT = 15;
 
-		return searchFacade.search(store, language, searchRequest);
 
-		
-	}
-	
-	/**
-	 * Displays the search page after a search query post
-	 * @param query
-	 * @param model
-	 * @param request
-	 * @param response
-	 * @param locale
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value={"/shop/search/search.html"}, method=RequestMethod.POST)
-	public String displaySearch(@RequestParam("q") String query, Model model, HttpServletRequest request, HttpServletResponse response, Locale locale) throws Exception {
+  /**
+   * Retrieves a list of keywords for a given series of character typed by the end user This is used
+   * for auto complete on search input field
+   *
+   * @param json
+   * @param store
+   * @param language
+   * @param model
+   * @param request
+   * @param response
+   * @return
+   * @throws Exception
+   */
+  @RequestMapping(value = "/services/public/search/{store}/{language}/autocomplete.json", produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public String autocomplete(@RequestParam("q") String query, @PathVariable String store,
+      @PathVariable final String language, Model model, HttpServletRequest request,
+      HttpServletResponse response) {
 
-		MerchantStore store = (MerchantStore)request.getAttribute(Constants.MERCHANT_STORE);
-		
-		String q = request.getParameter("q");
+    MerchantStore merchantStore = (MerchantStore) request.getAttribute(Constants.MERCHANT_STORE);
 
-		model.addAttribute("q",q);
-		
-		/** template **/
-		StringBuilder template = new StringBuilder().append(ControllerConstants.Tiles.Search.search).append(".").append(store.getStoreTemplate());
-		return template.toString();
-	}
-	
-	
+    if (merchantStore != null) {
+      if (!merchantStore.getCode().equals(store)) {
+        merchantStore = null; //reset for the current request
+      }
+    }
+
+    try {
+
+      if (merchantStore == null) {
+        merchantStore = merchantStoreService.getByCode(store);
+      }
+
+      if (merchantStore == null) {
+        LOGGER.error("Merchant store is null for code " + store);
+        response.sendError(503, "Merchant store is null for code " + store);//TODO localized message
+        return null;
+      }
+
+      AutoCompleteRequest req = new AutoCompleteRequest(store, language);
+      /** formatted toJSONString because of te specific field names required in the UI **/
+      SearchKeywords keywords = searchService
+          .searchForKeywords(req.getCollectionName(), query, AUTOCOMPLETE_ENTRIES_COUNT);
+      return keywords.toJSONString();
+
+
+    } catch (Exception e) {
+      LOGGER.error("Exception while autocomplete " + e);
+    }
+
+    return null;
+
+  }
+
+
+  /**
+   * Search results page
+   *
+   * @param searchRequest
+   * @param model
+   * @param language
+   * @param store
+   * @return
+   */
+  @RequestMapping(value = "/services/public/search.json", method = RequestMethod.POST)
+  @ResponseBody
+  public SearchProductList search(
+      @RequestBody SearchProductRequest searchRequest,
+      Model model,
+      Language language,
+      MerchantStore store) {
+
+    return searchFacade.search(store, language, searchRequest);
+
+
+  }
+
+  /**
+   * Displays the search page after a search query post
+   *
+   * @param query
+   * @param model
+   * @param request
+   * @param response
+   * @param locale
+   * @return
+   * @throws Exception
+   */
+  @RequestMapping(value = {"/shop/search/search.html"}, method = RequestMethod.POST)
+  public String displaySearch(@RequestParam("q") String query, Model model,
+      HttpServletRequest request, HttpServletResponse response, Locale locale) throws Exception {
+
+    MerchantStore store = (MerchantStore) request.getAttribute(Constants.MERCHANT_STORE);
+
+    String q = request.getParameter("q");
+
+    model.addAttribute("q", q);
+
+    /** template **/
+    StringBuilder template = new StringBuilder().append(ControllerConstants.Tiles.Search.search)
+        .append(".").append(store.getStoreTemplate());
+    return template.toString();
+  }
+
+
 }

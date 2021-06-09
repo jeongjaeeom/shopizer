@@ -18,91 +18,82 @@ import com.salesmanager.core.model.reference.currency.Currency;
 import com.salesmanager.shop.constants.Constants;
 
 
-public class ShopProductPriceFormatTag extends RequestContextAwareTag  {
-	
-	
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(ShopProductPriceFormatTag.class);
-
-	@Inject
-	private PricingService pricingService;
-	
-	@Inject
-	private ProductPriceUtils productPriceUtils;
-	
-	
-	
-	private BigDecimal value;
-	
+public class ShopProductPriceFormatTag extends RequestContextAwareTag {
 
 
-	private Currency currency;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShopProductPriceFormatTag.class);
+
+  @Inject
+  private PricingService pricingService;
+
+  @Inject
+  private ProductPriceUtils productPriceUtils;
 
 
-	
+  private BigDecimal value;
 
 
-	public Currency getCurrency() {
-		return currency;
-	}
+  private Currency currency;
 
 
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
-	}
+  public Currency getCurrency() {
+    return currency;
+  }
 
 
-	@Override
-	protected int doStartTagInternal() throws Exception {
-		if (pricingService == null || productPriceUtils==null) {
-			LOGGER.debug("Autowiring productPriceUtils");
-            WebApplicationContext wac = getRequestContext().getWebApplicationContext();
-            AutowireCapableBeanFactory factory = wac.getAutowireCapableBeanFactory();
-            factory.autowireBean(this);
-        }
-		
-		HttpServletRequest request = (HttpServletRequest) pageContext
-		.getRequest();
-
-		MerchantStore store = (MerchantStore)request.getAttribute(Constants.MERCHANT_STORE);
-
-		String formatedPrice = null;
-		
-		if(this.getCurrency()!=null) {
-			formatedPrice = productPriceUtils.getFormatedAmountWithCurrency(this.getCurrency(), this.getValue());
-		} else {
-			formatedPrice = pricingService.getDisplayAmount(this.getValue(), store);
-		}
-		
-		pageContext.getOut().print(formatedPrice);
-		
-		return SKIP_BODY;
-
-	}
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
+  }
 
 
-	public int doEndTag() {
-		return EVAL_PAGE;
-	}
+  @Override
+  protected int doStartTagInternal() throws Exception {
+    if (pricingService == null || productPriceUtils == null) {
+      LOGGER.debug("Autowiring productPriceUtils");
+      WebApplicationContext wac = getRequestContext().getWebApplicationContext();
+      AutowireCapableBeanFactory factory = wac.getAutowireCapableBeanFactory();
+      factory.autowireBean(this);
+    }
+
+    HttpServletRequest request = (HttpServletRequest) pageContext
+        .getRequest();
+
+    MerchantStore store = (MerchantStore) request.getAttribute(Constants.MERCHANT_STORE);
+
+    String formatedPrice = null;
+
+    if (this.getCurrency() != null) {
+      formatedPrice = productPriceUtils
+          .getFormatedAmountWithCurrency(this.getCurrency(), this.getValue());
+    } else {
+      formatedPrice = pricingService.getDisplayAmount(this.getValue(), store);
+    }
+
+    pageContext.getOut().print(formatedPrice);
+
+    return SKIP_BODY;
+
+  }
 
 
-	public void setValue(BigDecimal value) {
-		this.value = value;
-	}
+  public int doEndTag() {
+    return EVAL_PAGE;
+  }
 
 
-	public BigDecimal getValue() {
-		return value;
-	}
+  public void setValue(BigDecimal value) {
+    this.value = value;
+  }
 
 
+  public BigDecimal getValue() {
+    return value;
+  }
 
-
-	
 
 }

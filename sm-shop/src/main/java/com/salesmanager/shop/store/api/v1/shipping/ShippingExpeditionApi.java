@@ -34,58 +34,62 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(tags = { "Shipping - Expedition management resource (Shipping Management Api) - ship to country" })
-@SwaggerDefinition(tags = { @Tag(name = "Shipping - Expedition management resource", description = "Manage shipping expedition") })
+@Api(tags = {
+    "Shipping - Expedition management resource (Shipping Management Api) - ship to country"})
+@SwaggerDefinition(tags = {
+    @Tag(name = "Shipping - Expedition management resource", description = "Manage shipping expedition")})
 public class ShippingExpeditionApi {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ShippingExpeditionApi.class);
 
-	@Autowired
-	private AuthorizationUtils authorizationUtils;
-	
-	@Autowired
-	private ShippingFacade shippingFacade;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShippingExpeditionApi.class);
 
-	@RequestMapping(value = { "/private/shipping/expedition" }, method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public ExpeditionConfiguration expedition(
-			@ApiIgnore MerchantStore merchantStore,
-			@ApiIgnore Language language) {
+  @Autowired
+  private AuthorizationUtils authorizationUtils;
 
+  @Autowired
+  private ShippingFacade shippingFacade;
 
-		String user = authorizationUtils.authenticatedUser();
-		authorizationUtils.authorizeUser(user, Stream.of(Constants.GROUP_SUPERADMIN, Constants.GROUP_ADMIN,
-				Constants.GROUP_SHIPPING, Constants.GROUP_ADMIN_RETAIL).collect(Collectors.toList()), merchantStore);
+  @RequestMapping(value = {"/private/shipping/expedition"}, method = RequestMethod.GET)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public ExpeditionConfiguration expedition(
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
 
-		return shippingFacade.getExpeditionConfiguration(merchantStore, language);
+    String user = authorizationUtils.authenticatedUser();
+    authorizationUtils
+        .authorizeUser(user, Stream.of(Constants.GROUP_SUPERADMIN, Constants.GROUP_ADMIN,
+            Constants.GROUP_SHIPPING, Constants.GROUP_ADMIN_RETAIL).collect(Collectors.toList()),
+            merchantStore);
 
-	}
-	
-	 @GetMapping("/shipping/country")
-	  public List<ReadableCountry> 
-	 	getCountry(
-				@ApiIgnore MerchantStore merchantStore,
-				@ApiIgnore Language language) {
-	    return shippingFacade.shipToCountry(merchantStore, language);
-	  }
-	
-	
-	@RequestMapping(value = { "/private/shipping/expedition" }, method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public void saveExpedition(
-			@RequestBody ExpeditionConfiguration expedition,
-			@ApiIgnore MerchantStore merchantStore,
-			@ApiIgnore Language language) {
+    return shippingFacade.getExpeditionConfiguration(merchantStore, language);
+
+  }
+
+  @GetMapping("/shipping/country")
+  public List<ReadableCountry>
+  getCountry(
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
+    return shippingFacade.shipToCountry(merchantStore, language);
+  }
 
 
-		String user = authorizationUtils.authenticatedUser();
-		authorizationUtils.authorizeUser(user, Stream.of(Constants.GROUP_SUPERADMIN, Constants.GROUP_ADMIN,
-				Constants.GROUP_SHIPPING, Constants.GROUP_ADMIN_RETAIL).collect(Collectors.toList()), merchantStore);
+  @RequestMapping(value = {"/private/shipping/expedition"}, method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  @ResponseBody
+  public void saveExpedition(
+      @RequestBody ExpeditionConfiguration expedition,
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language) {
 
-		shippingFacade.saveExpeditionConfiguration(expedition, merchantStore);
+    String user = authorizationUtils.authenticatedUser();
+    authorizationUtils
+        .authorizeUser(user, Stream.of(Constants.GROUP_SUPERADMIN, Constants.GROUP_ADMIN,
+            Constants.GROUP_SHIPPING, Constants.GROUP_ADMIN_RETAIL).collect(Collectors.toList()),
+            merchantStore);
 
-	}
+    shippingFacade.saveExpeditionConfiguration(expedition, merchantStore);
+
+  }
 
 }

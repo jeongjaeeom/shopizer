@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * Interaction with GCP (Google Cloud Platform) with AWS S3
- * https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-java
- * 
- * @author carlsamson
+ * Interaction with GCP (Google Cloud Platform) with AWS S3 https://cloud.google.com/storage/docs/uploading-objects#storage-upload-object-java
  *
+ * @author carlsamson
  */
 @Component("gcpAssetsManager")
 public class GCPCacheManagerImpl implements CMSManager {
@@ -17,8 +15,8 @@ public class GCPCacheManagerImpl implements CMSManager {
   private String bucketName;
 
 
-
-  public GCPCacheManagerImpl() {}
+  public GCPCacheManagerImpl() {
+  }
 
 
   @Override
@@ -36,12 +34,10 @@ public class GCPCacheManagerImpl implements CMSManager {
     // TODO Auto-generated method stub
     return null;
   }
-  
+
   public void setBucketName(String bucketName) {
     this.bucketName = bucketName;
   }
-
-
 
 
 }

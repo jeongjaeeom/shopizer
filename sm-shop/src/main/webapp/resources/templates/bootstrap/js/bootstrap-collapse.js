@@ -17,14 +17,12 @@
  * limitations under the License.
  * ============================================================ */
 
-
 !function ($) {
 
   "use strict"; // jshint ;_;
 
-
- /* COLLAPSE PUBLIC CLASS DEFINITION
-  * ================================ */
+  /* COLLAPSE PUBLIC CLASS DEFINITION
+   * ================================ */
 
   var Collapse = function (element, options) {
     this.$element = $(element)
@@ -41,18 +39,20 @@
 
     constructor: Collapse
 
-  , dimension: function () {
+    , dimension: function () {
       var hasWidth = this.$element.hasClass('width')
       return hasWidth ? 'width' : 'height'
     }
 
-  , show: function () {
+    , show: function () {
       var dimension
-        , scroll
-        , actives
-        , hasData
+          , scroll
+          , actives
+          , hasData
 
-      if (this.transitioning) return
+      if (this.transitioning) {
+        return
+      }
 
       dimension = this.dimension()
       scroll = $.camelCase(['scroll', dimension].join('-'))
@@ -60,7 +60,9 @@
 
       if (actives && actives.length) {
         hasData = actives.data('collapse')
-        if (hasData && hasData.transitioning) return
+        if (hasData && hasData.transitioning) {
+          return
+        }
         actives.collapse('hide')
         hasData || actives.data('collapse', null)
       }
@@ -70,66 +72,75 @@
       this.$element[dimension](this.$element[0][scroll])
     }
 
-  , hide: function () {
+    , hide: function () {
       var dimension
-      if (this.transitioning) return
+      if (this.transitioning) {
+        return
+      }
       dimension = this.dimension()
       this.reset(this.$element[dimension]())
       this.transition('removeClass', $.Event('hide'), 'hidden')
       this.$element[dimension](0)
     }
 
-  , reset: function (size) {
+    , reset: function (size) {
       var dimension = this.dimension()
 
       this.$element
-        .removeClass('collapse')
-        [dimension](size || 'auto')
-        [0].offsetWidth
+      .removeClass('collapse')
+          [dimension](size || 'auto')
+          [0].offsetWidth
 
       this.$element[size !== null ? 'addClass' : 'removeClass']('collapse')
 
       return this
     }
 
-  , transition: function (method, startEvent, completeEvent) {
+    , transition: function (method, startEvent, completeEvent) {
       var that = this
-        , complete = function () {
-            if (startEvent.type == 'show') that.reset()
-            that.transitioning = 0
-            that.$element.trigger(completeEvent)
-          }
+          , complete = function () {
+        if (startEvent.type == 'show') {
+          that.reset()
+        }
+        that.transitioning = 0
+        that.$element.trigger(completeEvent)
+      }
 
       this.$element.trigger(startEvent)
 
-      if (startEvent.isDefaultPrevented()) return
+      if (startEvent.isDefaultPrevented()) {
+        return
+      }
 
       this.transitioning = 1
 
       this.$element[method]('in')
 
       $.support.transition && this.$element.hasClass('collapse') ?
-        this.$element.one($.support.transition.end, complete) :
-        complete()
+          this.$element.one($.support.transition.end, complete) :
+          complete()
     }
 
-  , toggle: function () {
+    , toggle: function () {
       this[this.$element.hasClass('in') ? 'hide' : 'show']()
     }
 
   }
 
-
- /* COLLAPSIBLE PLUGIN DEFINITION
-  * ============================== */
+  /* COLLAPSIBLE PLUGIN DEFINITION
+   * ============================== */
 
   $.fn.collapse = function (option) {
     return this.each(function () {
       var $this = $(this)
-        , data = $this.data('collapse')
-        , options = typeof option == 'object' && option
-      if (!data) $this.data('collapse', (data = new Collapse(this, options)))
-      if (typeof option == 'string') data[option]()
+          , data = $this.data('collapse')
+          , options = typeof option == 'object' && option
+      if (!data) {
+        $this.data('collapse', (data = new Collapse(this, options)))
+      }
+      if (typeof option == 'string') {
+        data[option]()
+      }
     })
   }
 
@@ -139,19 +150,20 @@
 
   $.fn.collapse.Constructor = Collapse
 
-
- /* COLLAPSIBLE DATA-API
-  * ==================== */
+  /* COLLAPSIBLE DATA-API
+   * ==================== */
 
   $(function () {
-    $('body').on('click.collapse.data-api', '[data-toggle=collapse]', function ( e ) {
-      var $this = $(this), href
-        , target = $this.attr('data-target')
-          || e.preventDefault()
-          || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') //strip for ie7
-        , option = $(target).data('collapse') ? 'toggle' : $this.data()
-      $(target).collapse(option)
-    })
+    $('body').on('click.collapse.data-api', '[data-toggle=collapse]',
+        function (e) {
+          var $this = $(this), href
+              , target = $this.attr('data-target')
+              || e.preventDefault()
+              || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/,
+                  '') //strip for ie7
+              , option = $(target).data('collapse') ? 'toggle' : $this.data()
+          $(target).collapse(option)
+        })
   })
 
 }(window.jQuery);

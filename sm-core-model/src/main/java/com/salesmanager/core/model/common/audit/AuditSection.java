@@ -29,7 +29,8 @@ public class AuditSection implements Serializable {
   @Column(name = "UPDT_ID", length = 60)
   private String modifiedBy;
 
-  public AuditSection() {}
+  public AuditSection() {
+  }
 
   public Date getDateCreated() {
     return CloneUtils.clone(dateCreated);
@@ -52,11 +53,11 @@ public class AuditSection implements Serializable {
   }
 
   public void setModifiedBy(String modifiedBy) {
-	  if(!StringUtils.isBlank(modifiedBy)) {//TODO
-		  if(modifiedBy.length()>20) {
-			  modifiedBy = modifiedBy.substring(0, 20);
-		  }
-	  }
+    if (!StringUtils.isBlank(modifiedBy)) {//TODO
+      if (modifiedBy.length() > 20) {
+        modifiedBy = modifiedBy.substring(0, 20);
+      }
+    }
     this.modifiedBy = modifiedBy;
   }
 }

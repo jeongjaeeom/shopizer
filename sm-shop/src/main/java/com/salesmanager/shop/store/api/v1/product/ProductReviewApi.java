@@ -38,24 +38,29 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/api/v1")
 public class ProductReviewApi {
 
-  @Inject private ProductFacade productFacade;
+  @Inject
+  private ProductFacade productFacade;
 
-  @Inject private StoreFacade storeFacade;
+  @Inject
+  private StoreFacade storeFacade;
 
-  @Inject private LanguageUtils languageUtils;
+  @Inject
+  private LanguageUtils languageUtils;
 
-  @Inject private ProductService productService;
+  @Inject
+  private ProductService productService;
 
-  @Inject private ProductReviewService productReviewService;
+  @Inject
+  private ProductReviewService productReviewService;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProductReviewApi.class);
 
   @RequestMapping(
       value = {
-        "/private/products/{id}/reviews",
-        "/auth/products/{id}/reviews",
-        "/auth/products/{id}/reviews",
-        "/auth/products/{id}/reviews"
+          "/private/products/{id}/reviews",
+          "/auth/products/{id}/reviews",
+          "/auth/products/{id}/reviews",
+          "/auth/products/{id}/reviews"
       },
       method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.CREATED)
@@ -145,8 +150,8 @@ public class ProductReviewApi {
 
   @RequestMapping(
       value = {
-        "/private/products/{id}/reviews/{reviewid}",
-        "/auth/products/{id}/reviews/{reviewid}"
+          "/private/products/{id}/reviews/{reviewid}",
+          "/auth/products/{id}/reviews/{reviewid}"
       },
       method = RequestMethod.PUT)
   @ResponseStatus(HttpStatus.OK)
@@ -201,8 +206,8 @@ public class ProductReviewApi {
 
   @RequestMapping(
       value = {
-        "/private/products/{id}/reviews/{reviewid}",
-        "/auth/products/{id}/reviews/{reviewid}"
+          "/private/products/{id}/reviews/{reviewid}",
+          "/auth/products/{id}/reviews/{reviewid}"
       },
       method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.OK)

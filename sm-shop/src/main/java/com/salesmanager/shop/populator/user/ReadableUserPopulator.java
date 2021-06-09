@@ -15,9 +15,8 @@ import com.salesmanager.shop.utils.DateUtil;
 
 /**
  * Converts user model to readable user
- * 
- * @author carlsamson
  *
+ * @author carlsamson
  */
 public class ReadableUserPopulator extends AbstractDataPopulator<User, ReadableUser> {
 
@@ -43,11 +42,11 @@ public class ReadableUserPopulator extends AbstractDataPopulator<User, ReadableU
     // set default language
     target.setDefaultLanguage(Constants.DEFAULT_LANGUAGE);
 
-    if (source.getDefaultLanguage() != null)
+    if (source.getDefaultLanguage() != null) {
       target.setDefaultLanguage(source.getDefaultLanguage().getCode());
+    }
     target.setMerchant(store.getCode());
     target.setId(source.getId());
-
 
     for (Group group : source.getGroups()) {
 
@@ -61,7 +60,6 @@ public class ReadableUserPopulator extends AbstractDataPopulator<User, ReadableU
      * dates DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm a z");
      * myObjectMapper.setDateFormat(df);
      */
-
 
     return target;
   }

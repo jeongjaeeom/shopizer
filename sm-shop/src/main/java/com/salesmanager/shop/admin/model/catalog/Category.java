@@ -8,18 +8,18 @@ import com.salesmanager.core.model.catalog.category.CategoryDescription;
 
 /**
  * Wrapper to ease admin jstl
- * @author carlsamson
  *
+ * @author carlsamson
  */
 public class Category implements Serializable {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
-  
+
   private com.salesmanager.core.model.catalog.category.Category category;
-  
+
   @Valid
   private List<CategoryDescription> descriptions = new ArrayList<CategoryDescription>();
 

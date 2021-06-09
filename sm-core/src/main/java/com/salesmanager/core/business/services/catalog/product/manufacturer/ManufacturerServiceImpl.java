@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 
 
-
 @Service("manufacturerService")
 public class ManufacturerServiceImpl extends SalesManagerEntityServiceImpl<Long, Manufacturer>
     implements ManufacturerService {
@@ -32,7 +31,7 @@ public class ManufacturerServiceImpl extends SalesManagerEntityServiceImpl<Long,
 
   @Inject
   private PageableManufacturerRepository pageableManufacturerRepository;
-  
+
   private ManufacturerRepository manufacturerRepository;
 
   @Inject
@@ -75,7 +74,6 @@ public class ManufacturerServiceImpl extends SalesManagerEntityServiceImpl<Long,
   public void addManufacturerDescription(Manufacturer manufacturer,
       ManufacturerDescription description) throws ServiceException {
 
-
     if (manufacturer.getDescriptions() == null) {
       manufacturer.setDescriptions(new HashSet<ManufacturerDescription>());
     }
@@ -104,7 +102,7 @@ public class ManufacturerServiceImpl extends SalesManagerEntityServiceImpl<Long,
       String code) {
     return manufacturerRepository.findByCodeAndMerchandStore(code, store.getId());
   }
-  
+
   @Override
   public Manufacturer getById(Long id) {
     return manufacturerRepository.findOne(id);
@@ -114,9 +112,10 @@ public class ManufacturerServiceImpl extends SalesManagerEntityServiceImpl<Long,
   public List<Manufacturer> listByProductsInCategory(MerchantStore store, Category category,
       Language language) throws ServiceException {
     Validate.notNull(store, "Store cannot be null");
-    Validate.notNull(category,"Category cannot be null");
+    Validate.notNull(category, "Category cannot be null");
     Validate.notNull(language, "Language cannot be null");
-    return manufacturerRepository.findByProductInCategoryId(store.getId(), category.getLineage(), language.getId());
+    return manufacturerRepository
+        .findByProductInCategoryId(store.getId(), category.getLineage(), language.getId());
   }
 
   @Override
@@ -124,7 +123,8 @@ public class ManufacturerServiceImpl extends SalesManagerEntityServiceImpl<Long,
       throws ServiceException {
 
     Pageable pageRequest = PageRequest.of(page, count);
-    return pageableManufacturerRepository.findByStore(store.getId(), language.getId(), null, pageRequest);
+    return pageableManufacturerRepository
+        .findByStore(store.getId(), language.getId(), null, pageRequest);
   }
 
   @Override
@@ -138,7 +138,8 @@ public class ManufacturerServiceImpl extends SalesManagerEntityServiceImpl<Long,
       int page, int count) throws ServiceException {
 
     Pageable pageRequest = PageRequest.of(page, count);
-    return pageableManufacturerRepository.findByStore(store.getId(), language.getId(), name, pageRequest);
+    return pageableManufacturerRepository
+        .findByStore(store.getId(), language.getId(), name, pageRequest);
   }
 
   @Override

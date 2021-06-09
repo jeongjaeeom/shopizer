@@ -16,94 +16,88 @@ import com.salesmanager.core.model.reference.language.Language;
 
 public class ContentRepositoryImpl implements ContentRepositoryCustom {
 
-	
-    @PersistenceContext
-    private EntityManager em;
-    
-	@Override
-	public List<ContentDescription> listNameByType(List<ContentType> contentType, MerchantStore store, Language language) {
-		
 
+  @PersistenceContext
+  private EntityManager em;
 
-			StringBuilder qs = new StringBuilder();
+  @Override
+  public List<ContentDescription> listNameByType(List<ContentType> contentType, MerchantStore store,
+      Language language) {
 
-			qs.append("select c from Content c ");
-			qs.append("left join fetch c.descriptions cd join fetch c.merchantStore cm ");
-			qs.append("where c.contentType in (:ct) ");
-			qs.append("and cm.id =:cm ");
-			qs.append("and cd.language.id =:cl ");
-			qs.append("and c.visible=true ");
-			qs.append("order by c.sortOrder");
+    StringBuilder qs = new StringBuilder();
 
-			String hql = qs.toString();
-			Query q = this.em.createQuery(hql);
+    qs.append("select c from Content c ");
+    qs.append("left join fetch c.descriptions cd join fetch c.merchantStore cm ");
+    qs.append("where c.contentType in (:ct) ");
+    qs.append("and cm.id =:cm ");
+    qs.append("and cd.language.id =:cl ");
+    qs.append("and c.visible=true ");
+    qs.append("order by c.sortOrder");
 
-	    	q.setParameter("ct", contentType);
-	    	q.setParameter("cm", store.getId());
-	    	q.setParameter("cl", language.getId());
-	
+    String hql = qs.toString();
+    Query q = this.em.createQuery(hql);
 
-			@SuppressWarnings("unchecked")
-			List<Content> contents = q.getResultList();
-			
-			List<ContentDescription> descriptions = new ArrayList<ContentDescription>();
-			for(Content c : contents) {
-					String name = c.getDescription().getName();
-					String url = c.getDescription().getSeUrl();
-					ContentDescription contentDescription = new ContentDescription();
-					contentDescription.setName(name);
-					contentDescription.setSeUrl(url);
-					contentDescription.setContent(c);
-					descriptions.add(contentDescription);
-					
-			}
-			
-			return descriptions;
+    q.setParameter("ct", contentType);
+    q.setParameter("cm", store.getId());
+    q.setParameter("cl", language.getId());
 
-	}
-	
-	@Override
-	public ContentDescription getBySeUrl(MerchantStore store,String seUrl) {
+    @SuppressWarnings("unchecked")
+    List<Content> contents = q.getResultList();
 
-			StringBuilder qs = new StringBuilder();
+    List<ContentDescription> descriptions = new ArrayList<ContentDescription>();
+    for (Content c : contents) {
+      String name = c.getDescription().getName();
+      String url = c.getDescription().getSeUrl();
+      ContentDescription contentDescription = new ContentDescription();
+      contentDescription.setName(name);
+      contentDescription.setSeUrl(url);
+      contentDescription.setContent(c);
+      descriptions.add(contentDescription);
 
-			qs.append("select c from Content c ");
-			qs.append("left join fetch c.descriptions cd join fetch c.merchantStore cm ");
-			qs.append("where cm.id =:cm ");
-			qs.append("and c.visible =true ");
-			qs.append("and cd.seUrl =:se ");
+    }
 
+    return descriptions;
 
-			String hql = qs.toString();
-			Query q = this.em.createQuery(hql);
+  }
 
-	    	q.setParameter("cm", store.getId());
-	    	q.setParameter("se", seUrl);
-	
+  @Override
+  public ContentDescription getBySeUrl(MerchantStore store, String seUrl) {
 
-	    	Content content = (Content)q.getSingleResult();
-			
+    StringBuilder qs = new StringBuilder();
 
-			if(content!=null) {
-					return content.getDescription();
-			}
-			
-			@SuppressWarnings("unchecked")
-			List<Content> results = q.getResultList();
-	        if (results.isEmpty()) {
-	        	return null;
-	        } else if (results.size() >= 1) {
-	        		content = results.get(0);
-	        }
-	        
-			if(content!=null) {
-				return content.getDescription();
-			}
-	        
-			
-			return null;
+    qs.append("select c from Content c ");
+    qs.append("left join fetch c.descriptions cd join fetch c.merchantStore cm ");
+    qs.append("where cm.id =:cm ");
+    qs.append("and c.visible =true ");
+    qs.append("and cd.seUrl =:se ");
 
-	}
-    
+    String hql = qs.toString();
+    Query q = this.em.createQuery(hql);
+
+    q.setParameter("cm", store.getId());
+    q.setParameter("se", seUrl);
+
+    Content content = (Content) q.getSingleResult();
+
+    if (content != null) {
+      return content.getDescription();
+    }
+
+    @SuppressWarnings("unchecked")
+    List<Content> results = q.getResultList();
+    if (results.isEmpty()) {
+      return null;
+    } else if (results.size() >= 1) {
+      content = results.get(0);
+    }
+
+    if (content != null) {
+      return content.getDescription();
+    }
+
+    return null;
+
+  }
+
 
 }

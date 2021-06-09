@@ -7,14 +7,13 @@ import com.salesmanager.core.business.services.common.generic.SalesManagerEntity
 import com.salesmanager.core.model.system.IntegrationModule;
 
 public interface ModuleConfigurationService extends
-		SalesManagerEntityService<Long, IntegrationModule> {
+    SalesManagerEntityService<Long, IntegrationModule> {
 
-	List<IntegrationModule> getIntegrationModules(String module);
+  List<IntegrationModule> getIntegrationModules(String module);
 
-	IntegrationModule getByCode(String moduleCode);
-	
-	void createOrUpdateModule(String json) throws ServiceException;
-	
+  IntegrationModule getByCode(String moduleCode);
+
+  void createOrUpdateModule(String json) throws ServiceException;
 
 
 }

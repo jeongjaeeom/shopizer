@@ -3,7 +3,7 @@ package com.salesmanager.shop.model.user;
 public class UserEntity extends User {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
   private String firstName;
@@ -12,8 +12,6 @@ public class UserEntity extends User {
   private String defaultLanguage;
   private String userName;
   private boolean active;
-
-
 
 
   public String getFirstName() {
@@ -57,13 +55,13 @@ public class UserEntity extends User {
     this.active = active;
   }
 
-public String getUserName() {
-	return userName;
-}
+  public String getUserName() {
+    return userName;
+  }
 
-public void setUserName(String userName) {
-	this.userName = userName;
-}
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
 
 
 }

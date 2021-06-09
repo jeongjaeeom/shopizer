@@ -7,13 +7,13 @@ import com.salesmanager.core.model.order.OrderTotalVariation;
 import com.salesmanager.core.model.reference.language.Language;
 
 /**
- * Additional dynamic order total calculation
- * from the rules engine and other modules
- * @author carlsamson
+ * Additional dynamic order total calculation from the rules engine and other modules
  *
+ * @author carlsamson
  */
 public interface OrderTotalService {
-	
-	OrderTotalVariation findOrderTotalVariation(final OrderSummary summary, final Customer customer, final MerchantStore store, final Language language) throws Exception;
+
+  OrderTotalVariation findOrderTotalVariation(final OrderSummary summary, final Customer customer,
+      final MerchantStore store, final Language language) throws Exception;
 
 }

@@ -13,7 +13,8 @@ import com.salesmanager.shop.model.catalog.product.attribute.api.ReadableProduct
 import com.salesmanager.shop.model.catalog.product.attribute.api.ReadableProductOptionFull;
 
 @Component
-public class ReadableProductOptionMapper implements Mapper<ProductOption, ReadableProductOptionEntity> {
+public class ReadableProductOptionMapper implements
+    Mapper<ProductOption, ReadableProductOptionEntity> {
 
   @Override
   public ReadableProductOptionEntity convert(ProductOption source, MerchantStore store,
@@ -25,39 +26,41 @@ public class ReadableProductOptionMapper implements Mapper<ProductOption, Readab
 
   @Override
   public ReadableProductOptionEntity merge(ProductOption source,
-                                           ReadableProductOptionEntity destination, MerchantStore store, Language language) {
+      ReadableProductOptionEntity destination, MerchantStore store, Language language) {
     ReadableProductOptionEntity readableProductOption = new ReadableProductOptionEntity();
-    if(language == null) {
+    if (language == null) {
       readableProductOption = new ReadableProductOptionFull();
       List<com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription> descriptions = new ArrayList<com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription>();
-      for(ProductOptionDescription desc : source.getDescriptions()) {
-          com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription d = this.description(desc);
-          descriptions.add(d);
+      for (ProductOptionDescription desc : source.getDescriptions()) {
+        com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription d = this
+            .description(desc);
+        descriptions.add(d);
       }
-      ((ReadableProductOptionFull)readableProductOption).setDescriptions(descriptions);
+      ((ReadableProductOptionFull) readableProductOption).setDescriptions(descriptions);
     } else {
       readableProductOption = new ReadableProductOptionEntity();
-      if(!CollectionUtils.isEmpty(source.getDescriptions())) {
-        for(ProductOptionDescription desc : source.getDescriptions()) {
-          if(desc != null && desc.getLanguage()!= null && desc.getLanguage().getId() == language.getId()) {
-            com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription d = this.description(desc);
+      if (!CollectionUtils.isEmpty(source.getDescriptions())) {
+        for (ProductOptionDescription desc : source.getDescriptions()) {
+          if (desc != null && desc.getLanguage() != null && desc.getLanguage().getId() == language
+              .getId()) {
+            com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription d = this
+                .description(desc);
             readableProductOption.setDescription(d);
           }
         }
       }
     }
-    
+
     readableProductOption.setCode(source.getCode());
     readableProductOption.setId(source.getId());
     readableProductOption.setType(source.getProductOptionType());
-    
-    
+
     return readableProductOption;
   }
 
 
-
-  com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription description(ProductOptionDescription description) {
+  com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription description(
+      ProductOptionDescription description) {
     com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription desc = new com.salesmanager.shop.model.catalog.product.attribute.ProductOptionDescription();
     desc.setDescription(description.getDescription());
     desc.setName(description.getName());

@@ -30,17 +30,17 @@ public class PersistableUserPopulator extends AbstractDataPopulator<PersistableU
 
   @Inject
   private LanguageService languageService;
-  
+
   @Inject
   private GroupService groupService;
-  
+
   @Inject
   private MerchantStoreService merchantStoreService;
-  
+
   @Inject
   @Named("passwordEncoder")
   private PasswordEncoder passwordEncoder;
-  
+
   @Override
   public User populate(PersistableUser source, User target, MerchantStore store, Language language)
       throws ConversionException {
@@ -55,29 +55,29 @@ public class PersistableUserPopulator extends AbstractDataPopulator<PersistableU
     target.setLastName(source.getLastName());
     target.setAdminEmail(source.getEmailAddress());
     target.setAdminName(source.getUserName());
-    if(!StringUtils.isBlank(source.getPassword())) {
+    if (!StringUtils.isBlank(source.getPassword())) {
       target.setAdminPassword(passwordEncoder.encode(source.getPassword()));
     }
-    
-    if(!StringUtils.isBlank(source.getStore())) {
-        try {
-			MerchantStore userStore = merchantStoreService.getByCode(source.getStore());
-			target.setMerchantStore(userStore);
-		} catch (ServiceException e) {
-			throw new ConversionException("Error while reading MerchantStore store [" + source.getStore() + "]",e);
-		}
+
+    if (!StringUtils.isBlank(source.getStore())) {
+      try {
+        MerchantStore userStore = merchantStoreService.getByCode(source.getStore());
+        target.setMerchantStore(userStore);
+      } catch (ServiceException e) {
+        throw new ConversionException(
+            "Error while reading MerchantStore store [" + source.getStore() + "]", e);
+      }
     } else {
-    	target.setMerchantStore(store);
+      target.setMerchantStore(store);
     }
-    
-    
+
     target.setActive(source.isActive());
-    
+
     Language lang = null;
     try {
       lang = languageService.getByCode(source.getDefaultLanguage());
-    } catch(Exception e) {
-      throw new ConversionException("Cannot get language [" + source.getDefaultLanguage() + "]",e);
+    } catch (Exception e) {
+      throw new ConversionException("Cannot get language [" + source.getDefaultLanguage() + "]", e);
     }
 
     // set default language
@@ -90,13 +90,13 @@ public class PersistableUserPopulator extends AbstractDataPopulator<PersistableU
     }
     try {
       List<Group> groups = groupService.listGroupByNames(names);
-      for(Group g: groups) {
+      for (Group g : groups) {
         userGroups.add(g);
       }
     } catch (Exception e1) {
-      throw new ConversionException("Error while getting user groups",e1);
+      throw new ConversionException("Error while getting user groups", e1);
     }
-    
+
     target.setGroups(userGroups);
 
     return target;

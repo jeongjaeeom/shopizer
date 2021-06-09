@@ -50,309 +50,308 @@ import com.salesmanager.core.model.user.Group;
 import com.salesmanager.core.utils.CloneUtils;
 
 @Entity
-@Table(name = "CUSTOMER", 
-	 uniqueConstraints=
-			@UniqueConstraint(columnNames = {"MERCHANT_ID", "CUSTOMER_NICK"}))
+@Table(name = "CUSTOMER",
+    uniqueConstraints =
+    @UniqueConstraint(columnNames = {"MERCHANT_ID", "CUSTOMER_NICK"}))
 public class Customer extends SalesManagerEntity<Long, Customer> implements Auditable {
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@Column(name = "CUSTOMER_ID", unique=true, nullable=false)
-	@TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
-	pkColumnValue = "CUSTOMER_SEQ_NEXT_VAL")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
-	private Long id;
-	
-	@JsonIgnore
-	@Embedded
-	private AuditSection auditSection = new AuditSection();
-	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
-	private Set<CustomerAttribute> attributes = new HashSet<CustomerAttribute>();
-	
-	@Column(name="CUSTOMER_GENDER", length=1, nullable=true)
-	@Enumerated(value = EnumType.STRING)
-	private CustomerGender gender;
+
+  private static final long serialVersionUID = 1L;
+
+  @Id
+  @Column(name = "CUSTOMER_ID", unique = true, nullable = false)
+  @TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT",
+      pkColumnValue = "CUSTOMER_SEQ_NEXT_VAL")
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
+  private Long id;
+
+  @JsonIgnore
+  @Embedded
+  private AuditSection auditSection = new AuditSection();
+
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
+  private Set<CustomerAttribute> attributes = new HashSet<CustomerAttribute>();
+
+  @Column(name = "CUSTOMER_GENDER", length = 1, nullable = true)
+  @Enumerated(value = EnumType.STRING)
+  private CustomerGender gender;
 
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="CUSTOMER_DOB")
-	private Date dateOfBirth;
-	
-	@Email
-	@NotEmpty
-	@Column(name="CUSTOMER_EMAIL_ADDRESS", length=96, nullable=false)
-	private String emailAddress;
-	
-	@Column(name="CUSTOMER_NICK", length=96)
-	private String nick;// unique username per store
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column(name = "CUSTOMER_DOB")
+  private Date dateOfBirth;
 
-	@Column(name="CUSTOMER_COMPANY", length=100)
-	private String company;
-	
-	@JsonIgnore
-	@Column(name="CUSTOMER_PASSWORD", length=60)
-	private String password;
+  @Email
+  @NotEmpty
+  @Column(name = "CUSTOMER_EMAIL_ADDRESS", length = 96, nullable = false)
+  private String emailAddress;
 
-	@Column(name="CUSTOMER_ANONYMOUS")
-	private boolean anonymous;
-	
-	@Column(name = "REVIEW_AVG")
-	private BigDecimal customerReviewAvg;
+  @Column(name = "CUSTOMER_NICK", length = 96)
+  private String nick;// unique username per store
 
-	@Column(name = "REVIEW_COUNT")
-	private Integer customerReviewCount;
-	
-	@Column(name="PROVIDER")
-	private String provider;
-	
+  @Column(name = "CUSTOMER_COMPANY", length = 100)
+  private String company;
 
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Language.class)
-	@JoinColumn(name = "LANGUAGE_ID", nullable=false)
-	private Language defaultLanguage;
-	
+  @JsonIgnore
+  @Column(name = "CUSTOMER_PASSWORD", length = 60)
+  private String password;
 
-	@OneToMany(mappedBy = "customer", targetEntity = ProductReview.class)
-	private List<ProductReview> reviews = new ArrayList<ProductReview>();
-	
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="MERCHANT_ID", nullable=false)
-	private MerchantStore merchantStore;
-	
+  @Column(name = "CUSTOMER_ANONYMOUS")
+  private boolean anonymous;
 
-	@Embedded
-	private Delivery delivery = null;
-	
-	@Valid
-	@Embedded
-	private Billing billing = null;
-	
-	@JsonIgnore
-	@ManyToMany(fetch=FetchType.LAZY, cascade = {CascadeType.REFRESH})
-	@JoinTable(name = "CUSTOMER_GROUP", joinColumns = { 
-			@JoinColumn(name = "CUSTOMER_ID", nullable = false, updatable = false) }
-			, 
-			inverseJoinColumns = { @JoinColumn(name = "GROUP_ID", 
-					nullable = false, updatable = false) }
-	)
-	@Cascade({
-		org.hibernate.annotations.CascadeType.DETACH,
-		org.hibernate.annotations.CascadeType.LOCK,
-		org.hibernate.annotations.CascadeType.REFRESH,
-		org.hibernate.annotations.CascadeType.REPLICATE
-		
-	})
-	private List<Group> groups = new ArrayList<Group>();
-	
-	@JsonIgnore
-	@Transient
-	private String showCustomerStateList;
-	
-	@JsonIgnore
-	@Transient
-	private String showBillingStateList;
-	
-	@JsonIgnore
-	@Transient
-	private String showDeliveryStateList;
+  @Column(name = "REVIEW_AVG")
+  private BigDecimal customerReviewAvg;
 
-	@Embedded
-	private CredentialsReset credentialsResetRequest = null;
+  @Column(name = "REVIEW_COUNT")
+  private Integer customerReviewCount;
 
-	public Customer() {
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+  @Column(name = "PROVIDER")
+  private String provider;
 
 
-
-	public Date getDateOfBirth() {
-		return CloneUtils.clone(dateOfBirth);
-	}
-
-	public void setDateOfBirth(Date dateOfBirth) {
-		this.dateOfBirth = CloneUtils.clone(dateOfBirth);
-	}
-
-	public String getEmailAddress() {
-		return emailAddress;
-	}
-
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
-
-	public String getNick() {
-		return nick;
-	}
-
-	public void setNick(String nick) {
-		this.nick = nick;
-	}
-
-	public String getCompany() {
-		return company;
-	}
-
-	public void setCompany(String company) {
-		this.company = company;
-	}
+  @ManyToOne(fetch = FetchType.LAZY, targetEntity = Language.class)
+  @JoinColumn(name = "LANGUAGE_ID", nullable = false)
+  private Language defaultLanguage;
 
 
+  @OneToMany(mappedBy = "customer", targetEntity = ProductReview.class)
+  private List<ProductReview> reviews = new ArrayList<ProductReview>();
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "MERCHANT_ID", nullable = false)
+  private MerchantStore merchantStore;
 
 
-	public boolean isAnonymous() {
-		return anonymous;
-	}
+  @Embedded
+  private Delivery delivery = null;
 
-	public void setAnonymous(boolean anonymous) {
-		this.anonymous = anonymous;
-	}
+  @Valid
+  @Embedded
+  private Billing billing = null;
+
+  @JsonIgnore
+  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
+  @JoinTable(name = "CUSTOMER_GROUP", joinColumns = {
+      @JoinColumn(name = "CUSTOMER_ID", nullable = false, updatable = false)}
+      ,
+      inverseJoinColumns = {@JoinColumn(name = "GROUP_ID",
+          nullable = false, updatable = false)}
+  )
+  @Cascade({
+      org.hibernate.annotations.CascadeType.DETACH,
+      org.hibernate.annotations.CascadeType.LOCK,
+      org.hibernate.annotations.CascadeType.REFRESH,
+      org.hibernate.annotations.CascadeType.REPLICATE
+
+  })
+  private List<Group> groups = new ArrayList<Group>();
+
+  @JsonIgnore
+  @Transient
+  private String showCustomerStateList;
+
+  @JsonIgnore
+  @Transient
+  private String showBillingStateList;
+
+  @JsonIgnore
+  @Transient
+  private String showDeliveryStateList;
+
+  @Embedded
+  private CredentialsReset credentialsResetRequest = null;
+
+  public Customer() {
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 
 
-	public List<ProductReview> getReviews() {
-		return reviews;
-	}
+  public Date getDateOfBirth() {
+    return CloneUtils.clone(dateOfBirth);
+  }
 
-	public void setReviews(List<ProductReview> reviews) {
-		this.reviews = reviews;
-	}
+  public void setDateOfBirth(Date dateOfBirth) {
+    this.dateOfBirth = CloneUtils.clone(dateOfBirth);
+  }
 
-	public void setMerchantStore(MerchantStore merchantStore) {
-		this.merchantStore = merchantStore;
-	}
+  public String getEmailAddress() {
+    return emailAddress;
+  }
 
-	public MerchantStore getMerchantStore() {
-		return merchantStore;
-	}
+  public void setEmailAddress(String emailAddress) {
+    this.emailAddress = emailAddress;
+  }
 
-	public void setDelivery(Delivery delivery) {
-		this.delivery = delivery;
-	}
+  public String getNick() {
+    return nick;
+  }
 
-	public Delivery getDelivery() {
-		return delivery;
-	}
+  public void setNick(String nick) {
+    this.nick = nick;
+  }
 
-	public void setBilling(Billing billing) {
-		this.billing = billing;
-	}
+  public String getCompany() {
+    return company;
+  }
 
-	public Billing getBilling() {
-		return billing;
-	}
+  public void setCompany(String company) {
+    this.company = company;
+  }
 
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
-	}
 
-	public List<Group> getGroups() {
-		return groups;
-	}
-	public String getShowCustomerStateList() {
-		return showCustomerStateList;
-	}
+  public String getPassword() {
+    return password;
+  }
 
-	public void setShowCustomerStateList(String showCustomerStateList) {
-		this.showCustomerStateList = showCustomerStateList;
-	}
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-	public String getShowBillingStateList() {
-		return showBillingStateList;
-	}
 
-	public void setShowBillingStateList(String showBillingStateList) {
-		this.showBillingStateList = showBillingStateList;
-	}
+  public boolean isAnonymous() {
+    return anonymous;
+  }
 
-	public String getShowDeliveryStateList() {
-		return showDeliveryStateList;
-	}
+  public void setAnonymous(boolean anonymous) {
+    this.anonymous = anonymous;
+  }
 
-	public void setShowDeliveryStateList(String showDeliveryStateList) {
-		this.showDeliveryStateList = showDeliveryStateList;
-	}
-	
-	public Language getDefaultLanguage() {
-		return defaultLanguage;
-	}
 
-	public void setDefaultLanguage(Language defaultLanguage) {
-		this.defaultLanguage = defaultLanguage;
-	}
+  public List<ProductReview> getReviews() {
+    return reviews;
+  }
 
-	public void setAttributes(Set<CustomerAttribute> attributes) {
-		this.attributes = attributes;
-	}
+  public void setReviews(List<ProductReview> reviews) {
+    this.reviews = reviews;
+  }
 
-	public Set<CustomerAttribute> getAttributes() {
-		return attributes;
-	}
+  public void setMerchantStore(MerchantStore merchantStore) {
+    this.merchantStore = merchantStore;
+  }
 
-	public void setGender(CustomerGender gender) {
-		this.gender = gender;
-	}
+  public MerchantStore getMerchantStore() {
+    return merchantStore;
+  }
 
-	public CustomerGender getGender() {
-		return gender;
-	}
+  public void setDelivery(Delivery delivery) {
+    this.delivery = delivery;
+  }
 
-	public BigDecimal getCustomerReviewAvg() {
-		return customerReviewAvg;
-	}
+  public Delivery getDelivery() {
+    return delivery;
+  }
 
-	public void setCustomerReviewAvg(BigDecimal customerReviewAvg) {
-		this.customerReviewAvg = customerReviewAvg;
-	}
+  public void setBilling(Billing billing) {
+    this.billing = billing;
+  }
 
-	public Integer getCustomerReviewCount() {
-		return customerReviewCount;
-	}
+  public Billing getBilling() {
+    return billing;
+  }
 
-	public void setCustomerReviewCount(Integer customerReviewCount) {
-		this.customerReviewCount = customerReviewCount;
-	}
+  public void setGroups(List<Group> groups) {
+    this.groups = groups;
+  }
 
-	@Override
-	public AuditSection getAuditSection() {
-		return auditSection;
-	}
+  public List<Group> getGroups() {
+    return groups;
+  }
 
-	@Override
-	public void setAuditSection(AuditSection auditSection) {
-		this.auditSection = auditSection;
-	}
-	
-	public String getProvider() {
-		return provider;
-	}
+  public String getShowCustomerStateList() {
+    return showCustomerStateList;
+  }
 
-	public void setProvider(String provider) {
-		this.provider = provider;
-	}
+  public void setShowCustomerStateList(String showCustomerStateList) {
+    this.showCustomerStateList = showCustomerStateList;
+  }
 
-	public CredentialsReset getCredentialsResetRequest() {
-		return credentialsResetRequest;
-	}
+  public String getShowBillingStateList() {
+    return showBillingStateList;
+  }
 
-	public void setCredentialsResetRequest(CredentialsReset credentialsResetRequest) {
-		this.credentialsResetRequest = credentialsResetRequest;
-	}
-	
+  public void setShowBillingStateList(String showBillingStateList) {
+    this.showBillingStateList = showBillingStateList;
+  }
+
+  public String getShowDeliveryStateList() {
+    return showDeliveryStateList;
+  }
+
+  public void setShowDeliveryStateList(String showDeliveryStateList) {
+    this.showDeliveryStateList = showDeliveryStateList;
+  }
+
+  public Language getDefaultLanguage() {
+    return defaultLanguage;
+  }
+
+  public void setDefaultLanguage(Language defaultLanguage) {
+    this.defaultLanguage = defaultLanguage;
+  }
+
+  public void setAttributes(Set<CustomerAttribute> attributes) {
+    this.attributes = attributes;
+  }
+
+  public Set<CustomerAttribute> getAttributes() {
+    return attributes;
+  }
+
+  public void setGender(CustomerGender gender) {
+    this.gender = gender;
+  }
+
+  public CustomerGender getGender() {
+    return gender;
+  }
+
+  public BigDecimal getCustomerReviewAvg() {
+    return customerReviewAvg;
+  }
+
+  public void setCustomerReviewAvg(BigDecimal customerReviewAvg) {
+    this.customerReviewAvg = customerReviewAvg;
+  }
+
+  public Integer getCustomerReviewCount() {
+    return customerReviewCount;
+  }
+
+  public void setCustomerReviewCount(Integer customerReviewCount) {
+    this.customerReviewCount = customerReviewCount;
+  }
+
+  @Override
+  public AuditSection getAuditSection() {
+    return auditSection;
+  }
+
+  @Override
+  public void setAuditSection(AuditSection auditSection) {
+    this.auditSection = auditSection;
+  }
+
+  public String getProvider() {
+    return provider;
+  }
+
+  public void setProvider(String provider) {
+    this.provider = provider;
+  }
+
+  public CredentialsReset getCredentialsResetRequest() {
+    return credentialsResetRequest;
+  }
+
+  public void setCredentialsResetRequest(CredentialsReset credentialsResetRequest) {
+    this.credentialsResetRequest = credentialsResetRequest;
+  }
+
 }

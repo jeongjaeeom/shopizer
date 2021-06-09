@@ -16,77 +16,75 @@ import com.salesmanager.core.constants.SchemaConstant;
 import com.salesmanager.core.model.generic.SalesManagerEntity;
 
 @Entity
-@Table(name="CUSTOMER_OPTION_SET",
-	uniqueConstraints={
-		@UniqueConstraint(columnNames={
-				"CUSTOMER_OPTION_ID",
-				"CUSTOMER_OPTION_VALUE_ID"
-			})
-	}
+@Table(name = "CUSTOMER_OPTION_SET",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+            "CUSTOMER_OPTION_ID",
+            "CUSTOMER_OPTION_VALUE_ID"
+        })
+    }
 )
 public class CustomerOptionSet extends SalesManagerEntity<Long, CustomerOptionSet> {
 
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name = "CUSTOMER_OPTIONSET_ID", unique=true, nullable=false)
-	@TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "CUST_OPTSET_SEQ_NEXT_VAL")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
-	private Long id;
-	
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="CUSTOMER_OPTION_ID", nullable=false)
-	private CustomerOption customerOption = null;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="CUSTOMER_OPTION_VALUE_ID", nullable=false)
-	private CustomerOptionValue customerOptionValue = null;
-	
+  @Id
+  @Column(name = "CUSTOMER_OPTIONSET_ID", unique = true, nullable = false)
+  @TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "CUST_OPTSET_SEQ_NEXT_VAL")
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
+  private Long id;
 
 
-	@Column(name="SORT_ORDER")
-	private Integer sortOrder = new Integer(0);
-	
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "CUSTOMER_OPTION_ID", nullable = false)
+  private CustomerOption customerOption = null;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "CUSTOMER_OPTION_VALUE_ID", nullable = false)
+  private CustomerOptionValue customerOptionValue = null;
 
 
-	public int getSortOrder() {
-		return sortOrder;
-	}
+  @Column(name = "SORT_ORDER")
+  private Integer sortOrder = new Integer(0);
 
-	public void setSortOrder(int sortOrder) {
-		this.sortOrder = sortOrder;
-	}
 
-	public void setCustomerOptionValue(CustomerOptionValue customerOptionValue) {
-		this.customerOptionValue = customerOptionValue;
-	}
+  public int getSortOrder() {
+    return sortOrder;
+  }
 
-	public CustomerOptionValue getCustomerOptionValue() {
-		return customerOptionValue;
-	}
+  public void setSortOrder(int sortOrder) {
+    this.sortOrder = sortOrder;
+  }
 
-	public void setCustomerOption(CustomerOption customerOption) {
-		this.customerOption = customerOption;
-	}
+  public void setCustomerOptionValue(CustomerOptionValue customerOptionValue) {
+    this.customerOptionValue = customerOptionValue;
+  }
 
-	public CustomerOption getCustomerOption() {
-		return customerOption;
-	}
+  public CustomerOptionValue getCustomerOptionValue() {
+    return customerOptionValue;
+  }
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+  public void setCustomerOption(CustomerOption customerOption) {
+    this.customerOption = customerOption;
+  }
 
-	@Override
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public CustomerOption getCustomerOption() {
+    return customerOption;
+  }
+
+  @Override
+  public Long getId() {
+    return id;
+  }
+
+  @Override
+  public void setId(Long id) {
+    this.id = id;
+  }
 
 
 }

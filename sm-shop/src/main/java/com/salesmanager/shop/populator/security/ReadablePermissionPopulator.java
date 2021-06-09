@@ -7,7 +7,8 @@ import com.salesmanager.core.model.reference.language.Language;
 import com.salesmanager.core.model.user.Permission;
 import com.salesmanager.shop.model.security.ReadablePermission;
 
-public class ReadablePermissionPopulator extends AbstractDataPopulator<Permission, ReadablePermission> {
+public class ReadablePermissionPopulator extends
+    AbstractDataPopulator<Permission, ReadablePermission> {
 
   @Override
   public ReadablePermission populate(Permission source, ReadablePermission target,

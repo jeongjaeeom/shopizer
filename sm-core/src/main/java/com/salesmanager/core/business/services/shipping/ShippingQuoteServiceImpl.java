@@ -18,61 +18,60 @@ import com.salesmanager.core.model.shipping.Quote;
 import com.salesmanager.core.model.shipping.ShippingSummary;
 
 @Service("shippingQuoteService")
-public class ShippingQuoteServiceImpl extends SalesManagerEntityServiceImpl<Long, Quote> implements ShippingQuoteService {
+public class ShippingQuoteServiceImpl extends SalesManagerEntityServiceImpl<Long, Quote> implements
+    ShippingQuoteService {
 
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ShippingQuoteServiceImpl.class);
-	
-	private ShippingQuoteRepository shippingQuoteRepository;
-	
-	@Inject
-	private ShippingService shippingService;
-	
-	@Inject
-	public ShippingQuoteServiceImpl(ShippingQuoteRepository repository) {
-		super(repository);
-		this.shippingQuoteRepository = repository;
-		// TODO Auto-generated constructor stub
-	}
 
-	@Override
-	public List<Quote> findByOrder(Order order) throws ServiceException {
-		Validate.notNull(order,"Order cannot be null");
-		return this.shippingQuoteRepository.findByOrder(order.getId());
-	}
+  private static final Logger LOGGER = LoggerFactory.getLogger(ShippingQuoteServiceImpl.class);
 
-	@Override
-	public ShippingSummary getShippingSummary(Long quoteId, MerchantStore store) throws ServiceException {
-		
-		Validate.notNull(quoteId,"quoteId must not be null");
-		
-		Quote q = shippingQuoteRepository.getOne(quoteId);
+  private ShippingQuoteRepository shippingQuoteRepository;
 
-		
-		ShippingSummary quote = null;
-		
-		if(q != null) {
-			
-			quote = new ShippingSummary();
-			quote.setDeliveryAddress(q.getDelivery());
-			quote.setShipping(q.getPrice());
-			quote.setShippingModule(q.getModule());
-			quote.setShippingOption(q.getOptionName());
-			quote.setShippingOptionCode(q.getOptionCode());
-			quote.setHandling(q.getHandling());
-			
-			if(shippingService.hasTaxOnShipping(store)) {
-				quote.setTaxOnShipping(true);
-			}
-			
-			
-			
-		}
-		
-		
-		return quote;
-		
-	}
+  @Inject
+  private ShippingService shippingService;
+
+  @Inject
+  public ShippingQuoteServiceImpl(ShippingQuoteRepository repository) {
+    super(repository);
+    this.shippingQuoteRepository = repository;
+    // TODO Auto-generated constructor stub
+  }
+
+  @Override
+  public List<Quote> findByOrder(Order order) throws ServiceException {
+    Validate.notNull(order, "Order cannot be null");
+    return this.shippingQuoteRepository.findByOrder(order.getId());
+  }
+
+  @Override
+  public ShippingSummary getShippingSummary(Long quoteId, MerchantStore store)
+      throws ServiceException {
+
+    Validate.notNull(quoteId, "quoteId must not be null");
+
+    Quote q = shippingQuoteRepository.getOne(quoteId);
+
+    ShippingSummary quote = null;
+
+    if (q != null) {
+
+      quote = new ShippingSummary();
+      quote.setDeliveryAddress(q.getDelivery());
+      quote.setShipping(q.getPrice());
+      quote.setShippingModule(q.getModule());
+      quote.setShippingOption(q.getOptionName());
+      quote.setShippingOptionCode(q.getOptionCode());
+      quote.setHandling(q.getHandling());
+
+      if (shippingService.hasTaxOnShipping(store)) {
+        quote.setTaxOnShipping(true);
+      }
+
+
+    }
+
+    return quote;
+
+  }
 
 
 }

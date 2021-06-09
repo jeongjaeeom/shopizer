@@ -9,7 +9,6 @@ import com.salesmanager.core.model.user.PermissionCriteria;
 import com.salesmanager.core.model.user.PermissionList;
 
 
-
 public interface PermissionService extends SalesManagerEntityService<Integer, Permission> {
 
   List<Permission> getByName();

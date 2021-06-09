@@ -5,15 +5,14 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 import com.salesmanager.core.model.shipping.ShippingOrigin;
 
 /**
- * ShippingOrigin object if different from MerchantStore address.
- * Can be managed through this service.
- * @author carlsamson
+ * ShippingOrigin object if different from MerchantStore address. Can be managed through this
+ * service.
  *
+ * @author carlsamson
  */
-public interface ShippingOriginService  extends SalesManagerEntityService<Long, ShippingOrigin> {
+public interface ShippingOriginService extends SalesManagerEntityService<Long, ShippingOrigin> {
 
-	ShippingOrigin getByStore(MerchantStore store);
-
+  ShippingOrigin getByStore(MerchantStore store);
 
 
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.salesmanager.core.business.modules.cms.content;
 
@@ -9,8 +9,8 @@ import com.salesmanager.core.business.exception.ServiceException;
 
 
 public interface FolderPut {
-	
-	
+
+
   /**
    * Create folder on root or on specific path
    * @param merchantStoreCode

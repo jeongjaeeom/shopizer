@@ -16,8 +16,10 @@ import org.springframework.stereotype.Component;
 import com.salesmanager.shop.store.security.JWTTokenUtil;
 import com.salesmanager.shop.store.security.common.CustomAuthenticationException;
 import com.salesmanager.shop.store.security.common.CustomAuthenticationManager;
+
 import static java.util.Optional.ofNullable;
 import static org.apache.commons.lang3.StringUtils.removeStart;
+
 import io.jsonwebtoken.ExpiredJwtException;
 
 @Component("jwtCustomAdminAuthenticationManager")
@@ -50,7 +52,6 @@ public class JWTAdminAuthenticationManager extends CustomAuthenticationManager {
     } catch (ExpiredJwtException e) {
       logger.warn("the token is expired and not valid anymore", e);
     }
-
 
     UsernamePasswordAuthenticationToken authentication = null;
 

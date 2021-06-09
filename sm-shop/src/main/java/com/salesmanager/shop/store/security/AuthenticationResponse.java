@@ -4,7 +4,9 @@ import java.io.Serializable;
 import com.salesmanager.shop.model.entity.Entity;
 
 public class AuthenticationResponse extends Entity implements Serializable {
-  public AuthenticationResponse() {}
+
+  public AuthenticationResponse() {
+  }
 
   /**
    *

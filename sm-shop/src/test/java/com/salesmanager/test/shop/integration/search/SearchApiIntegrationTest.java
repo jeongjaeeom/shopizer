@@ -27,36 +27,39 @@ import com.salesmanager.test.shop.common.ServicesTestSupport;
 @Ignore
 public class SearchApiIntegrationTest extends ServicesTestSupport {
 
-    @Autowired
-    private TestRestTemplate testRestTemplate;
+  @Autowired
+  private TestRestTemplate testRestTemplate;
 
 
+  /**
+   * Add a product then search for it This tests is disabled since it requires Elastic search server
+   * started
+   *
+   * @throws Exception
+   */
+  @Test
+  public void searchItem() throws Exception {
 
-    /**
-     * Add a product then search for it
-     * This tests is disabled since it requires Elastic search server started
-     *
-     * @throws Exception
-     */
-    @Test
-    public void searchItem() throws Exception {
-    	
-    	PersistableProduct product = super.product("TESTPRODUCT");
-    	
-        final HttpEntity<PersistableProduct> entity = new HttpEntity<>(product, getHeader());
+    PersistableProduct product = super.product("TESTPRODUCT");
 
-        final ResponseEntity<PersistableProduct> response = testRestTemplate.postForEntity("/api/v1/private/product?store=" + Constants.DEFAULT_STORE, entity, PersistableProduct.class);
-        assertThat(response.getStatusCode(), is(CREATED));
-        
-        SearchProductRequest searchRequest = new SearchProductRequest();
-        searchRequest.setQuery("TEST");
-        final HttpEntity<SearchProductRequest> searchEntity = new HttpEntity<>(searchRequest, getHeader());
-        
-        
-        final ResponseEntity<SearchProductList> searchResponse = testRestTemplate.postForEntity("/api/v1/search?store=" + Constants.DEFAULT_STORE, searchEntity, SearchProductList.class);
-        assertThat(searchResponse.getStatusCode(), is(CREATED));
+    final HttpEntity<PersistableProduct> entity = new HttpEntity<>(product, getHeader());
 
-    }
+    final ResponseEntity<PersistableProduct> response = testRestTemplate
+        .postForEntity("/api/v1/private/product?store=" + Constants.DEFAULT_STORE, entity,
+            PersistableProduct.class);
+    assertThat(response.getStatusCode(), is(CREATED));
+
+    SearchProductRequest searchRequest = new SearchProductRequest();
+    searchRequest.setQuery("TEST");
+    final HttpEntity<SearchProductRequest> searchEntity = new HttpEntity<>(searchRequest,
+        getHeader());
+
+    final ResponseEntity<SearchProductList> searchResponse = testRestTemplate
+        .postForEntity("/api/v1/search?store=" + Constants.DEFAULT_STORE, searchEntity,
+            SearchProductList.class);
+    assertThat(searchResponse.getStatusCode(), is(CREATED));
+
+  }
 
 
 }

@@ -35,29 +35,26 @@ import com.salesmanager.shop.utils.LocaleUtils;
 @Component
 public class PersistableOrderApiPopulator extends AbstractDataPopulator<PersistableOrder, Order> {
 
-	@Autowired
-	private CurrencyService currencyService;
-	@Autowired
-	private CustomerService customerService;
-/*	@Autowired
-	private ShoppingCartService shoppingCartService;
-	@Autowired
-	private ProductService productService;
-	@Autowired
-	private ProductAttributeService productAttributeService;
-	@Autowired
-	private DigitalProductService digitalProductService;*/
-	@Autowired
-	private CustomerPopulator customerPopulator;
-	
-	
-
-	
+  @Autowired
+  private CurrencyService currencyService;
+  @Autowired
+  private CustomerService customerService;
+  /*	@Autowired
+    private ShoppingCartService shoppingCartService;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private ProductAttributeService productAttributeService;
+    @Autowired
+    private DigitalProductService digitalProductService;*/
+  @Autowired
+  private CustomerPopulator customerPopulator;
 
 
-	@Override
-	public Order populate(PersistableOrder source, Order target, MerchantStore store, Language language)
-			throws ConversionException {
+  @Override
+  public Order populate(PersistableOrder source, Order target, MerchantStore store,
+      Language language)
+      throws ConversionException {
 		
 
 /*		Validate.notNull(currencyService,"currencyService must be set");
@@ -66,106 +63,106 @@ public class PersistableOrderApiPopulator extends AbstractDataPopulator<Persista
 		Validate.notNull(productService,"productService must be set");
 		Validate.notNull(productAttributeService,"productAttributeService must be set");
 		Validate.notNull(digitalProductService,"digitalProductService must be set");*/
-		Validate.notNull(source.getPayment(),"Payment cannot be null");
-		
-		try {
-			
-			if(target == null) {
-				target = new Order();
-			}
-		
-			//target.setLocale(LocaleUtils.getLocale(store));
+    Validate.notNull(source.getPayment(), "Payment cannot be null");
 
-			target.setLocale(LocaleUtils.getLocale(store));
-			
-			
-			Currency currency = null;
-			try {
-				currency = currencyService.getByCode(source.getCurrency());
-			} catch(Exception e) {
-				throw new ConversionException("Currency not found for code " + source.getCurrency());
-			}
-			
-			if(currency==null) {
-				throw new ConversionException("Currency not found for code " + source.getCurrency());
-			}
-			
-			//Customer
-			Customer customer = null;
-			if(source.getCustomerId() != null && source.getCustomerId().longValue() >0) {
-			  Long customerId = source.getCustomerId();
-			  customer = customerService.getById(customerId);
+    try {
 
-			  if(customer == null) {
-				throw new ConversionException("Curstomer with id " + source.getCustomerId() + " does not exist");
-			  }
-			  target.setCustomerId(customerId);
-			
-			} else {
-			  if(source instanceof PersistableAnonymousOrder) {
-			    PersistableCustomer persistableCustomer = ((PersistableAnonymousOrder)source).getCustomer();
-			    customer = new Customer();
-			    customer = customerPopulator.populate(persistableCustomer, customer, store, language);
-			  } else {
-			    throw new ConversionException("Curstomer details or id not set in request");
-			  } 
-			}
-			
-			
-			target.setCustomerEmailAddress(customer.getEmailAddress());
-			
-			Delivery delivery = customer.getDelivery();
-			target.setDelivery(delivery);
-			
-			Billing billing = customer.getBilling();
-			target.setBilling(billing);
-			
-			if(source.getAttributes() != null && source.getAttributes().size() > 0) {
-				Set<OrderAttribute> attrs = new HashSet<OrderAttribute>();
-				for(com.salesmanager.shop.model.order.OrderAttribute attribute : source.getAttributes()) {
-					OrderAttribute attr = new OrderAttribute();
-					attr.setKey(attribute.getKey());
-					attr.setValue(attribute.getValue());
-					attr.setOrder(target);
-					attrs.add(attr);
-				}
-				target.setOrderAttributes(attrs);
-			}
+      if (target == null) {
+        target = new Order();
+      }
 
-			target.setDatePurchased(new Date());
-			target.setCurrency(currency);
-			target.setCurrencyValue(new BigDecimal(0));
-			target.setMerchant(store);
-			target.setChannel(OrderChannel.API);
-			//need this
-			target.setStatus(OrderStatus.ORDERED);
-			target.setPaymentModuleCode(source.getPayment().getPaymentModule());
-			target.setPaymentType(PaymentType.valueOf(source.getPayment().getPaymentType()));
-			
-			target.setCustomerAgreement(source.isCustomerAgreement());
-			target.setConfirmedAddress(true);//force this to true, cannot perform this activity from the API
+      //target.setLocale(LocaleUtils.getLocale(store));
 
-			
-			if(!StringUtils.isBlank(source.getComments())) {
-				OrderStatusHistory statusHistory = new OrderStatusHistory();
-				statusHistory.setStatus(null);
-				statusHistory.setOrder(target);
-				statusHistory.setComments(source.getComments());
-				target.getOrderHistory().add(statusHistory);
-			}
-			
-			return target;
-		
-		} catch(Exception e) {
-			throw new ConversionException(e);
-		}
-	}
+      target.setLocale(LocaleUtils.getLocale(store));
 
-	@Override
-	protected Order createTarget() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+      Currency currency = null;
+      try {
+        currency = currencyService.getByCode(source.getCurrency());
+      } catch (Exception e) {
+        throw new ConversionException("Currency not found for code " + source.getCurrency());
+      }
+
+      if (currency == null) {
+        throw new ConversionException("Currency not found for code " + source.getCurrency());
+      }
+
+      //Customer
+      Customer customer = null;
+      if (source.getCustomerId() != null && source.getCustomerId().longValue() > 0) {
+        Long customerId = source.getCustomerId();
+        customer = customerService.getById(customerId);
+
+        if (customer == null) {
+          throw new ConversionException(
+              "Curstomer with id " + source.getCustomerId() + " does not exist");
+        }
+        target.setCustomerId(customerId);
+
+      } else {
+        if (source instanceof PersistableAnonymousOrder) {
+          PersistableCustomer persistableCustomer = ((PersistableAnonymousOrder) source)
+              .getCustomer();
+          customer = new Customer();
+          customer = customerPopulator.populate(persistableCustomer, customer, store, language);
+        } else {
+          throw new ConversionException("Curstomer details or id not set in request");
+        }
+      }
+
+      target.setCustomerEmailAddress(customer.getEmailAddress());
+
+      Delivery delivery = customer.getDelivery();
+      target.setDelivery(delivery);
+
+      Billing billing = customer.getBilling();
+      target.setBilling(billing);
+
+      if (source.getAttributes() != null && source.getAttributes().size() > 0) {
+        Set<OrderAttribute> attrs = new HashSet<OrderAttribute>();
+        for (com.salesmanager.shop.model.order.OrderAttribute attribute : source.getAttributes()) {
+          OrderAttribute attr = new OrderAttribute();
+          attr.setKey(attribute.getKey());
+          attr.setValue(attribute.getValue());
+          attr.setOrder(target);
+          attrs.add(attr);
+        }
+        target.setOrderAttributes(attrs);
+      }
+
+      target.setDatePurchased(new Date());
+      target.setCurrency(currency);
+      target.setCurrencyValue(new BigDecimal(0));
+      target.setMerchant(store);
+      target.setChannel(OrderChannel.API);
+      //need this
+      target.setStatus(OrderStatus.ORDERED);
+      target.setPaymentModuleCode(source.getPayment().getPaymentModule());
+      target.setPaymentType(PaymentType.valueOf(source.getPayment().getPaymentType()));
+
+      target.setCustomerAgreement(source.isCustomerAgreement());
+      target
+          .setConfirmedAddress(true);//force this to true, cannot perform this activity from the API
+
+      if (!StringUtils.isBlank(source.getComments())) {
+        OrderStatusHistory statusHistory = new OrderStatusHistory();
+        statusHistory.setStatus(null);
+        statusHistory.setOrder(target);
+        statusHistory.setComments(source.getComments());
+        target.getOrderHistory().add(statusHistory);
+      }
+
+      return target;
+
+    } catch (Exception e) {
+      throw new ConversionException(e);
+    }
+  }
+
+  @Override
+  protected Order createTarget() {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
 
 /*	public CurrencyService getCurrencyService() {
@@ -215,7 +212,6 @@ public class PersistableOrderApiPopulator extends AbstractDataPopulator<Persista
 	public void setDigitalProductService(DigitalProductService digitalProductService) {
 		this.digitalProductService = digitalProductService;
 	}*/
-
 
 
 }

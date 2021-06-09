@@ -37,7 +37,8 @@ import springfox.documentation.annotations.ApiIgnore;
 })
 public class SearchApi {
 
-  @Inject private SearchFacade searchFacade;
+  @Inject
+  private SearchFacade searchFacade;
 
 
   /**
@@ -45,10 +46,11 @@ public class SearchApi {
    */
   @PostMapping("/search")
   @ApiImplicitParams({
-    @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-    @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
   })
-  public @ResponseBody SearchProductList search(
+  public @ResponseBody
+  SearchProductList search(
       @RequestBody SearchProductRequest searchRequest,
       @ApiIgnore MerchantStore merchantStore,
       @ApiIgnore Language language,
@@ -58,10 +60,11 @@ public class SearchApi {
 
   @PostMapping("/search/autocomplete")
   @ApiImplicitParams({
-    @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-    @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
   })
-  public @ResponseBody ValueList autocomplete(
+  public @ResponseBody
+  ValueList autocomplete(
       @RequestBody SearchProductRequest searchRequest,
       @ApiIgnore MerchantStore merchantStore,
       @ApiIgnore Language language,

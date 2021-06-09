@@ -14,29 +14,31 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.util.StringUtils;
 
 public class ServicesAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-	
-	private RequestCache requestCache = new HttpSessionRequestCache();
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
-        SavedRequest savedRequest = requestCache.getRequest(request, response);
+  private RequestCache requestCache = new HttpSessionRequestCache();
 
-        if (savedRequest == null) {
-            clearAuthenticationAttributes(request);
-            return;
-        }
-        String targetUrlParam = getTargetUrlParameter();
-        if (isAlwaysUseDefaultTargetUrl() || (targetUrlParam != null && StringUtils.hasText(request.getParameter(targetUrlParam)))) {
-            requestCache.removeRequest(request, response);
-            clearAuthenticationAttributes(request);
-            return;
-        }
+  @Override
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+      Authentication authentication) throws ServletException, IOException {
+    SavedRequest savedRequest = requestCache.getRequest(request, response);
 
-        clearAuthenticationAttributes(request);
+    if (savedRequest == null) {
+      clearAuthenticationAttributes(request);
+      return;
+    }
+    String targetUrlParam = getTargetUrlParameter();
+    if (isAlwaysUseDefaultTargetUrl() || (targetUrlParam != null && StringUtils
+        .hasText(request.getParameter(targetUrlParam)))) {
+      requestCache.removeRequest(request, response);
+      clearAuthenticationAttributes(request);
+      return;
     }
 
-    public void setRequestCache(RequestCache requestCache) {
-        this.requestCache = requestCache;
-    }
-    
+    clearAuthenticationAttributes(request);
+  }
+
+  public void setRequestCache(RequestCache requestCache) {
+    this.requestCache = requestCache;
+  }
+
 }

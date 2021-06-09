@@ -17,41 +17,44 @@
  * limitations under the License.
  * ========================================================== */
 
-
 !function ($) {
 
   "use strict"; // jshint ;_;
 
-
- /* CAROUSEL CLASS DEFINITION
-  * ========================= */
+  /* CAROUSEL CLASS DEFINITION
+   * ========================= */
 
   var Carousel = function (element, options) {
     this.$element = $(element)
     this.options = options
     this.options.slide && this.slide(this.options.slide)
     this.options.pause == 'hover' && this.$element
-      .on('mouseenter', $.proxy(this.pause, this))
-      .on('mouseleave', $.proxy(this.cycle, this))
+    .on('mouseenter', $.proxy(this.pause, this))
+    .on('mouseleave', $.proxy(this.cycle, this))
   }
 
   Carousel.prototype = {
 
     cycle: function (e) {
-      if (!e) this.paused = false
+      if (!e) {
+        this.paused = false
+      }
       this.options.interval
-        && !this.paused
-        && (this.interval = setInterval($.proxy(this.next, this), this.options.interval))
+      && !this.paused
+      && (this.interval = setInterval($.proxy(this.next, this),
+          this.options.interval))
       return this
     }
 
-  , to: function (pos) {
+    , to: function (pos) {
       var $active = this.$element.find('.active')
-        , children = $active.parent().children()
-        , activePos = children.index($active)
-        , that = this
+          , children = $active.parent().children()
+          , activePos = children.index($active)
+          , that = this
 
-      if (pos > (children.length - 1) || pos < 0) return
+      if (pos > (children.length - 1) || pos < 0) {
+        return
+      }
 
       if (this.sliding) {
         return this.$element.one('slid', function () {
@@ -66,31 +69,37 @@
       return this.slide(pos > activePos ? 'next' : 'prev', $(children[pos]))
     }
 
-  , pause: function (e) {
-      if (!e) this.paused = true
+    , pause: function (e) {
+      if (!e) {
+        this.paused = true
+      }
       clearInterval(this.interval)
       this.interval = null
       return this
     }
 
-  , next: function () {
-      if (this.sliding) return
+    , next: function () {
+      if (this.sliding) {
+        return
+      }
       return this.slide('next')
     }
 
-  , prev: function () {
-      if (this.sliding) return
+    , prev: function () {
+      if (this.sliding) {
+        return
+      }
       return this.slide('prev')
     }
 
-  , slide: function (type, next) {
+    , slide: function (type, next) {
       var $active = this.$element.find('.active')
-        , $next = next || $active[type]()
-        , isCycling = this.interval
-        , direction = type == 'next' ? 'left' : 'right'
-        , fallback  = type == 'next' ? 'first' : 'last'
-        , that = this
-        , e = $.Event('slide')
+          , $next = next || $active[type]()
+          , isCycling = this.interval
+          , direction = type == 'next' ? 'left' : 'right'
+          , fallback = type == 'next' ? 'first' : 'last'
+          , that = this
+          , e = $.Event('slide')
 
       this.sliding = true
 
@@ -98,11 +107,15 @@
 
       $next = $next.length ? $next : this.$element.find('.item')[fallback]()
 
-      if ($next.hasClass('active')) return
+      if ($next.hasClass('active')) {
+        return
+      }
 
       if ($.support.transition && this.$element.hasClass('slide')) {
         this.$element.trigger(e)
-        if (e.isDefaultPrevented()) return
+        if (e.isDefaultPrevented()) {
+          return
+        }
         $next.addClass(type)
         $next[0].offsetWidth // force reflow
         $active.addClass(direction)
@@ -111,11 +124,15 @@
           $next.removeClass([type, direction].join(' ')).addClass('active')
           $active.removeClass(['active', direction].join(' '))
           that.sliding = false
-          setTimeout(function () { that.$element.trigger('slid') }, 0)
+          setTimeout(function () {
+            that.$element.trigger('slid')
+          }, 0)
         })
       } else {
         this.$element.trigger(e)
-        if (e.isDefaultPrevented()) return
+        if (e.isDefaultPrevented()) {
+          return
+        }
         $active.removeClass('active')
         $next.addClass('active')
         this.sliding = false
@@ -129,38 +146,46 @@
 
   }
 
-
- /* CAROUSEL PLUGIN DEFINITION
-  * ========================== */
+  /* CAROUSEL PLUGIN DEFINITION
+   * ========================== */
 
   $.fn.carousel = function (option) {
     return this.each(function () {
       var $this = $(this)
-        , data = $this.data('carousel')
-        , options = $.extend({}, $.fn.carousel.defaults, typeof option == 'object' && option)
-      if (!data) $this.data('carousel', (data = new Carousel(this, options)))
-      if (typeof option == 'number') data.to(option)
-      else if (typeof option == 'string' || (option = options.slide)) data[option]()
-      else if (options.interval) data.cycle()
+          , data = $this.data('carousel')
+          , options = $.extend({}, $.fn.carousel.defaults,
+          typeof option == 'object' && option)
+      if (!data) {
+        $this.data('carousel', (data = new Carousel(this, options)))
+      }
+      if (typeof option == 'number') {
+        data.to(option)
+      } else if (typeof option == 'string'
+          || (option = options.slide)) {
+        data[option]()
+      } else if (options.interval) {
+        data.cycle()
+      }
     })
   }
 
   $.fn.carousel.defaults = {
     interval: 5000
-  , pause: 'hover'
+    , pause: 'hover'
   }
 
   $.fn.carousel.Constructor = Carousel
 
-
- /* CAROUSEL DATA-API
-  * ================= */
+  /* CAROUSEL DATA-API
+   * ================= */
 
   $(function () {
-    $('body').on('click.carousel.data-api', '[data-slide]', function ( e ) {
+    $('body').on('click.carousel.data-api', '[data-slide]', function (e) {
       var $this = $(this), href
-        , $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
-        , options = !$target.data('modal') && $.extend({}, $target.data(), $this.data())
+          , $target = $($this.attr('data-target') || (href = $this.attr('href'))
+          && href.replace(/.*(?=#[^\s]+$)/, '')) //strip for ie7
+          , options = !$target.data('modal') && $.extend({}, $target.data(),
+          $this.data())
       $target.carousel(options)
       e.preventDefault()
     })

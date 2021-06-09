@@ -2,9 +2,8 @@ package com.salesmanager.core.business.modules.cms.impl;
 
 /**
  * Marker interface
- * 
- * @author carlsamson
  *
+ * @author carlsamson
  */
 public interface CMSManager {
 

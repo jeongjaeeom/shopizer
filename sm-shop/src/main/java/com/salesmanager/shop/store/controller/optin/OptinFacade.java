@@ -7,5 +7,6 @@ import com.salesmanager.shop.model.system.ReadableOptin;
 
 public interface OptinFacade {
 
-  ReadableOptin create(PersistableOptin persistableOptin, MerchantStore merchantStore, Language language);
+  ReadableOptin create(PersistableOptin persistableOptin, MerchantStore merchantStore,
+      Language language);
 }

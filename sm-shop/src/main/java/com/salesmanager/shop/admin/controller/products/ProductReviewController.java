@@ -35,195 +35,184 @@ import java.util.*;
 
 @Controller
 public class ProductReviewController {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProductReviewController.class);
-	
-	@Inject
-	private ProductService productService;
-	
-	@Inject
-	private ProductReviewService productReviewService;
-	
-	@Inject
-	LabelUtils messages;
-	
-	
-	@PreAuthorize("hasRole('PRODUCTS')")
-	@RequestMapping(value="/admin/products/reviews.html", method=RequestMethod.GET)
-	public String displayProductReviews(@RequestParam("id") long productId,Model model, HttpServletRequest request, HttpServletResponse response, Locale locale) throws Exception {
-		
-		setMenu(model, request);
-		
 
-		MerchantStore store = (MerchantStore)request.getAttribute(Constants.ADMIN_STORE);
-		Product product = productService.getProductWithOnlyMerchantStoreById(productId);
-		
-		if(product==null) {
-			return "redirect:/admin/products/products.html";
-		}
-		
-		if(product.getMerchantStore().getId().intValue()!=store.getId().intValue()) {
-			return "redirect:/admin/products/products.html";
-		}
-		
-		
-		model.addAttribute("product", product);
-		
-		return ControllerConstants.Tiles.Product.productReviews;
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProductReviewController.class);
 
-	}
-	
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@PreAuthorize("hasRole('PRODUCTS')")
-	@RequestMapping(value="/admin/products/reviews/paging.html", method=RequestMethod.POST)
-	public @ResponseBody ResponseEntity<String> pageProductReviews(HttpServletRequest request, HttpServletResponse response) {
+  @Inject
+  private ProductService productService;
 
-		String sProductId = request.getParameter("productId");
-		MerchantStore store = (MerchantStore)request.getAttribute(Constants.ADMIN_STORE);
-		
-		
-		AjaxResponse resp = new AjaxResponse();
-		final HttpHeaders httpHeaders= new HttpHeaders();
-	    httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
-		
-		Long productId;
-		Product product = null;
-		
-		try {
-			productId = Long.parseLong(sProductId);
-		} catch (Exception e) {
-			resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_FAIURE);
-			resp.setErrorString("Product id is not valid");
-			String returnString = resp.toJSONString();
-			return new ResponseEntity<String>(returnString,httpHeaders,HttpStatus.OK);
-		}
+  @Inject
+  private ProductReviewService productReviewService;
 
-		
-		try {
-
-			product = productService.getProductWithOnlyMerchantStoreById(productId);
-
-			
-			if(product==null) {
-				resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_FAIURE);
-				resp.setErrorString("Product id is not valid");
-				String returnString = resp.toJSONString();
-				return new ResponseEntity<String>(returnString,httpHeaders,HttpStatus.OK);
-			}
-			
-			if(product.getMerchantStore().getId().intValue()!=store.getId().intValue()) {
-				resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_FAIURE);
-				resp.setErrorString("Product id is not valid");
-				String returnString = resp.toJSONString();
-				return new ResponseEntity<String>(returnString,httpHeaders,HttpStatus.OK);
-			}
-			
-			
-			Language language = (Language)request.getAttribute("LANGUAGE");
-
-			
-			List<ProductReview> reviews = productReviewService.getByProduct(product);
-			
+  @Inject
+  LabelUtils messages;
 
 
-			for(ProductReview review : reviews) {
-				Map entry = new HashMap();
-				entry.put("reviewId", review.getId());
-				entry.put("rating", review.getReviewRating().intValue());
-				Set<ProductReviewDescription> descriptions = review.getDescriptions();
-				String reviewDesc= "";
-				if(!CollectionUtils.isEmpty(descriptions)) {
-					reviewDesc = descriptions.iterator().next().getDescription();
-				}
-				//for(ProductReviewDescription description : descriptions){
-				//	if(description.getLanguage().getCode().equals(language.getCode())) {
-				//		reviewDesc = description.getDescription();
-				//	}
-				//}
-				entry.put("description", reviewDesc);
-				resp.addDataEntry(entry);
-			}
+  @PreAuthorize("hasRole('PRODUCTS')")
+  @RequestMapping(value = "/admin/products/reviews.html", method = RequestMethod.GET)
+  public String displayProductReviews(@RequestParam("id") long productId, Model model,
+      HttpServletRequest request, HttpServletResponse response, Locale locale) throws Exception {
 
-			resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_SUCCESS);
-		
-		} catch (Exception e) {
-			LOGGER.error("Error while paging products", e);
-			resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_FAIURE);
-			resp.setErrorMessage(e);
-		}
-		
-		String returnString = resp.toJSONString();
-		return new ResponseEntity<String>(returnString,httpHeaders,HttpStatus.OK);
+    setMenu(model, request);
+
+    MerchantStore store = (MerchantStore) request.getAttribute(Constants.ADMIN_STORE);
+    Product product = productService.getProductWithOnlyMerchantStoreById(productId);
+
+    if (product == null) {
+      return "redirect:/admin/products/products.html";
+    }
+
+    if (product.getMerchantStore().getId().intValue() != store.getId().intValue()) {
+      return "redirect:/admin/products/products.html";
+    }
+
+    model.addAttribute("product", product);
+
+    return ControllerConstants.Tiles.Product.productReviews;
+
+  }
 
 
-	}
-	
-	@PreAuthorize("hasRole('PRODUCTS')")
-	@RequestMapping(value="/admin/products/reviews/remove.html", method=RequestMethod.POST)
-	public @ResponseBody ResponseEntity<String> deleteProductReview(HttpServletRequest request, HttpServletResponse response, Locale locale) {
-		String sReviewid = request.getParameter("reviewId");
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  @PreAuthorize("hasRole('PRODUCTS')")
+  @RequestMapping(value = "/admin/products/reviews/paging.html", method = RequestMethod.POST)
+  public @ResponseBody
+  ResponseEntity<String> pageProductReviews(HttpServletRequest request,
+      HttpServletResponse response) {
 
-		
-		MerchantStore store = (MerchantStore)request.getAttribute(Constants.ADMIN_STORE);
-		
-		AjaxResponse resp = new AjaxResponse();
-		final HttpHeaders httpHeaders= new HttpHeaders();
-	    httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+    String sProductId = request.getParameter("productId");
+    MerchantStore store = (MerchantStore) request.getAttribute(Constants.ADMIN_STORE);
 
-		
-		try {
-			
-			Long reviewId = Long.parseLong(sReviewid);
+    AjaxResponse resp = new AjaxResponse();
+    final HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
 
-			
-			ProductReview review = productReviewService.getById(reviewId);
-			
+    Long productId;
+    Product product = null;
 
-			if(review==null || review.getProduct().getMerchantStore().getId().intValue()!=store.getId()) {
+    try {
+      productId = Long.parseLong(sProductId);
+    } catch (Exception e) {
+      resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_FAIURE);
+      resp.setErrorString("Product id is not valid");
+      String returnString = resp.toJSONString();
+      return new ResponseEntity<String>(returnString, httpHeaders, HttpStatus.OK);
+    }
 
-				resp.setStatusMessage(messages.getMessage("message.unauthorized", locale));
-				resp.setStatus(AjaxResponse.RESPONSE_STATUS_FAIURE);			
-				String returnString = resp.toJSONString();
-				return new ResponseEntity<String>(returnString,httpHeaders,HttpStatus.OK);
-			} 
-			
+    try {
 
-			productReviewService.delete(review);
-			
-			
-			resp.setStatus(AjaxResponse.RESPONSE_OPERATION_COMPLETED);
+      product = productService.getProductWithOnlyMerchantStoreById(productId);
 
-		
-		
-		} catch (Exception e) {
-			LOGGER.error("Error while deleting review", e);
-			resp.setStatus(AjaxResponse.RESPONSE_STATUS_FAIURE);
-			resp.setErrorMessage(e);
-		}
-		
-		String returnString = resp.toJSONString();
-		return new ResponseEntity<String>(returnString,httpHeaders,HttpStatus.OK);
-	}
-	
-	
-	private void setMenu(Model model, HttpServletRequest request) throws Exception {
-		
-		//display menu
-		Map<String,String> activeMenus = new HashMap<String,String>();
-		activeMenus.put("catalogue", "catalogue");
-		activeMenus.put("catalogue-products", "catalogue-products");
-		
-		@SuppressWarnings("unchecked")
-		Map<String, Menu> menus = (Map<String, Menu>)request.getAttribute("MENUMAP");
-		
-		Menu currentMenu = (Menu)menus.get("catalogue");
-		model.addAttribute("currentMenu",currentMenu);
-		model.addAttribute("activeMenus",activeMenus);
-		//
-		
-	}
-	
-	
+      if (product == null) {
+        resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_FAIURE);
+        resp.setErrorString("Product id is not valid");
+        String returnString = resp.toJSONString();
+        return new ResponseEntity<String>(returnString, httpHeaders, HttpStatus.OK);
+      }
+
+      if (product.getMerchantStore().getId().intValue() != store.getId().intValue()) {
+        resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_FAIURE);
+        resp.setErrorString("Product id is not valid");
+        String returnString = resp.toJSONString();
+        return new ResponseEntity<String>(returnString, httpHeaders, HttpStatus.OK);
+      }
+
+      Language language = (Language) request.getAttribute("LANGUAGE");
+
+      List<ProductReview> reviews = productReviewService.getByProduct(product);
+
+      for (ProductReview review : reviews) {
+        Map entry = new HashMap();
+        entry.put("reviewId", review.getId());
+        entry.put("rating", review.getReviewRating().intValue());
+        Set<ProductReviewDescription> descriptions = review.getDescriptions();
+        String reviewDesc = "";
+        if (!CollectionUtils.isEmpty(descriptions)) {
+          reviewDesc = descriptions.iterator().next().getDescription();
+        }
+        //for(ProductReviewDescription description : descriptions){
+        //	if(description.getLanguage().getCode().equals(language.getCode())) {
+        //		reviewDesc = description.getDescription();
+        //	}
+        //}
+        entry.put("description", reviewDesc);
+        resp.addDataEntry(entry);
+      }
+
+      resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_SUCCESS);
+
+    } catch (Exception e) {
+      LOGGER.error("Error while paging products", e);
+      resp.setStatus(AjaxPageableResponse.RESPONSE_STATUS_FAIURE);
+      resp.setErrorMessage(e);
+    }
+
+    String returnString = resp.toJSONString();
+    return new ResponseEntity<String>(returnString, httpHeaders, HttpStatus.OK);
+
+
+  }
+
+  @PreAuthorize("hasRole('PRODUCTS')")
+  @RequestMapping(value = "/admin/products/reviews/remove.html", method = RequestMethod.POST)
+  public @ResponseBody
+  ResponseEntity<String> deleteProductReview(HttpServletRequest request,
+      HttpServletResponse response, Locale locale) {
+    String sReviewid = request.getParameter("reviewId");
+
+    MerchantStore store = (MerchantStore) request.getAttribute(Constants.ADMIN_STORE);
+
+    AjaxResponse resp = new AjaxResponse();
+    final HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setContentType(MediaType.APPLICATION_JSON_UTF8);
+
+    try {
+
+      Long reviewId = Long.parseLong(sReviewid);
+
+      ProductReview review = productReviewService.getById(reviewId);
+
+      if (review == null || review.getProduct().getMerchantStore().getId().intValue() != store
+          .getId()) {
+
+        resp.setStatusMessage(messages.getMessage("message.unauthorized", locale));
+        resp.setStatus(AjaxResponse.RESPONSE_STATUS_FAIURE);
+        String returnString = resp.toJSONString();
+        return new ResponseEntity<String>(returnString, httpHeaders, HttpStatus.OK);
+      }
+
+      productReviewService.delete(review);
+
+      resp.setStatus(AjaxResponse.RESPONSE_OPERATION_COMPLETED);
+
+
+    } catch (Exception e) {
+      LOGGER.error("Error while deleting review", e);
+      resp.setStatus(AjaxResponse.RESPONSE_STATUS_FAIURE);
+      resp.setErrorMessage(e);
+    }
+
+    String returnString = resp.toJSONString();
+    return new ResponseEntity<String>(returnString, httpHeaders, HttpStatus.OK);
+  }
+
+
+  private void setMenu(Model model, HttpServletRequest request) throws Exception {
+
+    //display menu
+    Map<String, String> activeMenus = new HashMap<String, String>();
+    activeMenus.put("catalogue", "catalogue");
+    activeMenus.put("catalogue-products", "catalogue-products");
+
+    @SuppressWarnings("unchecked")
+    Map<String, Menu> menus = (Map<String, Menu>) request.getAttribute("MENUMAP");
+
+    Menu currentMenu = (Menu) menus.get("catalogue");
+    model.addAttribute("currentMenu", currentMenu);
+    model.addAttribute("activeMenus", activeMenus);
+    //
+
+  }
+
 
 }

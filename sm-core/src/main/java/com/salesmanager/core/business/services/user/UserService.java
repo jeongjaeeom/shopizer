@@ -13,21 +13,21 @@ import com.salesmanager.core.model.user.User;
 import com.salesmanager.core.model.user.UserCriteria;
 
 
-
 public interface UserService extends SalesManagerEntityService<Long, User> {
 
   User getByUserName(String userName) throws ServiceException;
+
   User getByUserName(String userName, String storeCode) throws ServiceException;
 
   List<User> listUser() throws ServiceException;
-  
+
   User getById(Long id, MerchantStore store);
-  
+
   User getByPasswordResetToken(String storeCode, String token);
 
   /**
    * Create or update a User
-   * 
+   *
    * @param user
    * @throws ServiceException
    */
@@ -39,12 +39,11 @@ public interface UserService extends SalesManagerEntityService<Long, User> {
 
   @Deprecated
   GenericEntityList<User> listByCriteria(Criteria criteria) throws ServiceException;
-  
+
   Page<User> listByCriteria(UserCriteria criteria, int page, int count) throws ServiceException;
-  
-  User findByResetPasswordToken (String userName, String token, MerchantStore store) throws ServiceException;
 
-
+  User findByResetPasswordToken(String userName, String token, MerchantStore store)
+      throws ServiceException;
 
 
 }

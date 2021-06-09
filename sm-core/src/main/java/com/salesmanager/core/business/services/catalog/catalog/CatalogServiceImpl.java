@@ -20,55 +20,55 @@ import com.salesmanager.core.model.reference.language.Language;
 import java.util.Optional;
 
 @Service("catalogService")
-public class CatalogServiceImpl 
-extends SalesManagerEntityServiceImpl<Long, Catalog> 
-implements CatalogService {
-	
-	
-	private CatalogRepository catalogRepository;
-	
-	@Autowired
-	private PageableCatalogRepository pageableCatalogRepository;
+public class CatalogServiceImpl
+    extends SalesManagerEntityServiceImpl<Long, Catalog>
+    implements CatalogService {
 
-	@Inject
-	public CatalogServiceImpl(CatalogRepository repository) {
-		super(repository);
-		this.catalogRepository = repository;
-	}
 
-	@Override
-	public Catalog saveOrUpdate(Catalog catalog, MerchantStore store) {
-		catalogRepository.save(catalog);
-		return catalog;
-	}
+  private CatalogRepository catalogRepository;
 
-	@Override
-	public Page<Catalog> getCatalogs(MerchantStore store, Language language, String name, int page, int count) {
-		Pageable pageRequest = PageRequest.of(page, count);
-		return pageableCatalogRepository.listByStore(store.getId(), name, pageRequest);
-	}
+  @Autowired
+  private PageableCatalogRepository pageableCatalogRepository;
 
-	@Override
-	public void delete(Catalog catalog) throws ServiceException {
-		Validate.notNull(catalog,"Catalog must not be null");
-		catalogRepository.delete(catalog);
-	}
+  @Inject
+  public CatalogServiceImpl(CatalogRepository repository) {
+    super(repository);
+    this.catalogRepository = repository;
+  }
 
-	@Override
-	public Optional<Catalog> getById(Long catalogId, MerchantStore store) {
-		return catalogRepository.findById(catalogId, store.getId());
-	}
+  @Override
+  public Catalog saveOrUpdate(Catalog catalog, MerchantStore store) {
+    catalogRepository.save(catalog);
+    return catalog;
+  }
 
-	@Override
-	public Optional<Catalog> getByCode(String code, MerchantStore store) {
-		return catalogRepository.findByCode(code, store.getId());
-	}
+  @Override
+  public Page<Catalog> getCatalogs(MerchantStore store, Language language, String name, int page,
+      int count) {
+    Pageable pageRequest = PageRequest.of(page, count);
+    return pageableCatalogRepository.listByStore(store.getId(), name, pageRequest);
+  }
 
-	@Override
-	public boolean existByCode(String code, MerchantStore store) {
-		return catalogRepository.existsByCode(code, store.getId());
-	}
-	
-	
+  @Override
+  public void delete(Catalog catalog) throws ServiceException {
+    Validate.notNull(catalog, "Catalog must not be null");
+    catalogRepository.delete(catalog);
+  }
+
+  @Override
+  public Optional<Catalog> getById(Long catalogId, MerchantStore store) {
+    return catalogRepository.findById(catalogId, store.getId());
+  }
+
+  @Override
+  public Optional<Catalog> getByCode(String code, MerchantStore store) {
+    return catalogRepository.findByCode(code, store.getId());
+  }
+
+  @Override
+  public boolean existByCode(String code, MerchantStore store) {
+    return catalogRepository.existsByCode(code, store.getId());
+  }
+
 
 }

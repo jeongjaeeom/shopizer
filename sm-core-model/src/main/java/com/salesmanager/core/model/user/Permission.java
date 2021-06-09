@@ -26,72 +26,71 @@ import com.salesmanager.core.model.generic.SalesManagerEntity;
 @Table(name = "PERMISSION")
 public class Permission extends SalesManagerEntity<Integer, Permission> implements Auditable {
 
-	
 
-	private static final long serialVersionUID = 813468140197420748L;
+  private static final long serialVersionUID = 813468140197420748L;
 
-	@Id
-	@Column(name = "PERMISSION_ID", unique=true, nullable=false)
-	@TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "PERMISSION_SEQ_NEXT_VAL")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
-	private Integer id;
-	
-	public Permission() {
-		
-	}
-	
-	public Permission(String permissionName) {
-		this.permissionName = permissionName;
-	}
-	
-	
-	@NotEmpty
-	@Column(name="PERMISSION_NAME", unique=true)
-	private String permissionName;
+  @Id
+  @Column(name = "PERMISSION_ID", unique = true, nullable = false)
+  @TableGenerator(name = "TABLE_GEN", table = "SM_SEQUENCER", pkColumnName = "SEQ_NAME", valueColumnName = "SEQ_COUNT", pkColumnValue = "PERMISSION_SEQ_NEXT_VAL")
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
+  private Integer id;
 
-	@ManyToMany(mappedBy = "permissions")
-	private List<Group> groups = new ArrayList<Group>();
-	
-	@Embedded
-	private AuditSection auditSection = new AuditSection();
-	
-	
-	@Override
-	public Integer getId() {
-		return this.id;
-	}
+  public Permission() {
 
-	@Override
-	public void setId(Integer id) {
-		this.id = id;
-		
-	}
+  }
 
-	@Override
-	public AuditSection getAuditSection() {
-		return this.auditSection;
-	}
+  public Permission(String permissionName) {
+    this.permissionName = permissionName;
+  }
 
-	@Override
-	public void setAuditSection(AuditSection audit) {
-		this.auditSection = audit;
-		
-	}
 
-	public String getPermissionName() {
-		return permissionName;
-	}
+  @NotEmpty
+  @Column(name = "PERMISSION_NAME", unique = true)
+  private String permissionName;
 
-	public void setPermissionName(String permissionName) {
-		this.permissionName = permissionName;
-	}
-	
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
-	}
+  @ManyToMany(mappedBy = "permissions")
+  private List<Group> groups = new ArrayList<Group>();
 
-	public List<Group> getGroups() {
-		return groups;
-	}
+  @Embedded
+  private AuditSection auditSection = new AuditSection();
+
+
+  @Override
+  public Integer getId() {
+    return this.id;
+  }
+
+  @Override
+  public void setId(Integer id) {
+    this.id = id;
+
+  }
+
+  @Override
+  public AuditSection getAuditSection() {
+    return this.auditSection;
+  }
+
+  @Override
+  public void setAuditSection(AuditSection audit) {
+    this.auditSection = audit;
+
+  }
+
+  public String getPermissionName() {
+    return permissionName;
+  }
+
+  public void setPermissionName(String permissionName) {
+    this.permissionName = permissionName;
+  }
+
+  public void setGroups(List<Group> groups) {
+    this.groups = groups;
+  }
+
+  public List<Group> getGroups() {
+    return groups;
+  }
 
 }

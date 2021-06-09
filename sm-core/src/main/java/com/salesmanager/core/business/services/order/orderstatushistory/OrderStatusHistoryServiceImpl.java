@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderStatusHistoryServiceImpl implements OrderStatusHistoryService{
-    @Autowired
-    private OrderStatusHistoryRepository orderStatusHistoryRepository;
+public class OrderStatusHistoryServiceImpl implements OrderStatusHistoryService {
 
-    @Override
-    public List<OrderStatusHistory> findByOrder(Order order) {
-        return orderStatusHistoryRepository.findByOrderId(order.getId());
-    }
+  @Autowired
+  private OrderStatusHistoryRepository orderStatusHistoryRepository;
+
+  @Override
+  public List<OrderStatusHistory> findByOrder(Order order) {
+    return orderStatusHistoryRepository.findByOrderId(order.getId());
+  }
 }

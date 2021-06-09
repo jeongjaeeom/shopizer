@@ -13,93 +13,91 @@ import com.salesmanager.core.model.system.IntegrationConfiguration;
 
 /**
  * Loads all modules in the database
- * @author c.samson
  *
+ * @author c.samson
  */
 public class ConfigurationModulesLoader {
-	
-	@SuppressWarnings("unused")
-	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationModulesLoader.class);
-	
 
-	
-	public static String toJSONString(Map<String,IntegrationConfiguration> configurations) throws Exception {
-		
-		StringBuilder jsonModules = new StringBuilder();
-		jsonModules.append("[");
-		int count = 0;
-		for(Object key : configurations.keySet()) {
-			
-			String k = (String)key;
-			IntegrationConfiguration c = configurations.get(k);
-			
-			String jsonString = c.toJSONString();
-			jsonModules.append(jsonString);
-			
-			count ++;
-			if(count<configurations.size()) {
-				jsonModules.append(",");
-			}
-		}
-		jsonModules.append("]");
-		return jsonModules.toString();
-		
-		
-	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Map<String,IntegrationConfiguration> loadIntegrationConfigurations(String value) throws Exception {
-		
-		
-		Map<String,IntegrationConfiguration> modules = new HashMap<String,IntegrationConfiguration>();
-		
-		ObjectMapper mapper = new ObjectMapper();
-		
-		try {
-			
-
-            Map[] objects = mapper.readValue(value, Map[].class);
-
-			for (Map object : objects) {
+  @SuppressWarnings("unused")
+  private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationModulesLoader.class);
 
 
-				IntegrationConfiguration configuration = new IntegrationConfiguration();
+  public static String toJSONString(Map<String, IntegrationConfiguration> configurations)
+      throws Exception {
 
-				String moduleCode = (String) object.get("moduleCode");
-				if (object.get("active") != null) {
-					configuration.setActive((Boolean) object.get("active"));
-				}
-				if (object.get("defaultSelected") != null) {
-					configuration.setDefaultSelected((Boolean) object.get("defaultSelected"));
-				}
-				if (object.get("environment") != null) {
-					configuration.setEnvironment((String) object.get("environment"));
-				}
-				configuration.setModuleCode(moduleCode);
+    StringBuilder jsonModules = new StringBuilder();
+    jsonModules.append("[");
+    int count = 0;
+    for (Object key : configurations.keySet()) {
 
-				modules.put(moduleCode, configuration);
+      String k = (String) key;
+      IntegrationConfiguration c = configurations.get(k);
 
-				if (object.get("integrationKeys") != null) {
-					Map<String, String> confs = (Map<String, String>) object.get("integrationKeys");
-					configuration.setIntegrationKeys(confs);
-				}
+      String jsonString = c.toJSONString();
+      jsonModules.append(jsonString);
 
-				if (object.get("integrationKeys") != null) {
-					Map<String, List<String>> options = (Map<String, List<String>>) object.get("integrationOptions");
-					configuration.setIntegrationOptions(options);
-				}
+      count++;
+      if (count < configurations.size()) {
+        jsonModules.append(",");
+      }
+    }
+    jsonModules.append("]");
+    return jsonModules.toString();
 
 
-			}
-            
-            return modules;
+  }
 
-  		} catch (Exception e) {
-  			throw new ServiceException(e);
-  		}
-  		
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  public static Map<String, IntegrationConfiguration> loadIntegrationConfigurations(String value)
+      throws Exception {
 
-	
-	}
+    Map<String, IntegrationConfiguration> modules = new HashMap<String, IntegrationConfiguration>();
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    try {
+
+      Map[] objects = mapper.readValue(value, Map[].class);
+
+      for (Map object : objects) {
+
+        IntegrationConfiguration configuration = new IntegrationConfiguration();
+
+        String moduleCode = (String) object.get("moduleCode");
+        if (object.get("active") != null) {
+          configuration.setActive((Boolean) object.get("active"));
+        }
+        if (object.get("defaultSelected") != null) {
+          configuration.setDefaultSelected((Boolean) object.get("defaultSelected"));
+        }
+        if (object.get("environment") != null) {
+          configuration.setEnvironment((String) object.get("environment"));
+        }
+        configuration.setModuleCode(moduleCode);
+
+        modules.put(moduleCode, configuration);
+
+        if (object.get("integrationKeys") != null) {
+          Map<String, String> confs = (Map<String, String>) object.get("integrationKeys");
+          configuration.setIntegrationKeys(confs);
+        }
+
+        if (object.get("integrationKeys") != null) {
+          Map<String, List<String>> options = (Map<String, List<String>>) object
+              .get("integrationOptions");
+          configuration.setIntegrationOptions(options);
+        }
+
+
+      }
+
+      return modules;
+
+    } catch (Exception e) {
+      throw new ServiceException(e);
+    }
+
+
+  }
 
 }

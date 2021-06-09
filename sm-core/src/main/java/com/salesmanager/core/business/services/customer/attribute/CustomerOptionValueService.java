@@ -9,17 +9,16 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 import com.salesmanager.core.model.reference.language.Language;
 
 
-public interface CustomerOptionValueService extends SalesManagerEntityService<Long, CustomerOptionValue> {
+public interface CustomerOptionValueService extends
+    SalesManagerEntityService<Long, CustomerOptionValue> {
 
 
+  List<CustomerOptionValue> listByStore(MerchantStore store, Language language)
+      throws ServiceException;
 
-	List<CustomerOptionValue> listByStore(MerchantStore store, Language language)
-			throws ServiceException;
+  void saveOrUpdate(CustomerOptionValue entity) throws ServiceException;
 
-	void saveOrUpdate(CustomerOptionValue entity) throws ServiceException;
-
-	CustomerOptionValue getByCode(MerchantStore store, String optionValueCode);
-
+  CustomerOptionValue getByCode(MerchantStore store, String optionValueCode);
 
 
 }

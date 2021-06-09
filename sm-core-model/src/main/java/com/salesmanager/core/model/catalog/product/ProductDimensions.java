@@ -6,8 +6,8 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class ProductDimensions {
-  
-  
+
+
   @Column(name = "LENGTH")
   private BigDecimal length;
 

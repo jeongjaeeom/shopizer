@@ -10,18 +10,19 @@ import com.salesmanager.core.model.content.OutputContentFile;
 
 /**
  * Methods to retrieve the static content from the CMS
- * 
- * @author Carl Samson
  *
+ * @author Carl Samson
  */
 public interface FileGet {
 
-  OutputContentFile getFile(final String merchantStoreCode, Optional<String> path, FileContentType fileContentType,
+  OutputContentFile getFile(final String merchantStoreCode, Optional<String> path,
+      FileContentType fileContentType,
       String contentName) throws ServiceException;
 
-  List<String> getFileNames(final String merchantStoreCode, Optional<String> path, FileContentType fileContentType)
+  List<String> getFileNames(final String merchantStoreCode, Optional<String> path,
+      FileContentType fileContentType)
       throws ServiceException;
 
   List<OutputContentFile> getFiles(final String merchantStoreCode,
-		  Optional<String> path, FileContentType fileContentType) throws ServiceException;
+      Optional<String> path, FileContentType fileContentType) throws ServiceException;
 }

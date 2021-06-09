@@ -27,87 +27,88 @@ import com.salesmanager.core.model.reference.language.Language;
 @EntityListeners(value = AuditListener.class)
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Description implements Auditable, Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@Column(name = "DESCRIPTION_ID")
-	@GeneratedValue(strategy = GenerationType.TABLE, generator = "description_gen")
-	private Long id;
-	
-	@JsonIgnore
-	@Embedded
-	private AuditSection auditSection = new AuditSection();
-	
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "LANGUAGE_ID")
-	private Language language;
-	
-	@NotEmpty
-	@Column(name="NAME", nullable = false, length=120)
-	private String name;
-	
-	@Column(name="TITLE", length=100)
-	private String title;
-	
-	@Column(name="DESCRIPTION")
-	@Type(type = "org.hibernate.type.TextType")
-	private String description;
-	
-	public Description() {
-	}
-	
-	public Description(Language language, String name) {
-		this.setLanguage(language);
-		this.setName(name);
-	}
-	
-	@Override
-	public AuditSection getAuditSection() {
-		return auditSection;
-	}
 
-	@Override
-	public void setAuditSection(AuditSection auditSection) {
-		this.auditSection = auditSection;
-	}
+  private static final long serialVersionUID = 1L;
 
-	public Language getLanguage() {
-		return language;
-	}
+  @Id
+  @Column(name = "DESCRIPTION_ID")
+  @GeneratedValue(strategy = GenerationType.TABLE, generator = "description_gen")
+  private Long id;
 
-	public void setLanguage(Language language) {
-		this.language = language;
-	}
+  @JsonIgnore
+  @Embedded
+  private AuditSection auditSection = new AuditSection();
 
-	public String getName() {
-		return name;
-	}
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "LANGUAGE_ID")
+  private Language language;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  @NotEmpty
+  @Column(name = "NAME", nullable = false, length = 120)
+  private String name;
 
-	public String getTitle() {
-		return title;
-	}
+  @Column(name = "TITLE", length = 100)
+  private String title;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  @Column(name = "DESCRIPTION")
+  @Type(type = "org.hibernate.type.TextType")
+  private String description;
 
-	public String getDescription() {
-		return description;
-	}
+  public Description() {
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public Description(Language language, String name) {
+    this.setLanguage(language);
+    this.setName(name);
+  }
 
-	public Long getId() {
-		return id;
-	}
+  @Override
+  public AuditSection getAuditSection() {
+    return auditSection;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  @Override
+  public void setAuditSection(AuditSection auditSection) {
+    this.auditSection = auditSection;
+  }
+
+  public Language getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(Language language) {
+    this.language = language;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 }

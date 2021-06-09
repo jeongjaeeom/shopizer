@@ -27,11 +27,11 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 
 @Entity
 @EntityListeners(value = AuditListener.class)
-@Table(name = "LANGUAGE", indexes = { @Index(name="CODE_IDX2", columnList = "CODE")})
+@Table(name = "LANGUAGE", indexes = {@Index(name = "CODE_IDX2", columnList = "CODE")})
 @Cacheable
 public class Language extends SalesManagerEntity<Integer, Language> implements Auditable {
-  private static final long serialVersionUID = 1L;
 
+  private static final long serialVersionUID = 1L;
 
 
   @Id
@@ -40,7 +40,7 @@ public class Language extends SalesManagerEntity<Integer, Language> implements A
       valueColumnName = "SEQ_COUNT", pkColumnValue = "LANG_SEQ_NEXT_VAL")
   @GeneratedValue(strategy = GenerationType.TABLE, generator = "TABLE_GEN")
   private Integer id;
-  
+
   @JsonIgnore
   @Embedded
   private AuditSection auditSection = new AuditSection();
@@ -60,7 +60,8 @@ public class Language extends SalesManagerEntity<Integer, Language> implements A
   @ManyToMany(mappedBy = "languages", targetEntity = MerchantStore.class, fetch = FetchType.LAZY)
   private List<MerchantStore> stores = new ArrayList<MerchantStore>();
 
-  public Language() {}
+  public Language() {
+  }
 
   public Language(String code) {
     this.setCode(code);
@@ -105,8 +106,9 @@ public class Language extends SalesManagerEntity<Integer, Language> implements A
 
   @Override
   public boolean equals(Object obj) {
-    if (null == obj)
+    if (null == obj) {
       return false;
+    }
     if (!(obj instanceof Language)) {
       return false;
     } else {

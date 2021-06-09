@@ -23,119 +23,128 @@ import com.salesmanager.shop.store.controller.product.facade.ProductOptionSetFac
 
 @Service
 public class ProductOptionSetFacadeImpl implements ProductOptionSetFacade {
-	
-	@Autowired
-	private PersistableProductOptionSetMapper persistableProductOptionSetMapper;
-	
-	@Autowired
-	private ReadableProductOptionSetMapper readableProductOptionSetMapper;
-	
-	@Autowired
-	private ProductOptionSetService productOptionSetService;
 
-	@Override
-	public ReadableProductOptionSet get(Long id, MerchantStore store, Language language) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(language, "Language cannot be null");
-		ProductOptionSet optionSet =  productOptionSetService.getById(store, id, language);
-		if(optionSet == null) {
-			throw new ResourceNotFoundException("ProductOptionSet not found for id [" + id +"] and store [" + store.getCode() + "]");
-		}
-		
-		return readableProductOptionSetMapper.convert(optionSet, store, language);
-	}
+  @Autowired
+  private PersistableProductOptionSetMapper persistableProductOptionSetMapper;
 
-	@Override
-	public List<ReadableProductOptionSet> list(MerchantStore store, Language language) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(language, "Language cannot be null");
-		
-		try {
-			List<ProductOptionSet> optionSets = productOptionSetService.listByStore(store, language);
-			return optionSets.stream().map(opt -> this.convert(opt, store, language)).collect(Collectors.toList());
-		} catch (ServiceException e) {
-			throw new ServiceRuntimeException("Exception while listing ProductOptionSet", e);
-		}
-		
+  @Autowired
+  private ReadableProductOptionSetMapper readableProductOptionSetMapper;
 
-	}
-	
-	private ReadableProductOptionSet convert(ProductOptionSet optionSet, MerchantStore store, Language language) {
-		return readableProductOptionSetMapper.convert(optionSet, store, language);
-	}
+  @Autowired
+  private ProductOptionSetService productOptionSetService;
 
-	@Override
-	public void create(PersistableProductOptionSet optionSet, MerchantStore store, Language language) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(language, "Language cannot be null");
-		Validate.notNull(optionSet, "PersistableProductOptionSet cannot be null");
-		
-		if(this.exists(optionSet.getCode(), store)) {
-			throw new OperationNotAllowedException("Option set with code [" + optionSet.getCode() + "] already exist");
-		}
-		
-		ProductOptionSet opt = persistableProductOptionSetMapper.convert(optionSet, store, language);
-		try {
-			opt.setStore(store);
-			productOptionSetService.create(opt);
-		} catch (ServiceException e) {
-			throw new ServiceRuntimeException("Exception while creating ProductOptionSet", e);
-		}
+  @Override
+  public ReadableProductOptionSet get(Long id, MerchantStore store, Language language) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(language, "Language cannot be null");
+    ProductOptionSet optionSet = productOptionSetService.getById(store, id, language);
+    if (optionSet == null) {
+      throw new ResourceNotFoundException(
+          "ProductOptionSet not found for id [" + id + "] and store [" + store.getCode() + "]");
+    }
 
-	}
+    return readableProductOptionSetMapper.convert(optionSet, store, language);
+  }
 
-	@Override
-	public void update(Long id, PersistableProductOptionSet optionSet, MerchantStore store, Language language) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(language, "Language cannot be null");
-		Validate.notNull(optionSet, "PersistableProductOptionSet cannot be null");
-		
-		ProductOptionSet opt =  productOptionSetService.getById(store, id, language);
-		if(opt == null) {
-			throw new ResourceNotFoundException("ProductOptionSet not found for id [" + id +"] and store [" + store.getCode() + "]");
-		}
-		
-		optionSet.setId(id);
-		optionSet.setCode(opt.getCode());
-		ProductOptionSet model = persistableProductOptionSetMapper.convert(optionSet, store, language);
-		try {
-			model.setStore(store);
-			productOptionSetService.save(model);
-		} catch (ServiceException e) {
-			throw new ServiceRuntimeException("Exception while creating ProductOptionSet", e);
-		}
+  @Override
+  public List<ReadableProductOptionSet> list(MerchantStore store, Language language) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(language, "Language cannot be null");
 
-	}
+    try {
+      List<ProductOptionSet> optionSets = productOptionSetService.listByStore(store, language);
+      return optionSets.stream().map(opt -> this.convert(opt, store, language))
+          .collect(Collectors.toList());
+    } catch (ServiceException e) {
+      throw new ServiceRuntimeException("Exception while listing ProductOptionSet", e);
+    }
 
-	@Override
-	public void delete(Long id, MerchantStore store) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(id, "id cannot be null");
-		ProductOptionSet opt =  productOptionSetService.getById(id);
-		if(opt == null) {
-			throw new ResourceNotFoundException("ProductOptionSet not found for id [" + id +"] and store [" + store.getCode() + "]");
-		}
-		if(!opt.getStore().getCode().equals(store.getCode())) {
-			throw new ResourceNotFoundException("ProductOptionSet not found for id [" + id +"] and store [" + store.getCode() + "]");
-		}
-		try {
-			productOptionSetService.delete(opt);
-		} catch (ServiceException e) {
-			throw new ServiceRuntimeException("Exception while deleting ProductOptionSet", e);
-		}
 
-	}
+  }
 
-	@Override
-	public boolean exists(String code, MerchantStore store) {
-		Validate.notNull(store, "MerchantStore cannot be null");
-		Validate.notNull(code, "code cannot be null");
-		ProductOptionSet optionSet =  productOptionSetService.getCode(store, code);
-		if(optionSet != null) {
-			return true;
-		}
-		
-		return false;
-	}
+  private ReadableProductOptionSet convert(ProductOptionSet optionSet, MerchantStore store,
+      Language language) {
+    return readableProductOptionSetMapper.convert(optionSet, store, language);
+  }
+
+  @Override
+  public void create(PersistableProductOptionSet optionSet, MerchantStore store,
+      Language language) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(language, "Language cannot be null");
+    Validate.notNull(optionSet, "PersistableProductOptionSet cannot be null");
+
+    if (this.exists(optionSet.getCode(), store)) {
+      throw new OperationNotAllowedException(
+          "Option set with code [" + optionSet.getCode() + "] already exist");
+    }
+
+    ProductOptionSet opt = persistableProductOptionSetMapper.convert(optionSet, store, language);
+    try {
+      opt.setStore(store);
+      productOptionSetService.create(opt);
+    } catch (ServiceException e) {
+      throw new ServiceRuntimeException("Exception while creating ProductOptionSet", e);
+    }
+
+  }
+
+  @Override
+  public void update(Long id, PersistableProductOptionSet optionSet, MerchantStore store,
+      Language language) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(language, "Language cannot be null");
+    Validate.notNull(optionSet, "PersistableProductOptionSet cannot be null");
+
+    ProductOptionSet opt = productOptionSetService.getById(store, id, language);
+    if (opt == null) {
+      throw new ResourceNotFoundException(
+          "ProductOptionSet not found for id [" + id + "] and store [" + store.getCode() + "]");
+    }
+
+    optionSet.setId(id);
+    optionSet.setCode(opt.getCode());
+    ProductOptionSet model = persistableProductOptionSetMapper.convert(optionSet, store, language);
+    try {
+      model.setStore(store);
+      productOptionSetService.save(model);
+    } catch (ServiceException e) {
+      throw new ServiceRuntimeException("Exception while creating ProductOptionSet", e);
+    }
+
+  }
+
+  @Override
+  public void delete(Long id, MerchantStore store) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(id, "id cannot be null");
+    ProductOptionSet opt = productOptionSetService.getById(id);
+    if (opt == null) {
+      throw new ResourceNotFoundException(
+          "ProductOptionSet not found for id [" + id + "] and store [" + store.getCode() + "]");
+    }
+    if (!opt.getStore().getCode().equals(store.getCode())) {
+      throw new ResourceNotFoundException(
+          "ProductOptionSet not found for id [" + id + "] and store [" + store.getCode() + "]");
+    }
+    try {
+      productOptionSetService.delete(opt);
+    } catch (ServiceException e) {
+      throw new ServiceRuntimeException("Exception while deleting ProductOptionSet", e);
+    }
+
+  }
+
+  @Override
+  public boolean exists(String code, MerchantStore store) {
+    Validate.notNull(store, "MerchantStore cannot be null");
+    Validate.notNull(code, "code cannot be null");
+    ProductOptionSet optionSet = productOptionSetService.getCode(store, code);
+    if (optionSet != null) {
+      return true;
+    }
+
+    return false;
+  }
 
 }

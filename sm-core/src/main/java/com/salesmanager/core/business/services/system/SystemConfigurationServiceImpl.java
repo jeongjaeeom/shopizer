@@ -11,24 +11,22 @@ import com.salesmanager.core.model.system.SystemConfiguration;
 
 @Service("systemConfigurationService")
 public class SystemConfigurationServiceImpl extends
-		SalesManagerEntityServiceImpl<Long, SystemConfiguration> implements
-		SystemConfigurationService {
+    SalesManagerEntityServiceImpl<Long, SystemConfiguration> implements
+    SystemConfigurationService {
 
-	
-	private SystemConfigurationRepository systemConfigurationReposotory;
-	
-	@Inject
-	public SystemConfigurationServiceImpl(
-			SystemConfigurationRepository systemConfigurationReposotory) {
-			super(systemConfigurationReposotory);
-			this.systemConfigurationReposotory = systemConfigurationReposotory;
-	}
-	
-	public SystemConfiguration getByKey(String key) throws ServiceException {
-		return systemConfigurationReposotory.findByKey(key);
-	}
-	
 
+  private SystemConfigurationRepository systemConfigurationReposotory;
+
+  @Inject
+  public SystemConfigurationServiceImpl(
+      SystemConfigurationRepository systemConfigurationReposotory) {
+    super(systemConfigurationReposotory);
+    this.systemConfigurationReposotory = systemConfigurationReposotory;
+  }
+
+  public SystemConfiguration getByKey(String key) throws ServiceException {
+    return systemConfigurationReposotory.findByKey(key);
+  }
 
 
 }

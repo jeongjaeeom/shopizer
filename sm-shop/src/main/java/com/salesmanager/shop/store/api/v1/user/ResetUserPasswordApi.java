@@ -35,99 +35,107 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(tags = { "User password reset resource (Customer password reset Api)" })
-@SwaggerDefinition(tags = { @Tag(name = "User password reset resource", description = "User password reset") })
+@Api(tags = {"User password reset resource (Customer password reset Api)"})
+@SwaggerDefinition(tags = {
+    @Tag(name = "User password reset resource", description = "User password reset")})
 public class ResetUserPasswordApi {
-	
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ResetUserPasswordApi.class);
-	
 
 
-	@Inject
-	private UserFacade userFacade;
-
-	/**
-	 * Request a reset password token
-	 * @param merchantStore
-	 * @param language
-	 * @param user
-	 * @param request
-	 */
-	@ResponseStatus(HttpStatus.OK)
-	@PostMapping(value = { "/user/password/reset/request" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(httpMethod = "POST", value = "Launch user password reset flow", notes = "", response = ReadableUser.class)
-	@ApiImplicitParams({ @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-			@ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en") })
-	public void passwordResetRequest(
-			@ApiIgnore MerchantStore merchantStore, 
-			@ApiIgnore Language language,
-			@Valid @RequestBody ResetPasswordRequest user, HttpServletRequest request) {
+  private static final Logger LOGGER = LoggerFactory.getLogger(ResetUserPasswordApi.class);
 
 
-		userFacade.requestPasswordReset(user.getUsername(), user.getReturnUrl(), merchantStore, language);
+  @Inject
+  private UserFacade userFacade;
 
-	}
-	
-	/**
-	 * Verify a password token
-	 * @param store
-	 * @param token
-	 * @param merchantStore
-	 * @param language
-	 * @param request
-	 */
-	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = { "/user/{store}/reset/{token}" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiOperation(httpMethod = "GET", value = "Validate customer password reset token", notes = "", response = Void.class)
-	@ApiImplicitParams({ @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-			@ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en") })
-	public void passwordResetVerify(@PathVariable String store, @PathVariable String token,
-			@ApiIgnore MerchantStore merchantStore, @ApiIgnore Language language, HttpServletRequest request) {
+  /**
+   * Request a reset password token
+   *
+   * @param merchantStore
+   * @param language
+   * @param user
+   * @param request
+   */
+  @ResponseStatus(HttpStatus.OK)
+  @PostMapping(value = {
+      "/user/password/reset/request"}, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiOperation(httpMethod = "POST", value = "Launch user password reset flow", notes = "", response = ReadableUser.class)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")})
+  public void passwordResetRequest(
+      @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language,
+      @Valid @RequestBody ResetPasswordRequest user, HttpServletRequest request) {
 
-		/**
-		 * Receives reset token Needs to validate if user found from token Needs
-		 * to validate if token has expired
-		 * 
-		 * If no problem void is returned otherwise throw OperationNotAllowed
-		 * All of this in UserFacade
-		 */
+    userFacade
+        .requestPasswordReset(user.getUsername(), user.getReturnUrl(), merchantStore, language);
 
-		userFacade.verifyPasswordRequestToken(token, store);
+  }
 
-	}
+  /**
+   * Verify a password token
+   *
+   * @param store
+   * @param token
+   * @param merchantStore
+   * @param language
+   * @param request
+   */
+  @ResponseStatus(HttpStatus.OK)
+  @GetMapping(value = {"/user/{store}/reset/{token}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiOperation(httpMethod = "GET", value = "Validate customer password reset token", notes = "", response = Void.class)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
+      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")})
+  public void passwordResetVerify(@PathVariable String store, @PathVariable String token,
+      @ApiIgnore MerchantStore merchantStore, @ApiIgnore Language language,
+      HttpServletRequest request) {
 
-	/**
-	 * Change password
-	 * @param passwordRequest
-	 * @param store
-	 * @param token
-	 * @param merchantStore
-	 * @param language
-	 * @param request
-	 */
-	@PostMapping(value = "/user/{store}/password/{token}", produces = {
-			"application/json" })
-	@ApiOperation(httpMethod = "POST", value = "Change user password", response = Void.class)
-	public void changePassword(
-			@RequestBody @Valid PasswordRequest passwordRequest, 
-			@PathVariable String store,
-			@PathVariable String token, @ApiIgnore MerchantStore merchantStore, @ApiIgnore Language language,
-			HttpServletRequest request) {
+    /**
+     * Receives reset token Needs to validate if user found from token Needs
+     * to validate if token has expired
+     *
+     * If no problem void is returned otherwise throw OperationNotAllowed
+     * All of this in UserFacade
+     */
 
-		// validate password
-		if (StringUtils.isBlank(passwordRequest.getPassword())
-				|| StringUtils.isBlank(passwordRequest.getRepeatPassword())) {
-			throw new RestApiException("400", "Password don't match");
-		}
+    userFacade.verifyPasswordRequestToken(token, store);
 
-		if (!passwordRequest.getPassword().equals(passwordRequest.getRepeatPassword())) {
-			throw new RestApiException("400", "Password don't match");
-		}
+  }
 
-		userFacade.resetPassword(passwordRequest.getPassword(), token, store);
+  /**
+   * Change password
+   *
+   * @param passwordRequest
+   * @param store
+   * @param token
+   * @param merchantStore
+   * @param language
+   * @param request
+   */
+  @PostMapping(value = "/user/{store}/password/{token}", produces = {
+      "application/json"})
+  @ApiOperation(httpMethod = "POST", value = "Change user password", response = Void.class)
+  public void changePassword(
+      @RequestBody @Valid PasswordRequest passwordRequest,
+      @PathVariable String store,
+      @PathVariable String token, @ApiIgnore MerchantStore merchantStore,
+      @ApiIgnore Language language,
+      HttpServletRequest request) {
 
-	}
+    // validate password
+    if (StringUtils.isBlank(passwordRequest.getPassword())
+        || StringUtils.isBlank(passwordRequest.getRepeatPassword())) {
+      throw new RestApiException("400", "Password don't match");
+    }
+
+    if (!passwordRequest.getPassword().equals(passwordRequest.getRepeatPassword())) {
+      throw new RestApiException("400", "Password don't match");
+    }
+
+    userFacade.resetPassword(passwordRequest.getPassword(), token, store);
+
+  }
 
 
 }

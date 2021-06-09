@@ -32,20 +32,23 @@ import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Optin a customer to newsletter
- * @author carlsamson
  *
+ * @author carlsamson
  */
 @RestController
 @RequestMapping(value = "/api/v1", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(tags = { "Optin Customer to newsletter" })
-@SwaggerDefinition(tags = { @Tag(name = "Manage customer subscription to newsletter", description = "Manage customer subscription to newsletter") })
+@Api(tags = {"Optin Customer to newsletter"})
+@SwaggerDefinition(tags = {
+    @Tag(name = "Manage customer subscription to newsletter", description = "Manage customer subscription to newsletter")})
 public class CustomerNewsletterApi {
 
-	@Inject
-	private CustomerFacade customerFacade;
+  @Inject
+  private CustomerFacade customerFacade;
 
 
-  /** Create new optin */
+  /**
+   * Create new optin
+   */
   @PostMapping("/newsletter")
   @ApiOperation(
       httpMethod = "POST",
@@ -60,8 +63,8 @@ public class CustomerNewsletterApi {
       @Valid @RequestBody PersistableCustomerOptin optin,
       @ApiIgnore MerchantStore merchantStore,
       @ApiIgnore Language language) {
-		customerFacade.optinCustomer(optin, merchantStore);
-	}
+    customerFacade.optinCustomer(optin, merchantStore);
+  }
 
   @PutMapping("/newsletter/{email}")
   @ApiOperation(

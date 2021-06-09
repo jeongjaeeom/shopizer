@@ -7,7 +7,7 @@ import com.salesmanager.shop.model.entity.ReadableList;
 public class ReadableMerchantStoreList extends ReadableList {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 

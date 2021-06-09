@@ -23,11 +23,14 @@ public class PublicConfigsApi {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PublicConfigsApi.class);
 
-  @Inject private StoreFacade storeFacade;
+  @Inject
+  private StoreFacade storeFacade;
 
-  @Inject private LanguageUtils languageUtils;
+  @Inject
+  private LanguageUtils languageUtils;
 
-  @Inject private MerchantConfigurationFacade configurationFacade;
+  @Inject
+  private MerchantConfigurationFacade configurationFacade;
 
   /**
    * Get public set of merchant configuration --- allow online purchase --- social links

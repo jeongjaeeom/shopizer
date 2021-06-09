@@ -16,79 +16,81 @@ import com.salesmanager.core.model.reference.language.Language;
 
 @Service("productAttributeService")
 public class ProductAttributeServiceImpl extends
-		SalesManagerEntityServiceImpl<Long, ProductAttribute> implements ProductAttributeService {
-	
-	private ProductAttributeRepository productAttributeRepository;
+    SalesManagerEntityServiceImpl<Long, ProductAttribute> implements ProductAttributeService {
 
-	@Inject
-	public ProductAttributeServiceImpl(ProductAttributeRepository productAttributeRepository) {
-		super(productAttributeRepository);
-		this.productAttributeRepository = productAttributeRepository;
-	}
-	
-	@Override
-	public ProductAttribute getById(Long id) {
-		
-		return productAttributeRepository.findOne(id);
-		
-	}
-	
-	
-	@Override
-	public List<ProductAttribute> getByOptionId(MerchantStore store,
-			Long id) throws ServiceException {
-		
-		return productAttributeRepository.findByOptionId(store.getId(), id);
-		
-	}
-	
-	@Override
-	public List<ProductAttribute> getByAttributeIds(MerchantStore store,
-			Product product, List<Long> ids) throws ServiceException {
-		
-		return productAttributeRepository.findByAttributeIds(store.getId(), product.getId(), ids);
-		
-	}
-	
-	@Override
-	public List<ProductAttribute> getByOptionValueId(MerchantStore store,
-			Long id) throws ServiceException {
-		
-		return productAttributeRepository.findByOptionValueId(store.getId(), id);
-		
-	}
-	
-	/**
-	 * Returns all product attributes
-	 */
-	@Override
-	public List<ProductAttribute> getByProductId(MerchantStore store,
-			Product product, Language language) throws ServiceException {
-		return productAttributeRepository.findByProductId(store.getId(), product.getId(), language.getId());
-		
-	}
+  private ProductAttributeRepository productAttributeRepository;
+
+  @Inject
+  public ProductAttributeServiceImpl(ProductAttributeRepository productAttributeRepository) {
+    super(productAttributeRepository);
+    this.productAttributeRepository = productAttributeRepository;
+  }
+
+  @Override
+  public ProductAttribute getById(Long id) {
+
+    return productAttributeRepository.findOne(id);
+
+  }
 
 
-	@Override
-	public void saveOrUpdate(ProductAttribute productAttribute)
-			throws ServiceException {
-			productAttributeRepository.save(productAttribute);
+  @Override
+  public List<ProductAttribute> getByOptionId(MerchantStore store,
+      Long id) throws ServiceException {
 
-	}
-	
-	@Override
-	public void delete(ProductAttribute attribute) throws ServiceException {
-		
-		//override method, this allows the error that we try to remove a detached instance
-		attribute = this.getById(attribute.getId());
-		super.delete(attribute);
-		
-	}
+    return productAttributeRepository.findByOptionId(store.getId(), id);
+
+  }
+
+  @Override
+  public List<ProductAttribute> getByAttributeIds(MerchantStore store,
+      Product product, List<Long> ids) throws ServiceException {
+
+    return productAttributeRepository.findByAttributeIds(store.getId(), product.getId(), ids);
+
+  }
+
+  @Override
+  public List<ProductAttribute> getByOptionValueId(MerchantStore store,
+      Long id) throws ServiceException {
+
+    return productAttributeRepository.findByOptionValueId(store.getId(), id);
+
+  }
+
+  /**
+   * Returns all product attributes
+   */
+  @Override
+  public List<ProductAttribute> getByProductId(MerchantStore store,
+      Product product, Language language) throws ServiceException {
+    return productAttributeRepository
+        .findByProductId(store.getId(), product.getId(), language.getId());
+
+  }
+
+
+  @Override
+  public void saveOrUpdate(ProductAttribute productAttribute)
+      throws ServiceException {
+    productAttributeRepository.save(productAttribute);
+
+  }
+
+  @Override
+  public void delete(ProductAttribute attribute) throws ServiceException {
+
+    //override method, this allows the error that we try to remove a detached instance
+    attribute = this.getById(attribute.getId());
+    super.delete(attribute);
+
+  }
 
   @Override
   public List<ProductAttribute> getProductAttributesByCategoryLineage(MerchantStore store,
       String lineage, Language language) throws Exception {
-	  return productAttributeRepository.findOptionsByCategoryLineage(store.getId(), lineage, language.getId());
+    return productAttributeRepository
+        .findOptionsByCategoryLineage(store.getId(), lineage, language.getId());
   }
 
 }

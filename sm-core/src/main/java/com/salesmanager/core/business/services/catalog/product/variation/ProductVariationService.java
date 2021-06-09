@@ -10,13 +10,14 @@ import com.salesmanager.core.model.reference.language.Language;
 
 public interface ProductVariationService extends SalesManagerEntityService<Long, ProductVariation> {
 
-	void saveOrUpdate(ProductVariation entity) throws ServiceException;
+  void saveOrUpdate(ProductVariation entity) throws ServiceException;
 
-	ProductVariation getById(MerchantStore store, Long id, Language lang);
-	
-	ProductVariation getByCode(MerchantStore store, String code);
-	
-	Page<ProductVariation> getByMerchant(MerchantStore store, Language language, String code, int page, int count);
-	
+  ProductVariation getById(MerchantStore store, Long id, Language lang);
+
+  ProductVariation getByCode(MerchantStore store, String code);
+
+  Page<ProductVariation> getByMerchant(MerchantStore store, Language language, String code,
+      int page, int count);
+
 
 }

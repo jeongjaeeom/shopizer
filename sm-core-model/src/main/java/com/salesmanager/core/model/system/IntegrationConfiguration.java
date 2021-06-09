@@ -12,9 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Object used to contain the integration information with an external gateway Uses simple JSON to
  * encode the object in JSON by implementing JSONAware and uses jackson JSON decode to parse JSON
  * String to an Object
- * 
- * @author csamson
  *
+ * @author csamson
  */
 public class IntegrationConfiguration implements JSONAware {
 
@@ -78,7 +77,6 @@ public class IntegrationConfiguration implements JSONAware {
   @Override
   public String toJSONString() {
 
-
     StringBuilder returnString = new StringBuilder();
     returnString.append(getJsonInfo());
 
@@ -96,7 +94,6 @@ public class IntegrationConfiguration implements JSONAware {
 
 
     }
-
 
     if (this.getIntegrationOptions() != null && this.getIntegrationOptions().size() > 0) {
 
@@ -150,9 +147,7 @@ public class IntegrationConfiguration implements JSONAware {
 
     }
 
-
     returnString.append("}");
-
 
     return returnString.toString();
 
@@ -181,7 +176,6 @@ public class IntegrationConfiguration implements JSONAware {
   public void setDefaultSelected(boolean defaultSelected) {
     this.defaultSelected = defaultSelected;
   }
-
 
 
 }

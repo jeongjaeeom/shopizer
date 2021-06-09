@@ -21,9 +21,9 @@ import com.salesmanager.shop.store.api.exception.ServiceRuntimeException;
 
 @Service("securityFacade")
 public class SecurityFacadeImpl implements SecurityFacade {
-  
+
   private static final String USER_PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z]).{6,12})";
-  
+
   private Pattern userPasswordPattern = Pattern.compile(USER_PASSWORD_PATTERN);
 
   @Inject
@@ -31,7 +31,7 @@ public class SecurityFacadeImpl implements SecurityFacade {
 
   @Inject
   private GroupService groupService;
-  
+
   @Inject
   private PasswordEncoder passwordEncoder;
 
@@ -73,21 +73,19 @@ public class SecurityFacadeImpl implements SecurityFacade {
   }
 
   /**
-   * Match non encoded to encoded
-   * Don't use this as a simple raw password check
+   * Match non encoded to encoded Don't use this as a simple raw password check
    */
   @Override
   public boolean matchPassword(String modelPassword, String newPassword) {
     return passwordEncoder.matches(newPassword, modelPassword);
   }
 
-@Override
-public boolean matchRawPasswords(String password, String repeatPassword) {
-	Validate.notNull(password,"password is null");
-	Validate.notNull(repeatPassword,"repeat password is null");
-	return password.equals(repeatPassword);
-}
-  
-  
+  @Override
+  public boolean matchRawPasswords(String password, String repeatPassword) {
+    Validate.notNull(password, "password is null");
+    Validate.notNull(repeatPassword, "repeat password is null");
+    return password.equals(repeatPassword);
+  }
+
 
 }

@@ -50,359 +50,365 @@ import com.salesmanager.test.shop.common.ServicesTestSupport;
 @RunWith(SpringRunner.class)
 public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 
-	private RestTemplate restTemplate;
-
-	private Long testCategoryID;
-
-	private Long testProductID;
-
-	@Test
-	public void createProductWithCategory() throws Exception {
-
-
-		final PersistableCategory newCategory = new PersistableCategory();
-		newCategory.setCode("test-cat");
-		newCategory.setSortOrder(1);
-		newCategory.setVisible(true);
-		newCategory.setDepth(4);
-
-		final Category parent = new Category();
-
-		newCategory.setParent(parent);
-
-		final CategoryDescription description = new CategoryDescription();
-		description.setLanguage("en");
-		description.setName("test-cat");
-		description.setFriendlyUrl("test-cat");
-		description.setTitle("test-cat");
-
-		final List<CategoryDescription> descriptions = new ArrayList<>();
-		descriptions.add(description);
-
-		newCategory.setDescriptions(descriptions);
-
-		final HttpEntity<PersistableCategory> categoryEntity = new HttpEntity<>(newCategory, getHeader());
-
-		final ResponseEntity<PersistableCategory> categoryResponse = testRestTemplate.postForEntity(
-				"/api/v1/private/category?store=" + Constants.DEFAULT_STORE, categoryEntity, PersistableCategory.class);
-		final PersistableCategory cat = categoryResponse.getBody();
-		assertThat(categoryResponse.getStatusCode(), is(CREATED));
-		assertNotNull(cat.getId());
-
-		final PersistableProduct product = new PersistableProduct();
-		final ArrayList<Category> categories = new ArrayList<>();
-		categories.add(cat);
-		product.setCategories(categories);
-		ProductSpecification specifications = new ProductSpecification();
-		specifications.setManufacturer(
-				com.salesmanager.core.model.catalog.product.manufacturer.Manufacturer.DEFAULT_MANUFACTURER);
-		product.setProductSpecifications(specifications);
-		product.setPrice(BigDecimal.TEN);
-		product.setSku("123");
-		final HttpEntity<PersistableProduct> entity = new HttpEntity<>(product, getHeader());
-
-		final ResponseEntity<PersistableProduct> response = testRestTemplate.postForEntity(
-				"/api/v1/private/product?store=" + Constants.DEFAULT_STORE, entity, PersistableProduct.class);
-		assertThat(response.getStatusCode(), is(CREATED));
-	}
-
-	/**
-	 * Creates a ProductReview requires an existing Customer and an existing
-	 * Product
-	 *
-	 * @throws Exception
-	 */
-	@Ignore
-	@Test
-	public void createProductReview() throws Exception {
-
-		final PersistableProductReview review = new PersistableProductReview();
-		review.setCustomerId(1L);
-
-		review.setProductId(1L);
-		review.setLanguage("en");
-		review.setRating(2D);// rating is on 5
-		review.setDescription(
-				"Not as good as expected. From what i understood that was supposed to be premium quality but unfortunately i had to return the item after one week... Verry disapointed !");
-		review.setDate("2013-06-06");
-		final HttpEntity<PersistableProductReview> entity = new HttpEntity<>(review, getHeader());
-
-		final ResponseEntity<PersistableProductReview> response = testRestTemplate.postForEntity(
-				"/api/v1/private/products/1/reviews?store=" + Constants.DEFAULT_STORE, entity,
-				PersistableProductReview.class);
-
-		final PersistableProductReview rev = response.getBody();
-		assertThat(response.getStatusCode(), is(CREATED));
-		assertNotNull(rev.getId());
-
-	}
-
-	/**
-	 * Creates a product option value that can be used to create a product
-	 * attribute when creating a new product
-	 *
-	 * @throws Exception
-	 */
-	@Test
-	@Ignore
-	public void createOptionValue() throws Exception {
-
-		final ProductOptionValueDescription description = new ProductOptionValueDescription();
-		description.setLanguage("en");
-		description.setName("Red");
-
-		final List<ProductOptionValueDescription> descriptions = new ArrayList<>();
-		descriptions.add(description);
+  private RestTemplate restTemplate;
+
+  private Long testCategoryID;
+
+  private Long testProductID;
+
+  @Test
+  public void createProductWithCategory() throws Exception {
+
+    final PersistableCategory newCategory = new PersistableCategory();
+    newCategory.setCode("test-cat");
+    newCategory.setSortOrder(1);
+    newCategory.setVisible(true);
+    newCategory.setDepth(4);
+
+    final Category parent = new Category();
+
+    newCategory.setParent(parent);
+
+    final CategoryDescription description = new CategoryDescription();
+    description.setLanguage("en");
+    description.setName("test-cat");
+    description.setFriendlyUrl("test-cat");
+    description.setTitle("test-cat");
+
+    final List<CategoryDescription> descriptions = new ArrayList<>();
+    descriptions.add(description);
+
+    newCategory.setDescriptions(descriptions);
+
+    final HttpEntity<PersistableCategory> categoryEntity = new HttpEntity<>(newCategory,
+        getHeader());
+
+    final ResponseEntity<PersistableCategory> categoryResponse = testRestTemplate.postForEntity(
+        "/api/v1/private/category?store=" + Constants.DEFAULT_STORE, categoryEntity,
+        PersistableCategory.class);
+    final PersistableCategory cat = categoryResponse.getBody();
+    assertThat(categoryResponse.getStatusCode(), is(CREATED));
+    assertNotNull(cat.getId());
+
+    final PersistableProduct product = new PersistableProduct();
+    final ArrayList<Category> categories = new ArrayList<>();
+    categories.add(cat);
+    product.setCategories(categories);
+    ProductSpecification specifications = new ProductSpecification();
+    specifications.setManufacturer(
+        com.salesmanager.core.model.catalog.product.manufacturer.Manufacturer.DEFAULT_MANUFACTURER);
+    product.setProductSpecifications(specifications);
+    product.setPrice(BigDecimal.TEN);
+    product.setSku("123");
+    final HttpEntity<PersistableProduct> entity = new HttpEntity<>(product, getHeader());
+
+    final ResponseEntity<PersistableProduct> response = testRestTemplate.postForEntity(
+        "/api/v1/private/product?store=" + Constants.DEFAULT_STORE, entity,
+        PersistableProduct.class);
+    assertThat(response.getStatusCode(), is(CREATED));
+  }
+
+  /**
+   * Creates a ProductReview requires an existing Customer and an existing Product
+   *
+   * @throws Exception
+   */
+  @Ignore
+  @Test
+  public void createProductReview() throws Exception {
+
+    final PersistableProductReview review = new PersistableProductReview();
+    review.setCustomerId(1L);
+
+    review.setProductId(1L);
+    review.setLanguage("en");
+    review.setRating(2D);// rating is on 5
+    review.setDescription(
+        "Not as good as expected. From what i understood that was supposed to be premium quality but unfortunately i had to return the item after one week... Verry disapointed !");
+    review.setDate("2013-06-06");
+    final HttpEntity<PersistableProductReview> entity = new HttpEntity<>(review, getHeader());
+
+    final ResponseEntity<PersistableProductReview> response = testRestTemplate.postForEntity(
+        "/api/v1/private/products/1/reviews?store=" + Constants.DEFAULT_STORE, entity,
+        PersistableProductReview.class);
+
+    final PersistableProductReview rev = response.getBody();
+    assertThat(response.getStatusCode(), is(CREATED));
+    assertNotNull(rev.getId());
+
+  }
+
+  /**
+   * Creates a product option value that can be used to create a product attribute when creating a
+   * new product
+   *
+   * @throws Exception
+   */
+  @Test
+  @Ignore
+  public void createOptionValue() throws Exception {
+
+    final ProductOptionValueDescription description = new ProductOptionValueDescription();
+    description.setLanguage("en");
+    description.setName("Red");
 
-		final PersistableProductOptionValue optionValue = new PersistableProductOptionValue();
-		optionValue.setOrder(1);
-		optionValue.setCode("colorred");
-		optionValue.setDescriptions(descriptions);
+    final List<ProductOptionValueDescription> descriptions = new ArrayList<>();
+    descriptions.add(description);
 
-		final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		final String json = writer.writeValueAsString(optionValue);
+    final PersistableProductOptionValue optionValue = new PersistableProductOptionValue();
+    optionValue.setOrder(1);
+    optionValue.setCode("colorred");
+    optionValue.setDescriptions(descriptions);
 
-		System.out.println(json);
+    final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    final String json = writer.writeValueAsString(optionValue);
 
-		/**
-		 * { "descriptions" : [ { "name" : "Red", "description" : null,
-		 * "friendlyUrl" : null, "keyWords" : null, "highlights" : null,
-		 * "metaDescription" : null, "title" : null, "language" : "en", "id" : 0
-		 * } ], "order" : 1, "code" : "color-red", "id" : 0 }
-		 */
+    System.out.println(json);
 
-		restTemplate = new RestTemplate();
+    /**
+     * { "descriptions" : [ { "name" : "Red", "description" : null,
+     * "friendlyUrl" : null, "keyWords" : null, "highlights" : null,
+     * "metaDescription" : null, "title" : null, "language" : "en", "id" : 0
+     * } ], "order" : 1, "code" : "color-red", "id" : 0 }
+     */
 
-		final HttpEntity<String> entity = new HttpEntity<>(json, getHeader());
+    restTemplate = new RestTemplate();
 
-		final ResponseEntity response = restTemplate.postForEntity(
-				"http://localhost:8080/sm-shop/services/private/DEFAULT/product/optionValue", entity,
-				PersistableProductOptionValue.class);
+    final HttpEntity<String> entity = new HttpEntity<>(json, getHeader());
 
-		final PersistableProductOptionValue opt = (PersistableProductOptionValue) response.getBody();
-		System.out.println("New optionValue ID : " + opt.getId());
+    final ResponseEntity response = restTemplate.postForEntity(
+        "http://localhost:8080/sm-shop/services/private/DEFAULT/product/optionValue", entity,
+        PersistableProductOptionValue.class);
 
-	}
+    final PersistableProductOptionValue opt = (PersistableProductOptionValue) response.getBody();
+    System.out.println("New optionValue ID : " + opt.getId());
 
-	/**
-	 * Creates a new ProductOption
-	 *
-	 * @throws Exception
-	 */
-	@Test
-	@Ignore
-	public void createOption() throws Exception {
+  }
 
-		final ProductOptionDescription description = new ProductOptionDescription();
-		description.setLanguage("en");
-		description.setName("Color");
+  /**
+   * Creates a new ProductOption
+   *
+   * @throws Exception
+   */
+  @Test
+  @Ignore
+  public void createOption() throws Exception {
 
-		final List<ProductOptionDescription> descriptions = new ArrayList<>();
-		descriptions.add(description);
+    final ProductOptionDescription description = new ProductOptionDescription();
+    description.setLanguage("en");
+    description.setName("Color");
 
-		final PersistableProductOption option = new PersistableProductOption();
-		option.setOrder(1);
-		option.setCode("color");
-		option.setType(ProductOptionType.Select.name());
-		option.setDescriptions(descriptions);
+    final List<ProductOptionDescription> descriptions = new ArrayList<>();
+    descriptions.add(description);
 
-		final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		final String json = writer.writeValueAsString(option);
+    final PersistableProductOption option = new PersistableProductOption();
+    option.setOrder(1);
+    option.setCode("color");
+    option.setType(ProductOptionType.Select.name());
+    option.setDescriptions(descriptions);
 
-		System.out.println(json);
+    final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    final String json = writer.writeValueAsString(option);
 
-		/**
-		 * { "descriptions" : [ { "name" : "Color", "description" : null,
-		 * "friendlyUrl" : null, "keyWords" : null, "highlights" : null,
-		 * "metaDescription" : null, "title" : null, "language" : "en", "id" : 0
-		 * } ], "type" : SELECT, "order" : 1, "code" : "color", "id" : 0 }
-		 */
+    System.out.println(json);
 
-		restTemplate = new RestTemplate();
+    /**
+     * { "descriptions" : [ { "name" : "Color", "description" : null,
+     * "friendlyUrl" : null, "keyWords" : null, "highlights" : null,
+     * "metaDescription" : null, "title" : null, "language" : "en", "id" : 0
+     * } ], "type" : SELECT, "order" : 1, "code" : "color", "id" : 0 }
+     */
 
-		final HttpEntity<String> entity = new HttpEntity<>(json, getHeader());
+    restTemplate = new RestTemplate();
 
-		final ResponseEntity response = restTemplate.postForEntity(
-				"http://localhost:8080/sm-shop/services/private/DEFAULT/product/option", entity,
-				PersistableProductOption.class);
+    final HttpEntity<String> entity = new HttpEntity<>(json, getHeader());
 
-		final PersistableProductOption opt = (PersistableProductOption) response.getBody();
-		System.out.println("New option ID : " + opt.getId());
+    final ResponseEntity response = restTemplate.postForEntity(
+        "http://localhost:8080/sm-shop/services/private/DEFAULT/product/option", entity,
+        PersistableProductOption.class);
 
-	}
+    final PersistableProductOption opt = (PersistableProductOption) response.getBody();
+    System.out.println("New option ID : " + opt.getId());
 
-	@Test
-	@Ignore
-	public void getProducts() throws Exception {
-		restTemplate = new RestTemplate();
+  }
 
-		final HttpEntity<String> httpEntity = new HttpEntity<>(getHeader());
+  @Test
+  @Ignore
+  public void getProducts() throws Exception {
+    restTemplate = new RestTemplate();
 
-		final ResponseEntity<ReadableProduct[]> response = restTemplate.exchange(
-				"http://localhost:8080/sm-shop/services/rest/products/DEFAULT/en/" + testCategoryID, HttpMethod.GET,
-				httpEntity, ReadableProduct[].class);
+    final HttpEntity<String> httpEntity = new HttpEntity<>(getHeader());
 
-		if (response.getStatusCode() != HttpStatus.OK) {
-			throw new Exception();
-		} else {
-			System.out.println(response.getBody().length + " Product records found.");
-		}
-	}
+    final ResponseEntity<ReadableProduct[]> response = restTemplate.exchange(
+        "http://localhost:8080/sm-shop/services/rest/products/DEFAULT/en/" + testCategoryID,
+        HttpMethod.GET,
+        httpEntity, ReadableProduct[].class);
 
-	@Test
-	@Ignore
-	public void putProduct() throws Exception {
-		restTemplate = new RestTemplate();
+    if (response.getStatusCode() != HttpStatus.OK) {
+      throw new Exception();
+    } else {
+      System.out.println(response.getBody().length + " Product records found.");
+    }
+  }
 
-		// TODO: Put Product
+  @Test
+  @Ignore
+  public void putProduct() throws Exception {
+    restTemplate = new RestTemplate();
 
-	}
+    // TODO: Put Product
 
-	@Test
-	@Ignore
-	public void postProduct() throws Exception {
-		restTemplate = new RestTemplate();
+  }
 
-		final PersistableProduct product = new PersistableProduct();
+  @Test
+  @Ignore
+  public void postProduct() throws Exception {
+    restTemplate = new RestTemplate();
 
-		final String code = "abcdef";
+    final PersistableProduct product = new PersistableProduct();
 
-		final String categoryCode = "ROOT";// root category
+    final String code = "abcdef";
 
-		final Category category = new Category();
-		category.setCode(categoryCode);
-		final List<Category> categories = new ArrayList<>();
-		categories.add(category);
+    final String categoryCode = "ROOT";// root category
 
-		final String manufacturer = "temple";
-		final Manufacturer collection = new Manufacturer();
-		collection.setCode(manufacturer);
+    final Category category = new Category();
+    category.setCode(categoryCode);
+    final List<Category> categories = new ArrayList<>();
+    categories.add(category);
 
-		// core properties
+    final String manufacturer = "temple";
+    final Manufacturer collection = new Manufacturer();
+    collection.setCode(manufacturer);
 
-		product.setSku(code);
+    // core properties
 
-		// product.setManufacturer(collection); //no manufacturer assigned for
-		// now
-		// product.setCategories(categories); //no category assigned for now
+    product.setSku(code);
 
-		product.setSortOrder(0);// set iterator as sort order
-		product.setAvailable(true);// force availability
-		product.setProductVirtual(false);// force tangible good
-		product.setQuantityOrderMinimum(1);// force to 1 minimum when ordering
-		product.setProductShipeable(true);// all items are shipeable
+    // product.setManufacturer(collection); //no manufacturer assigned for
+    // now
+    // product.setCategories(categories); //no category assigned for now
 
-		/** images **/
-		final String image = "/Users/carlsamson/Documents/csti/IMG_4626.jpg";
-		// String image = "C:/personal/em/pictures-misc/IMG_2675.JPG";
+    product.setSortOrder(0);// set iterator as sort order
+    product.setAvailable(true);// force availability
+    product.setProductVirtual(false);// force tangible good
+    product.setQuantityOrderMinimum(1);// force to 1 minimum when ordering
+    product.setProductShipeable(true);// all items are shipeable
 
-		final File imgPath = new File(image);
+    /** images **/
+    final String image = "/Users/carlsamson/Documents/csti/IMG_4626.jpg";
+    // String image = "C:/personal/em/pictures-misc/IMG_2675.JPG";
 
-		// PersistableImage persistableImage = new PersistableImage();
+    final File imgPath = new File(image);
 
-		// persistableImage.setBytes(this.extractBytes(imgPath));
-		// persistableImage.setImageName(imgPath.getName());
+    // PersistableImage persistableImage = new PersistableImage();
 
-		// List<PersistableImage> images = new ArrayList<PersistableImage>();
-		// images.add(persistableImage);
+    // persistableImage.setBytes(this.extractBytes(imgPath));
+    // persistableImage.setImageName(imgPath.getName());
 
-		// product.setImages(images);
+    // List<PersistableImage> images = new ArrayList<PersistableImage>();
+    // images.add(persistableImage);
 
-		ProductSpecification specifications = new ProductSpecification();
-		specifications.setHeight(new BigDecimal(20));
-		specifications.setLength(new BigDecimal(21));
-		specifications.setWeight(new BigDecimal(22));
-		specifications.setWidth(new BigDecimal(23));
+    // product.setImages(images);
 
-		product.setProductSpecifications(specifications);
-		product.setQuantity(5);
-		product.setQuantityOrderMaximum(2);
+    ProductSpecification specifications = new ProductSpecification();
+    specifications.setHeight(new BigDecimal(20));
+    specifications.setLength(new BigDecimal(21));
+    specifications.setWeight(new BigDecimal(22));
+    specifications.setWidth(new BigDecimal(23));
 
-		final PersistableProductPrice productPrice = new PersistableProductPrice();
-		productPrice.setDefaultPrice(true);
+    product.setProductSpecifications(specifications);
+    product.setQuantity(5);
+    product.setQuantityOrderMaximum(2);
 
-		productPrice.setOriginalPrice(new BigDecimal(250));
-		productPrice.setDiscountedPrice(new BigDecimal(125));
+    final PersistableProductPrice productPrice = new PersistableProductPrice();
+    productPrice.setDefaultPrice(true);
 
-		final List<PersistableProductPrice> productPriceList = new ArrayList<>();
-		productPriceList.add(productPrice);
+    productPrice.setOriginalPrice(new BigDecimal(250));
+    productPrice.setDiscountedPrice(new BigDecimal(125));
 
-		product.setProductPrices(productPriceList);
+    final List<PersistableProductPrice> productPriceList = new ArrayList<>();
+    productPriceList.add(productPrice);
 
-		final List<ProductDescription> descriptions = new ArrayList<>();
+    product.setProductPrices(productPriceList);
 
-		// add english description
-		ProductDescription description = new ProductDescription();
-		description.setLanguage("en");
-		description.setTitle("Buddha Head");
-		description.setName("Buddha Head");
-		description.setDescription("Buddha Head");
-		description.setFriendlyUrl("buddha-head");
+    final List<ProductDescription> descriptions = new ArrayList<>();
 
-		// description.setHighlights(record.get("highlights_en"));
+    // add english description
+    ProductDescription description = new ProductDescription();
+    description.setLanguage("en");
+    description.setTitle("Buddha Head");
+    description.setName("Buddha Head");
+    description.setDescription("Buddha Head");
+    description.setFriendlyUrl("buddha-head");
 
-		descriptions.add(description);
+    // description.setHighlights(record.get("highlights_en"));
 
-		// add french description
-		description = new ProductDescription();
-		description.setLanguage("fr");
-		description.setTitle("Tête de Buddha");
-		description.setName("Tête de Buddha");
-		description.setDescription(description.getName());
-		description.setFriendlyUrl("tete-de-buddha");
-		//
+    descriptions.add(description);
 
-		descriptions.add(description);
+    // add french description
+    description = new ProductDescription();
+    description.setLanguage("fr");
+    description.setTitle("Tête de Buddha");
+    description.setName("Tête de Buddha");
+    description.setDescription(description.getName());
+    description.setFriendlyUrl("tete-de-buddha");
+    //
 
-		product.setDescriptions(descriptions);
+    descriptions.add(description);
 
-		// RENTAL
-		final RentalOwner owner = new RentalOwner();
-		// need to create a customer first
-		owner.setId(1L);
-		product.setOwner(owner);
+    product.setDescriptions(descriptions);
 
-		final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		final String json = writer.writeValueAsString(product);
+    // RENTAL
+    final RentalOwner owner = new RentalOwner();
+    // need to create a customer first
+    owner.setId(1L);
+    product.setOwner(owner);
 
-		System.out.println(json);
+    final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    final String json = writer.writeValueAsString(product);
 
-		final HttpEntity<String> entity = new HttpEntity<>(json, getHeader());
+    System.out.println(json);
 
-		// post to create category web service
-		final ResponseEntity response = restTemplate.postForEntity("http://localhost:8080/api/v1/product", entity,
-				PersistableProduct.class);
+    final HttpEntity<String> entity = new HttpEntity<>(json, getHeader());
 
-		final PersistableProduct prod = (PersistableProduct) response.getBody();
+    // post to create category web service
+    final ResponseEntity response = restTemplate
+        .postForEntity("http://localhost:8080/api/v1/product", entity,
+            PersistableProduct.class);
 
-		System.out.println("---------------------");
+    final PersistableProduct prod = (PersistableProduct) response.getBody();
 
-	}
+    System.out.println("---------------------");
 
-	@Test
-	@Ignore
-	public void deleteProduct() throws Exception {
-		restTemplate = new RestTemplate();
+  }
 
-		final HttpEntity<String> httpEntity = new HttpEntity<>(getHeader());
+  @Test
+  @Ignore
+  public void deleteProduct() throws Exception {
+    restTemplate = new RestTemplate();
 
-		restTemplate.exchange("http://localhost:8080/sm-shop/services/rest/product/DEFAULT/en/" + testCategoryID + "/"
-				+ testProductID, HttpMethod.DELETE, httpEntity, ReadableProduct.class);
-		System.out.println("Product " + testProductID + " Deleted.");
-	}
+    final HttpEntity<String> httpEntity = new HttpEntity<>(getHeader());
 
-	/** private helper methods **/
-	public byte[] extractBytes(final File imgPath) throws Exception {
+    restTemplate.exchange(
+        "http://localhost:8080/sm-shop/services/rest/product/DEFAULT/en/" + testCategoryID + "/"
+            + testProductID, HttpMethod.DELETE, httpEntity, ReadableProduct.class);
+    System.out.println("Product " + testProductID + " Deleted.");
+  }
 
-		final FileInputStream fis = new FileInputStream(imgPath);
+  /**
+   * private helper methods
+   **/
+  public byte[] extractBytes(final File imgPath) throws Exception {
 
-		final BufferedInputStream inputStream = new BufferedInputStream(fis);
-		final byte[] fileBytes = new byte[(int) imgPath.length()];
-		inputStream.read(fileBytes);
-		inputStream.close();
+    final FileInputStream fis = new FileInputStream(imgPath);
 
-		return fileBytes;
+    final BufferedInputStream inputStream = new BufferedInputStream(fis);
+    final byte[] fileBytes = new byte[(int) imgPath.length()];
+    inputStream.read(fileBytes);
+    inputStream.close();
 
-	}
+    return fileBytes;
+
+  }
 
 }

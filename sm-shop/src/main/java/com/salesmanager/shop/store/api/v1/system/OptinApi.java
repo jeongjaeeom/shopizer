@@ -19,17 +19,22 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
-/** Optin a customer to events such s newsletter */
+/**
+ * Optin a customer to events such s newsletter
+ */
 @RestController
 @RequestMapping("/api/v1")
 public class OptinApi {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(OptinApi.class);
 
-  @Inject private OptinFacade optinFacade;
+  @Inject
+  private OptinFacade optinFacade;
 
 
-  /** Create new optin */
+  /**
+   * Create new optin
+   */
   @PostMapping("/private/optin")
   @ApiOperation(
       httpMethod = "POST",
@@ -41,11 +46,12 @@ public class OptinApi {
       @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
   })
   public ReadableOptin create(
-      @Valid @RequestBody PersistableOptin optin, 
+      @Valid @RequestBody PersistableOptin optin,
       @ApiIgnore MerchantStore merchantStore,
       @ApiIgnore Language language,
       HttpServletRequest request) {
-    LOGGER.debug("[" + request.getUserPrincipal().getName() + "] creating optin [" + optin.getCode() + "]");
+    LOGGER.debug(
+        "[" + request.getUserPrincipal().getName() + "] creating optin [" + optin.getCode() + "]");
     return optinFacade.create(optin, merchantStore, language);
   }
 }

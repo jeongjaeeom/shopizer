@@ -30,7 +30,7 @@ public class DefaultEmailSenderImpl implements EmailModule {
 
   @Inject
   private Configuration freemarkerMailConfiguration;
-  
+
   @Inject
   private JavaMailSender mailSender;
 

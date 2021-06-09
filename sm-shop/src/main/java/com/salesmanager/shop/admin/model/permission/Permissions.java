@@ -17,33 +17,32 @@ import java.util.Map;
 @JsonPropertyOrder({
     "permission"
 })
-public class Permissions implements Serializable
-{
+public class Permissions implements Serializable {
 
-    @JsonProperty("permission")
-    private List<ShopPermission> shopPermission = null;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    private final static long serialVersionUID = 1L;
+  @JsonProperty("permission")
+  private List<ShopPermission> shopPermission = null;
+  @JsonIgnore
+  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+  private final static long serialVersionUID = 1L;
 
-    @JsonProperty("permission")
-    public List<ShopPermission> getShopPermission() {
-        return shopPermission;
-    }
+  @JsonProperty("permission")
+  public List<ShopPermission> getShopPermission() {
+    return shopPermission;
+  }
 
-    @JsonProperty("permission")
-    public void setShopPermission(List<ShopPermission> shopPermission) {
-        this.shopPermission = shopPermission;
-    }
+  @JsonProperty("permission")
+  public void setShopPermission(List<ShopPermission> shopPermission) {
+    this.shopPermission = shopPermission;
+  }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
+  @JsonAnyGetter
+  public Map<String, Object> getAdditionalProperties() {
+    return this.additionalProperties;
+  }
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
+  @JsonAnySetter
+  public void setAdditionalProperty(String name, Object value) {
+    this.additionalProperties.put(name, value);
+  }
 
 }

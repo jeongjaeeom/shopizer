@@ -3,29 +3,29 @@ package com.salesmanager.shop.model.system;
 import java.io.Serializable;
 
 public class IntegrationModuleEntity implements Serializable {
-	
-	private String code;
-	private boolean active;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+  private String code;
+  private boolean active;
 
-	public String getCode() {
-		return code;
-	}
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+  public String getCode() {
+    return code;
+  }
 
-	public boolean isActive() {
-		return active;
-	}
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
 
 }

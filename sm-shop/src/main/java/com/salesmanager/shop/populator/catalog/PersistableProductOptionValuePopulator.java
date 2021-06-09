@@ -16,70 +16,66 @@ import com.salesmanager.shop.model.catalog.product.attribute.PersistableProductO
 import com.salesmanager.shop.model.catalog.product.attribute.ProductOptionValueDescription;
 
 
-
 /**
- * Converts a PersistableProductOptionValue to
- * a ProductOptionValue model object
- * @author Carl Samson
+ * Converts a PersistableProductOptionValue to a ProductOptionValue model object
  *
+ * @author Carl Samson
  */
 public class PersistableProductOptionValuePopulator extends
-		AbstractDataPopulator<PersistableProductOptionValue, ProductOptionValue> {
+    AbstractDataPopulator<PersistableProductOptionValue, ProductOptionValue> {
 
-	
-	private LanguageService languageService;
-	
-	public LanguageService getLanguageService() {
-		return languageService;
-	}
 
-	public void setLanguageService(LanguageService languageService) {
-		this.languageService = languageService;
-	}
+  private LanguageService languageService;
 
-	@Override
-	public ProductOptionValue populate(PersistableProductOptionValue source,
-			ProductOptionValue target, MerchantStore store, Language language)
-			throws ConversionException {
-		
-		Validate.notNull(languageService, "Requires to set LanguageService");
-		
-		
-		try {
-			
+  public LanguageService getLanguageService() {
+    return languageService;
+  }
 
-			target.setMerchantStore(store);
-			target.setProductOptionValueSortOrder(source.getOrder());
-			target.setCode(source.getCode());
-			
-			if(!CollectionUtils.isEmpty(source.getDescriptions())) {
-				Set<com.salesmanager.core.model.catalog.product.attribute.ProductOptionValueDescription> descriptions = new HashSet<com.salesmanager.core.model.catalog.product.attribute.ProductOptionValueDescription>();
-				for(ProductOptionValueDescription desc  : source.getDescriptions()) {
-					com.salesmanager.core.model.catalog.product.attribute.ProductOptionValueDescription description = new com.salesmanager.core.model.catalog.product.attribute.ProductOptionValueDescription();
-					Language lang = languageService.getByCode(desc.getLanguage());
-					if(lang==null) {
-						throw new ConversionException("Language is null for code " + description.getLanguage() + " use language ISO code [en, fr ...]");
-					}
-					description.setLanguage(lang);
-					description.setName(desc.getName());
-					description.setTitle(desc.getTitle());
-					description.setProductOptionValue(target);
-					descriptions.add(description);
-				}
-				target.setDescriptions(descriptions);
-			}
-		
-		} catch (Exception e) {
-			throw new ConversionException(e);
-		}
-		
-		
-		return target;
-	}
+  public void setLanguageService(LanguageService languageService) {
+    this.languageService = languageService;
+  }
 
-	@Override
-	protected ProductOptionValue createTarget() {
-		return null;
-	}
+  @Override
+  public ProductOptionValue populate(PersistableProductOptionValue source,
+      ProductOptionValue target, MerchantStore store, Language language)
+      throws ConversionException {
+
+    Validate.notNull(languageService, "Requires to set LanguageService");
+
+    try {
+
+      target.setMerchantStore(store);
+      target.setProductOptionValueSortOrder(source.getOrder());
+      target.setCode(source.getCode());
+
+      if (!CollectionUtils.isEmpty(source.getDescriptions())) {
+        Set<com.salesmanager.core.model.catalog.product.attribute.ProductOptionValueDescription> descriptions = new HashSet<com.salesmanager.core.model.catalog.product.attribute.ProductOptionValueDescription>();
+        for (ProductOptionValueDescription desc : source.getDescriptions()) {
+          com.salesmanager.core.model.catalog.product.attribute.ProductOptionValueDescription description = new com.salesmanager.core.model.catalog.product.attribute.ProductOptionValueDescription();
+          Language lang = languageService.getByCode(desc.getLanguage());
+          if (lang == null) {
+            throw new ConversionException("Language is null for code " + description.getLanguage()
+                + " use language ISO code [en, fr ...]");
+          }
+          description.setLanguage(lang);
+          description.setName(desc.getName());
+          description.setTitle(desc.getTitle());
+          description.setProductOptionValue(target);
+          descriptions.add(description);
+        }
+        target.setDescriptions(descriptions);
+      }
+
+    } catch (Exception e) {
+      throw new ConversionException(e);
+    }
+
+    return target;
+  }
+
+  @Override
+  protected ProductOptionValue createTarget() {
+    return null;
+  }
 
 }

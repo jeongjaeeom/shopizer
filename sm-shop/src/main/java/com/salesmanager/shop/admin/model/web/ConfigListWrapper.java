@@ -5,19 +5,16 @@ import java.util.List;
 import com.salesmanager.core.model.system.MerchantConfiguration;
 
 
+public class ConfigListWrapper {
 
-public class ConfigListWrapper
-{
-	private List<MerchantConfiguration> merchantConfigs;
+  private List<MerchantConfiguration> merchantConfigs;
 
-	public List<MerchantConfiguration> getMerchantConfigs()
-	{
-		return merchantConfigs;
-	}
+  public List<MerchantConfiguration> getMerchantConfigs() {
+    return merchantConfigs;
+  }
 
-	public void setMerchantConfigs(List<MerchantConfiguration> merchantConfigs)
-	{
-		this.merchantConfigs = merchantConfigs;
-	}
+  public void setMerchantConfigs(List<MerchantConfiguration> merchantConfigs) {
+    this.merchantConfigs = merchantConfigs;
+  }
 
 }

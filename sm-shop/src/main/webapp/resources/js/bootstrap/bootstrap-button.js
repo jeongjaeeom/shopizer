@@ -17,14 +17,12 @@
  * limitations under the License.
  * ============================================================ */
 
-
 !function ($) {
 
   "use strict"; // jshint ;_;
 
-
- /* BUTTON PUBLIC CLASS DEFINITION
-  * ============================== */
+  /* BUTTON PUBLIC CLASS DEFINITION
+   * ============================== */
 
   var Button = function (element, options) {
     this.$element = $(element)
@@ -33,9 +31,9 @@
 
   Button.prototype.setState = function (state) {
     var d = 'disabled'
-      , $el = this.$element
-      , data = $el.data()
-      , val = $el.is('input') ? 'val' : 'html'
+        , $el = this.$element
+        , data = $el.data()
+        , val = $el.is('input') ? 'val' : 'html'
 
     state = state + 'Text'
     data.resetText || $el.data('resetText', $el[val]())
@@ -45,8 +43,8 @@
     // push to event loop to allow forms to submit
     setTimeout(function () {
       state == 'loadingText' ?
-        $el.addClass(d).attr(d, d) :
-        $el.removeClass(d).removeAttr(d)
+          $el.addClass(d).attr(d, d) :
+          $el.removeClass(d).removeAttr(d)
     }, 0)
   }
 
@@ -54,24 +52,28 @@
     var $parent = this.$element.parent('[data-toggle="buttons-radio"]')
 
     $parent && $parent
-      .find('.active')
-      .removeClass('active')
+    .find('.active')
+    .removeClass('active')
 
     this.$element.toggleClass('active')
   }
 
-
- /* BUTTON PLUGIN DEFINITION
-  * ======================== */
+  /* BUTTON PLUGIN DEFINITION
+   * ======================== */
 
   $.fn.button = function (option) {
     return this.each(function () {
       var $this = $(this)
-        , data = $this.data('button')
-        , options = typeof option == 'object' && option
-      if (!data) $this.data('button', (data = new Button(this, options)))
-      if (option == 'toggle') data.toggle()
-      else if (option) data.setState(option)
+          , data = $this.data('button')
+          , options = typeof option == 'object' && option
+      if (!data) {
+        $this.data('button', (data = new Button(this, options)))
+      }
+      if (option == 'toggle') {
+        data.toggle()
+      } else if (option) {
+        data.setState(option)
+      }
     })
   }
 
@@ -81,16 +83,18 @@
 
   $.fn.button.Constructor = Button
 
-
- /* BUTTON DATA-API
-  * =============== */
+  /* BUTTON DATA-API
+   * =============== */
 
   $(function () {
-    $('body').on('click.button.data-api', '[data-toggle^=button]', function ( e ) {
-      var $btn = $(e.target)
-      if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
-      $btn.button('toggle')
-    })
+    $('body').on('click.button.data-api', '[data-toggle^=button]',
+        function (e) {
+          var $btn = $(e.target)
+          if (!$btn.hasClass('btn')) {
+            $btn = $btn.closest('.btn')
+          }
+          $btn.button('toggle')
+        })
   })
 
 }(window.jQuery);

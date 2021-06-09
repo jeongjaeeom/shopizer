@@ -48,7 +48,7 @@ public class LanguageUtils {
 
   /**
    * Determines request language based on store rules
-   * 
+   *
    * @param request
    * @return
    */
@@ -59,15 +59,11 @@ public class LanguageUtils {
     Language language = (Language) request.getSession().getAttribute(Constants.LANGUAGE);
     MerchantStore store =
         (MerchantStore) request.getSession().getAttribute(Constants.MERCHANT_STORE);
-    
-
 
     if (language == null) {
       try {
 
         locale = LocaleContextHolder.getLocale();// should be browser locale
-
-
 
         if (store != null) {
           language = store.getDefaultLanguage();
@@ -96,7 +92,6 @@ public class LanguageUtils {
       }
     } else {
 
-
       Locale localeFromContext = LocaleContextHolder.getLocale();// should be browser locale
       if (!language.getCode().equals(localeFromContext.getLanguage())) {
         // get locale context
@@ -123,7 +118,7 @@ public class LanguageUtils {
 
   /**
    * Should be used by rest web services
-   * 
+   *
    * @param request
    * @param store
    * @return
@@ -143,14 +138,14 @@ public class LanguageUtils {
           language = languageService.defaultLanguage();
         }
       } else {
-        if(!ALL_LANGUALES.equals(lang)) {
+        if (!ALL_LANGUALES.equals(lang)) {
           language = languageService.getByCode(lang);
           if (language == null) {
             language = languageService.defaultLanguage();
           }
         }
       }
-      
+
       //if language is null then underlying facade must load all languages
       return language;
 
